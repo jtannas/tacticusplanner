@@ -45,7 +45,7 @@ export const TeamSlotEdit: React.FC<Props> = ({
                 <div
                     className={
                         selectedIndex === index
-                            ? 'border-solid border-2 border-[#0000ff] [transition:box-shadow_0.3s_ease-in-out]'
+                            ? 'border-2 border-solid border-[#0000ff] [transition:box-shadow_0.3s_ease-in-out]'
                             : ''
                     }
                     style={{ cursor: editSlot ? 'pointer' : 'default' }}
@@ -65,7 +65,7 @@ export const TeamSlotEdit: React.FC<Props> = ({
                 <div
                     className={
                         selectedIndex === index
-                            ? 'border-solid border-2 border-[#0000ff] [transition:box-shadow_0.3s_ease-in-out]'
+                            ? 'border-2 border-solid border-[#0000ff] [transition:box-shadow_0.3s_ease-in-out]'
                             : ''
                     }
                     style={{ cursor: editSlot ? 'pointer' : 'default' }}

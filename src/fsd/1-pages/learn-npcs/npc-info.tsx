@@ -46,7 +46,7 @@ export const NpcInfo: React.FC = () => {
 
     return (
         <div>
-            <div className="flex gap-[3px] justify-left">
+            <div className="justify-left flex gap-[3px]">
                 <FactionSelect
                     label={'Faction'}
                     factions={factions}
@@ -55,26 +55,26 @@ export const NpcInfo: React.FC = () => {
                 />
             </div>
             <div className="h-5 w-auto"></div>
-            <div className="flex gap-[3px] justify-left">
+            <div className="justify-left flex gap-[3px]">
                 <NpcSelect label={'NPC'} npcs={npcs} npc={npc} npcChanges={value => onNpcChange(value)} />
             </div>
             <div className="h-5 w-auto"></div>
-            <div className="flex gap-[3px] justify-left"></div>
+            <div className="justify-left flex gap-[3px]"></div>
             <ProgressionIndexSelect
                 label={'NPC Level'}
                 npc={npc}
                 index={progressionIndex}
                 indexChanges={value => onProgressionIndexChange(value)}
             />
-            <div className="flex gap-[3px] justify-left items-center">
+            <div className="justify-left flex items-center gap-[3px]">
                 <MiscIcon icon="health" />
                 <span>{npc.stats[progressionIndex]?.health}</span>
             </div>
-            <div className="flex gap-[3px] justify-left items-center">
+            <div className="justify-left flex items-center gap-[3px]">
                 <MiscIcon icon="armour" />
                 <span>{npc.stats[progressionIndex]?.armor}</span>
             </div>
-            <div className="flex gap-[3px] justify-left items-center">
+            <div className="justify-left flex items-center gap-[3px]">
                 <MiscIcon icon="damage" />
                 <span>{npc.stats[progressionIndex]?.damage}</span>
             </div>

@@ -257,7 +257,7 @@ export const Goals = () => {
 
     return (
         <div>
-            <div className="flex gap-5 flex-wrap items-center">
+            <div className="flex flex-wrap items-center gap-5">
                 <Button
                     size="small"
                     variant={'contained'}
@@ -306,7 +306,7 @@ export const Goals = () => {
 
             {!!upgradeRankOrMowGoals.length && (
                 <div>
-                    <div className="flex gap5 flex-wrap items-center" style={{ fontSize: 20, margin: '20px 0' }}>
+                    <div className="gap5 flex flex-wrap items-center" style={{ fontSize: 20, margin: '20px 0' }}>
                         <span>
                             Upgrade rank/MoW (<b>{estimatedUpgradesTotal.upgradesRaids.length}</b> Days |
                         </span>
@@ -319,7 +319,7 @@ export const Goals = () => {
                         </span>
                     </div>
                     {!viewPreferences.goalsTableView && (
-                        <div className="flex gap-3 flex-wrap">
+                        <div className="flex flex-wrap gap-3">
                             {upgradeRankOrMowGoals.map(goal => (
                                 <GoalCard
                                     key={goal.goalId}
@@ -361,7 +361,7 @@ export const Goals = () => {
                         </span>
                     </div>
                     {!viewPreferences.goalsTableView && (
-                        <div className="flex gap-3 flex-wrap">
+                        <div className="flex flex-wrap gap-3">
                             {shardsGoals.map(goal => (
                                 <GoalCard
                                     key={goal.goalId}
@@ -406,7 +406,7 @@ export const Goals = () => {
                             <AccordionDetails>
                                 <div>
                                     {[Alliance.Chaos, Alliance.Imperial, Alliance.Xenos].map(alliance => (
-                                        <div key={alliance} className="my-2 flex-box gap20">
+                                        <div key={alliance} className="flex-box gap20 my-2">
                                             <BadgesTotal badges={totalAbilityBadges[alliance]} alliance={alliance} />
                                         </div>
                                     ))}
@@ -415,7 +415,7 @@ export const Goals = () => {
                         </Accordion>
                     </div>
                     {!viewPreferences.goalsTableView && (
-                        <div className="flex gap-3 flex-wrap">
+                        <div className="flex flex-wrap gap-3">
                             {upgradeAbilities.map(goal => (
                                 <GoalCard
                                     key={goal.goalId}

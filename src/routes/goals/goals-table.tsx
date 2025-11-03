@@ -282,7 +282,7 @@ export const GoalsTable: React.FC<Props> = ({ rows, estimate, goalsColorCoding, 
                     if (data) {
                         if (data.type == PersonalGoalType.UpgradeRank) {
                             return (
-                                <div className="flex gap-[3px] justify-left">
+                                <div className="justify-left flex gap-[3px]">
                                     <MiscIcon icon="health" width={15} height={15} />
                                     {StatsCalculatorService.calculateHealth(
                                         data.unitId,
@@ -301,7 +301,7 @@ export const GoalsTable: React.FC<Props> = ({ rows, estimate, goalsColorCoding, 
                             );
                         } else if (data.type == PersonalGoalType.Ascend) {
                             return (
-                                <div className="flex gap-[3px] justify-left">
+                                <div className="justify-left flex gap-[3px]">
                                     <MiscIcon icon="health" width={15} height={15} />
                                     {StatsCalculatorService.calculateHealth(
                                         data.unitId,
@@ -330,7 +330,7 @@ export const GoalsTable: React.FC<Props> = ({ rows, estimate, goalsColorCoding, 
                     if (data) {
                         if (data.type == PersonalGoalType.UpgradeRank) {
                             return (
-                                <div className="flex gap-[3px] justify-left">
+                                <div className="justify-left flex gap-[3px]">
                                     <MiscIcon icon="damage" width={15} height={15} />
                                     {StatsCalculatorService.calculateDamage(
                                         data.unitId,
@@ -349,7 +349,7 @@ export const GoalsTable: React.FC<Props> = ({ rows, estimate, goalsColorCoding, 
                             );
                         } else if (data.type == PersonalGoalType.Ascend) {
                             return (
-                                <div className="flex gap-[3px] justify-left">
+                                <div className="justify-left flex gap-[3px]">
                                     <MiscIcon icon="damage" width={15} height={15} />
                                     {StatsCalculatorService.calculateDamage(
                                         data.unitId,
@@ -378,7 +378,7 @@ export const GoalsTable: React.FC<Props> = ({ rows, estimate, goalsColorCoding, 
                     if (data) {
                         if (data.type == PersonalGoalType.UpgradeRank) {
                             return (
-                                <div className="flex gap-[3px] justify-left">
+                                <div className="justify-left flex gap-[3px]">
                                     <MiscIcon icon="armour" width={15} height={15} />
                                     {StatsCalculatorService.calculateArmor(
                                         data.unitId,
@@ -397,7 +397,7 @@ export const GoalsTable: React.FC<Props> = ({ rows, estimate, goalsColorCoding, 
                             );
                         } else if (data.type == PersonalGoalType.Ascend) {
                             return (
-                                <div className="flex gap-[3px] justify-left">
+                                <div className="justify-left flex gap-[3px]">
                                     <MiscIcon icon="armour" width={15} height={15} />
                                     {StatsCalculatorService.calculateArmor(
                                         data.unitId,

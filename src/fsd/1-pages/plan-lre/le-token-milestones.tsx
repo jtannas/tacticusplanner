@@ -28,7 +28,7 @@ export const LeTokenMilestones = ({ currentPoints }: { currentPoints: number }) 
                 {getRowData().map((milestone, index) => (
                     <tr key={index}>
                         <td className="px-4 text-right">{milestone.points}</td>
-                        <td className="px-4 flex justify-center">
+                        <td className="flex justify-center px-4">
                             {milestone.points >= milestonesAndPoints[milestonesAndPoints.length - 1].points ? (
                                 '100%'
                             ) : (

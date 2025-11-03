@@ -111,7 +111,7 @@ export const LeTokenTable = ({ tokens, currentPoints }: { tokens: TokenUse[]; cu
             <table>
                 <tbody>
                     <tr>
-                        <td className="flex justify-center items-center">
+                        <td className="flex items-center justify-center">
                             {milestone.points >= milestonesAndPoints[milestonesAndPoints.length - 1].points ? (
                                 '100%'
                             ) : (
@@ -126,14 +126,14 @@ export const LeTokenTable = ({ tokens, currentPoints }: { tokens: TokenUse[]; cu
                         </td>
                     </tr>
                     <tr>
-                        <td className="text-center justify-center">
+                        <td className="justify-center text-center">
                             <span style={{ color: getTextColor(3 - milestone.round) }}>
                                 {getOrdinal(milestone.round)} Round
                             </span>
                         </td>
                     </tr>
                     <tr>
-                        <td className="text-center justify-center">
+                        <td className="justify-center text-center">
                             <span style={{ color: getTextColor(2 - milestone.packsPerRound) }}>
                                 {milestone.packsPerRound == 2
                                     ? 'with both packs'
@@ -178,12 +178,12 @@ export const LeTokenTable = ({ tokens, currentPoints }: { tokens: TokenUse[]; cu
                     return (
                         <tr key={index} style={{ backgroundColor: getBgColor(index) }}>
                             <td className="px-4">{index + 1}</td>
-                            <td align="center" className="px-4 flex justify-center">
+                            <td align="center" className="flex justify-center px-4">
                                 {getMilestone(token.milestoneAchievedIndex)}
                             </td>
                             <td className="px-4">{token.track}</td>
                             <td className="px-4 text-right">{token.battleNumber + 1}</td>
-                            <td className="px-4 flex justify-center">
+                            <td className="flex justify-center px-4">
                                 {token.restricts.map(restrict =>
                                     restrict.id === '_killPoints' || restrict.id === '_highScore' ? (
                                         <span key={token.track + token.battleNumber + restrict.id}> </span>

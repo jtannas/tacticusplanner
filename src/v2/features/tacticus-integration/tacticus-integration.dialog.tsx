@@ -93,7 +93,7 @@ export const TacticusIntegrationDialog: React.FC<Props> = ({
                 <Modal.Header>
                     <Modal.Title>Sync with Tacticus via API</Modal.Title>
                     <Modal.Description>
-                        <span className="text-red-600 dark:text-red-500 font-semibold">⚠ Warning:&nbsp;</span>
+                        <span className="font-semibold text-red-600 dark:text-red-500">⚠ Warning:&nbsp;</span>
                         The Planner is in an early stage of integration with the Tacticus API. Unexpected issues may
                         occur.
                     </Modal.Description>
@@ -105,14 +105,14 @@ export const TacticusIntegrationDialog: React.FC<Props> = ({
                             href="https://api.tacticusgame.com/"
                             target="_blank"
                             rel="noreferrer"
-                            className="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300 font-semibold">
+                            className="font-semibold text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
                             https://api.tacticusgame.com
                         </a>
                         .
                         <br />
                         <br />
                         <p>
-                            <span className="text-yellow-700 dark:text-yellow-400 font-semibold">
+                            <span className="font-semibold text-yellow-700 dark:text-yellow-400">
                                 🔑 DO NOT SHARE PUBLICLY:&nbsp;
                             </span>
                             <span>
@@ -124,7 +124,7 @@ export const TacticusIntegrationDialog: React.FC<Props> = ({
 
                     <br />
 
-                    <div className="flex flex-col justify-between items-center">
+                    <div className="flex flex-col items-center justify-between">
                         <TextField
                             name={`apikey-${Math.random()}`}
                             description="Used to fetch Player data. Player scope is required for this key"

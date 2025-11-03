@@ -155,7 +155,7 @@ export const RaidsPlan: React.FC<Props> = ({
         <Accordion defaultExpanded={scrollToCharSnowprintId !== undefined}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <FlexBox style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-                    <div className="flex gap-2 items-center flex-wrap" style={{ fontSize: isMobile ? 16 : 20 }}>
+                    <div className="flex flex-wrap items-center gap-2" style={{ fontSize: isMobile ? 16 : 20 }}>
                         <span>
                             Raids plan (<b>{daysTotal}</b> Days |
                         </span>
@@ -177,7 +177,7 @@ export const RaidsPlan: React.FC<Props> = ({
                 {!!estimatedRanks.relatedUpgrades.length && (
                     <Accordion TransitionProps={{ unmountOnExit: !grid1Loaded }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <div className="flex gap-2 items-center flex-wrap" style={{ fontSize: isMobile ? 16 : 20 }}>
+                            <div className="flex flex-wrap items-center gap-2" style={{ fontSize: isMobile ? 16 : 20 }}>
                                 <InventoryIcon />
                                 <b>{estimatedRanks.relatedUpgrades.length}</b> related upgrades (Inventory)
                             </div>
@@ -192,7 +192,7 @@ export const RaidsPlan: React.FC<Props> = ({
                         defaultExpanded={scrollToCharSnowprintId !== undefined}
                         TransitionProps={{ unmountOnExit: !grid1Loaded }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <div className="flex gap-2 items-center flex-wrap" style={{ fontSize: isMobile ? 16 : 20 }}>
+                            <div className="flex flex-wrap items-center gap-2" style={{ fontSize: isMobile ? 16 : 20 }}>
                                 <PendingIcon color={'primary'} />
                                 <b>{estimatedRanks.inProgressMaterials.length}</b> in progress upgrades
                             </div>
@@ -238,7 +238,7 @@ export const RaidsPlan: React.FC<Props> = ({
                 {!!estimatedRanks.finishedMaterials.length && (
                     <Accordion TransitionProps={{ unmountOnExit: !grid3Loaded }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <div className="flex gap-2 items-center flex-wrap" style={{ fontSize: isMobile ? 16 : 20 }}>
+                            <div className="flex flex-wrap items-center gap-2" style={{ fontSize: isMobile ? 16 : 20 }}>
                                 <CheckCircleIcon color={'success'} /> <b>{estimatedRanks.finishedMaterials.length}</b>{' '}
                                 finished upgrades
                             </div>
@@ -259,7 +259,7 @@ export const RaidsPlan: React.FC<Props> = ({
                             <AccessibleTooltip
                                 title={`You don't any have location for ${estimatedRanks.blockedMaterials.length} upgrades`}>
                                 <div
-                                    className="flex gap-2 items-center flex-wrap"
+                                    className="flex flex-wrap items-center gap-2"
                                     style={{ fontSize: isMobile ? 16 : 20 }}>
                                     <Warning color={'warning'} />
                                     <b>{estimatedRanks.blockedMaterials.length}</b> blocked upgrades
@@ -287,7 +287,7 @@ export const RaidsPlan: React.FC<Props> = ({
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <FlexBox style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
                                 <div
-                                    className="flex gap-2 items-center flex-wrap"
+                                    className="flex flex-wrap items-center gap-2"
                                     style={{ fontSize: isMobile ? 16 : 20 }}>
                                     <span>
                                         Shards Raids (<b>{estimatedShards.daysTotal}</b> Days |

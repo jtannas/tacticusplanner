@@ -47,7 +47,7 @@ export const SetAscendGoal: React.FC<Props> = ({
 
     return (
         <>
-            <div className="flex gap-3 items-center">
+            <div className="flex items-center gap-3">
                 <RaritySelect
                     label={'Target Rarity'}
                     rarityValues={rarityValues}
@@ -77,7 +77,7 @@ export const SetAscendGoal: React.FC<Props> = ({
             </div>
 
             {!!possibleLocations.length && (
-                <div className="flex gap-3 items-center">
+                <div className="flex items-center gap-3">
                     <div style={{ width: '50%' }}>
                         <CampaignsUsageSelect
                             disabled={!unlockedLocations.length}

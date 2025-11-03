@@ -293,7 +293,7 @@ export const Campaigns = () => {
                         rowData={rows}></AgGridReact>
                 </div>
             ) : (
-                <div className="flex gap-3 flex-wrap">
+                <div className="flex flex-wrap gap-3">
                     {rows.map(x => (
                         <CampaignBattleCard key={x.id} battle={x} />
                     ))}

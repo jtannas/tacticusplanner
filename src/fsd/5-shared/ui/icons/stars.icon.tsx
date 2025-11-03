@@ -19,7 +19,7 @@ export const StarsIcon = ({ stars }: { stars: RarityStars }) => {
             />
         ));
 
-        return <div className="flex items-end h-[15px]">{starsImages}</div>;
+        return <div className="flex h-[15px] items-end">{starsImages}</div>;
     }
 
     if (stars <= RarityStars.RedFiveStars) {
@@ -34,7 +34,7 @@ export const StarsIcon = ({ stars }: { stars: RarityStars }) => {
             />
         ));
 
-        return <div className="flex items-end h-[15px]">{starsImages}</div>;
+        return <div className="flex h-[15px] items-end">{starsImages}</div>;
     }
 
     if (stars <= RarityStars.ThreeBlueStars) {
@@ -49,7 +49,7 @@ export const StarsIcon = ({ stars }: { stars: RarityStars }) => {
             />
         ));
 
-        return <div className="flex items-end h-[15px]">{starsImages}</div>;
+        return <div className="flex h-[15px] items-end">{starsImages}</div>;
     }
 
     if (stars === RarityStars.MythicWings) {
