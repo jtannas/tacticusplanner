@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+read -p "Please enter path to datamine_tacticus_repo [~/datamine_tacticus]: " datamine_repo_path
+datamine_repo_path=${datamine_repo_path:-~/datamine_tacticus}
+
+read -p "Please enter path to data directory [./src/data]: " target_directory
+target_directory=${target_directory:-./src/data}
+
+echo "Copying datamine files from $datamine_repo_path to $target_directory"
+
+for jsonfile in $target_directory/*.json; do
+    filename=$(basename "$jsonfile")
+    if [ -f "$datamine_repo_path/$filename" ]; then
+        cp "$datamine_repo_path/$filename" "$target_directory/"
+        # echo "Updated $filename from $datamine_repo_path"
+    else
+        echo -e "${YELLOW}Warning${NC}: $filename not found in $datamine_repo_path"
+    fi
+done
+echo "Data files copy completed."
+
+npx prettier --write --log-level error "$target_directory/*.json"
