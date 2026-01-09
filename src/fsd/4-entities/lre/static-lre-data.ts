@@ -12,21 +12,21 @@ import danteJson from '@/data/lre/8-Dante.json';
 import trajannJson from '@/data/lre/9-Trajann.json';
 /* eslint-enable import-x/no-internal-modules */
 
-import { ILegendaryEventStatic } from './static-data.model';
+import { LegendaryEventStaticSchema } from './static-data.model';
 
-export const aunshi: ILegendaryEventStatic = aunshiJson;
-export const dante: ILegendaryEventStatic = danteJson;
-export const kharn: ILegendaryEventStatic = kharnJson;
-export const mephiston: ILegendaryEventStatic = mephistonJson;
-export const patermine: ILegendaryEventStatic = patermineJson;
-export const ragnar: ILegendaryEventStatic = ragnarJson;
-export const shadowsun: ILegendaryEventStatic = shadowsunJson;
-export const trajann: ILegendaryEventStatic = trajannJson;
-export const vitruvius: ILegendaryEventStatic = vitruviusJson;
-export const lucius: ILegendaryEventStatic = luciusJson;
-export const farsight: ILegendaryEventStatic = farsightJson;
+export const aunshi = LegendaryEventStaticSchema.parse(aunshiJson);
+export const dante = LegendaryEventStaticSchema.parse(danteJson);
+export const kharn = LegendaryEventStaticSchema.parse(kharnJson);
+export const mephiston = LegendaryEventStaticSchema.parse(mephistonJson);
+export const patermine = LegendaryEventStaticSchema.parse(patermineJson);
+export const ragnar = LegendaryEventStaticSchema.parse(ragnarJson);
+export const shadowsun = LegendaryEventStaticSchema.parse(shadowsunJson);
+export const trajann = LegendaryEventStaticSchema.parse(trajannJson);
+export const vitruvius = LegendaryEventStaticSchema.parse(vitruviusJson);
+export const lucius = LegendaryEventStaticSchema.parse(luciusJson);
+export const farsight = LegendaryEventStaticSchema.parse(farsightJson);
 
-export const allLegendaryEvents: ILegendaryEventStatic[] = [
+export const allLegendaryEvents = [
     aunshi,
     shadowsun,
     ragnar,
