@@ -105,7 +105,8 @@
     "format": "prettier src --write",
     "format-ci": "prettier src --check",
     "knip": "knip",
-    "spellcheck": "cspell ."
+    "spellcheck": "cspell .",
+    "cp-datamine": "bin/cp_datamine"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
