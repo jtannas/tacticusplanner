@@ -12,3 +12,7 @@ export { Equipment } from './equipment.enum';
 
 export type FactionId = (typeof factions)[number]['snowprintId'];
 export type FactionName = (typeof factions)[number]['name'];
+
+// Arranged from lowest to highest rarity to allow sorting
+export const RARITIES = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Mythic'] as const;
+export type RarityKey = (typeof RARITIES)[number];
