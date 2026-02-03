@@ -1,8 +1,8 @@
-﻿import { RarityKey } from '@/fsd/5-shared/model';
+﻿import { Rarity } from '@/fsd/5-shared/model';
 
 import { getImageUrl } from '../get-image-url';
 
-export const ForgeBadgeImage = ({ rarity, size = 'medium' }: { rarity: RarityKey; size?: 'small' | 'medium' }) => {
+export const ForgeBadgeImage = ({ rarity, size = 'medium' }: { rarity: Rarity; size?: 'small' | 'medium' }) => {
     const sizePx = size === 'medium' ? 35 : 25;
     const image = getImageUrl(`forgeBadges/resized/${rarity.toLowerCase()}.png`);
 

@@ -1,7 +1,7 @@
 import { cloneDeep, sum } from 'lodash';
 
 import { getEnumValues } from '@/fsd/5-shared/lib';
-import { RarityStars, Rank, rankToString, RarityKey } from '@/fsd/5-shared/model';
+import { RarityStars, Rank, rankToString, Rarity } from '@/fsd/5-shared/model';
 
 import { ICharacterRankRange, rankUpData } from '@/fsd/4-entities/character/@x/unit';
 import { IMaterialFull, IMaterialRecipeIngredientFull, UpgradesService } from '@/fsd/4-entities/upgrade/@x/unit';
@@ -113,7 +113,7 @@ export class CharactersValueService {
         );
     }
 
-    public static getUnlockValue(initialRarity: RarityKey, name: string): number {
+    public static getUnlockValue(initialRarity: Rarity, name: string): number {
         const defaultCharacters: string[] = ['Varro Tigurius', 'Certus', 'Bellator', 'Incisus', 'Vindicta'];
         if (defaultCharacters.includes(name)) {
             return 0;
@@ -445,7 +445,7 @@ export class CharactersValueService {
         }
     }
 
-    public static getInitialStarsValue(rarity: RarityKey): number {
+    public static getInitialStarsValue(rarity: Rarity): number {
         const ShardBS = 35;
 
         switch (rarity) {
@@ -466,7 +466,7 @@ export class CharactersValueService {
         }
     }
 
-    public static getRarityValue(rarity: RarityKey): number {
+    public static getRarityValue(rarity: Rarity): number {
         const ShardBS = 35;
         const UncommonOrbBS = 210 / 3;
         const RareOrbBS = 490 / 3;

@@ -1,13 +1,13 @@
 import { Badge } from '@mui/material';
 import React from 'react';
 
-import { Alliance, RARITIES, RarityKey } from '@/fsd/5-shared/model';
+import { Alliance, RARITIES, Rarity } from '@/fsd/5-shared/model';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { BadgeImage } from '@/fsd/5-shared/ui/icons/badge-image';
 
 interface Props {
     alliance: Alliance;
-    badges: Record<RarityKey, number>;
+    badges: Record<Rarity, number>;
     size?: 'small' | 'medium';
 }
 

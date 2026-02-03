@@ -7,7 +7,7 @@ import {
     DynamicProps,
     FactionId,
     Rank,
-    RarityKey,
+    Rarity,
     RarityStars,
     Trait,
     UnitType,
@@ -20,7 +20,7 @@ import { CharacterBias } from './bias.enum';
 interface IPersonalCharacterData2 {
     name: string;
     rank: Rank;
-    rarity: RarityKey;
+    rarity: Rarity;
     stars: RarityStars;
     level: number;
     xp: number;
@@ -77,7 +77,7 @@ export interface UnitDataRaw {
     'Extra Short Name': string;
     'Short Name': string;
     'Full Name': string;
-    'Initial rarity': RarityKey;
+    'Initial rarity': Rarity;
     'Melee Damage': string;
     'Melee Hits': number;
     'Ranged Damage'?: string;
@@ -108,7 +108,7 @@ export interface UnitDataRaw {
     CampaignsRequiredIn?: string[];
     Icon: string;
     RoundIcon: string;
-    ReleaseRarity?: RarityKey;
+    ReleaseRarity?: Rarity;
     releaseDate?: string;
     lre?: ILreCharacterStaticData;
 }
@@ -126,7 +126,7 @@ export interface ICharacterData {
     health: number;
     damage: number;
     armour: number;
-    initialRarity: RarityKey;
+    initialRarity: Rarity;
     rarityStars: RarityStars;
     damageTypes: IDamageTypes;
     traits: Trait[];
@@ -144,7 +144,7 @@ export interface ICharacterData {
     roundIcon: string;
     legendaryEvents: ICharLegendaryEvents;
     lre?: ILreCharacterStaticData;
-    releaseRarity?: RarityKey;
+    releaseRarity?: Rarity;
     releaseDate?: string;
 }
 
@@ -192,5 +192,5 @@ export interface IRankLookup {
     appliedUpgrades: string[];
     rankStartPoint5: boolean;
     rankPoint5: boolean;
-    upgradesRarity: RarityKey[];
+    upgradesRarity: Rarity[];
 }

@@ -4,7 +4,7 @@ import { isMobile } from 'react-device-detect';
 
 import { DispatchContext, StoreContext } from '@/reducers/store.provider';
 
-import { Alliance, RARITIES, RarityKey, useAuth } from '@/fsd/5-shared/model';
+import { Alliance, RARITIES, Rarity, useAuth } from '@/fsd/5-shared/model';
 import { BadgeImage } from '@/fsd/5-shared/ui/icons/badge-image';
 import { OrbIcon } from '@/fsd/5-shared/ui/icons/iconList';
 import { MiscIcon } from '@/fsd/5-shared/ui/icons/misc.icon';
@@ -24,7 +24,7 @@ export const Resources = () => {
         });
     };
 
-    const enabled: { [key in RarityKey]: boolean } = {
+    const enabled: { [key in Rarity]: boolean } = {
         Common: xpUse.useCommon,
         Uncommon: xpUse.useUncommon,
         Rare: xpUse.useRare,
@@ -33,7 +33,7 @@ export const Resources = () => {
         Mythic: xpUse.useMythic,
     };
 
-    const newState = (rarity: RarityKey): XpUseState => {
+    const newState = (rarity: Rarity): XpUseState => {
         const updatedEnabled = { ...enabled, [rarity]: !enabled[rarity] };
 
         return {
@@ -46,7 +46,7 @@ export const Resources = () => {
         };
     };
 
-    const toggleState = (rarity: RarityKey) => dispatchUpdate(newState(rarity));
+    const toggleState = (rarity: Rarity) => dispatchUpdate(newState(rarity));
 
     const hasSync = !!userInfo.tacticusApiKey;
 

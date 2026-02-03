@@ -8,7 +8,7 @@ import { AgGridReact } from 'ag-grid-react';
 import React, { useState } from 'react';
 
 import { raritiesBetween } from '@/fsd/5-shared/lib';
-import { RarityStars, Rank, RarityKey } from '@/fsd/5-shared/model';
+import { RarityStars, Rank, Rarity } from '@/fsd/5-shared/model';
 import { FlexBox } from '@/fsd/5-shared/ui';
 import { RarityIcon, StarsIcon } from '@/fsd/5-shared/ui/icons';
 
@@ -37,7 +37,7 @@ export const PotentialInfo: React.FC = () => {
         {
             field: 'rarity',
             width: 70,
-            cellRenderer: (params: ICellRendererParams<IRarityCap, RarityKey>) => {
+            cellRenderer: (params: ICellRendererParams<IRarityCap, Rarity>) => {
                 const { value } = params;
 
                 return <RarityIcon rarity={value!} />;

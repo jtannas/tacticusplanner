@@ -6,7 +6,7 @@ import React, { useMemo, useState } from 'react';
 
 import { ICustomDailyRaidsSettings } from 'src/models/interfaces';
 
-import { RARITIES, RarityKey } from '@/fsd/5-shared/model';
+import { RARITIES, Rarity } from '@/fsd/5-shared/model';
 import { AccessibleTooltip } from '@/fsd/5-shared/ui';
 import { RarityIcon } from '@/fsd/5-shared/ui/icons/rarity.icon';
 
@@ -21,7 +21,7 @@ interface Props {
 export const DailyRaidsCustomLocations: React.FC<Props> = ({ settings, settingsChange, hasCE }) => {
     const [showDroprates, setShowDroprates] = useState<boolean>(false);
 
-    const handleChange = (rarity: RarityKey, checked: boolean, campaignTypes: CampaignType[]) => {
+    const handleChange = (rarity: Rarity, checked: boolean, campaignTypes: CampaignType[]) => {
         const currentValue = settings[rarity];
         settingsChange({
             ...settings,

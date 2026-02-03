@@ -8,7 +8,7 @@ import { charsUnlockShards, charsProgression } from 'src/models/constants';
 import { IPersonalCharacterData2, ICharProgression } from 'src/models/interfaces';
 
 import { minRarity, rarityCompareFn } from '@/fsd/5-shared/lib';
-import { Rank, UnitType, RarityStars, RarityKey } from '@/fsd/5-shared/model';
+import { Rank, UnitType, RarityStars, Rarity } from '@/fsd/5-shared/model';
 
 import { ICharacter2 } from '@/fsd/4-entities/character';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
@@ -196,7 +196,7 @@ export class CharactersService {
         return result.sort((a, b) => b[orderByKey] - a[orderByKey]);
     }
 
-    static capCharacterAtRarity(character: ICharacter2, rarity: RarityKey): ICharacter2 {
+    static capCharacterAtRarity(character: ICharacter2, rarity: Rarity): ICharacter2 {
         const capped = rarityCaps[rarity];
         return {
             ...character,
@@ -209,7 +209,7 @@ export class CharactersService {
         };
     }
 
-    static capMowAtRarity(mow: IMow2, rarity: RarityKey): IMow2 {
+    static capMowAtRarity(mow: IMow2, rarity: Rarity): IMow2 {
         const capped = rarityCaps[rarity];
 
         return {
@@ -221,7 +221,7 @@ export class CharactersService {
         };
     }
 
-    static calculateCharacterPotential(character: IPersonalCharacterData2, rarityCap: RarityKey): number {
+    static calculateCharacterPotential(character: IPersonalCharacterData2, rarityCap: Rarity): number {
         const capped = rarityCaps[rarityCap];
 
         const cappedPower = CharactersPowerService.getCharacterPower({
@@ -246,7 +246,7 @@ export class CharactersService {
         return characterPower > cappedPower ? 100 : Math.round((characterPower / cappedPower) * 100); // Round potential to the nearest whole number
     }
 
-    public static groupByRarityPools(availableCharacters: IPersonalCharacterData2[]): Record<RarityKey, number> {
+    public static groupByRarityPools(availableCharacters: IPersonalCharacterData2[]): Record<Rarity, number> {
         // TODO(mythic): is rank right? what is this for?
         const mythicPool = availableCharacters.filter(x => x.rarity === 'Mythic' && x.rank >= Rank.Diamond1).length;
         const legendaryPool = availableCharacters.filter(x => x.rarity === 'Legendary' && x.rank >= Rank.Gold1).length;
@@ -266,7 +266,7 @@ export class CharactersService {
 
     public static getRosterPotential(
         availableCharacters: IPersonalCharacterData2[],
-        rarityCaps: Record<RarityKey, number>
+        rarityCaps: Record<Rarity, number>
     ): number {
         const uncommonCharactersCount = rarityCaps['Uncommon'];
         const rareCharactersCount = rarityCaps['Rare'];
@@ -323,7 +323,7 @@ export class CharactersService {
     private static getRosterRarityPotential(
         usedCharacters: string[],
         availableCharacters: IPersonalCharacterData2[],
-        rarityCap: RarityKey,
+        rarityCap: Rarity,
         charactersCount: number
     ): number {
         const charactersByPotential = orderBy(
@@ -353,7 +353,7 @@ export class CharactersService {
      * const totalProgression = CharactersService.getTotalProgressionUntil(Rarity.RARE, RarityStars.THREE);
      * console.log(totalProgression); // { shards: 100, orbs: 50, mythicShards: 10 }
      */
-    public static getTotalProgressionUntil(rarity: RarityKey, stars: RarityStars) {
+    public static getTotalProgressionUntil(rarity: Rarity, stars: RarityStars) {
         const key = rarity + stars;
         const totals: ICharProgression = {
             shards: 0,
@@ -384,11 +384,11 @@ export class CharactersService {
      * sorts them in ascending order, and returns the rarity that follows the provided
      * current rarity. If the current rarity is the highest, the method will return undefined.
      */
-    public static getNextRarity(current: RarityKey): RarityKey {
+    public static getNextRarity(current: Rarity): Rarity {
         const rarities = Object.values(charsProgression)
             .map(x => x.rarity)
             .filter(r => !!r)
-            .sort(rarityCompareFn) as RarityKey[];
+            .sort(rarityCompareFn) as Rarity[];
         const index = rarities.indexOf(current);
         return rarities[index + 1];
     }
@@ -398,7 +398,7 @@ export class CharactersService {
      * @param rarity - The rarity level to find the minimum stars for.
      * @returns The minimum number of stars needed to achieve the specified rarity.
      */
-    public static getMinimumStarsForRarity(rarity: RarityKey): RarityStars {
+    public static getMinimumStarsForRarity(rarity: Rarity): RarityStars {
         const matches: number[] = [];
 
         for (const [kString, value] of Object.entries(charsProgression)) {

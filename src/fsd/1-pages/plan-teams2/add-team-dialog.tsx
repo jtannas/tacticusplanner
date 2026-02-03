@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { ICharacter2 } from '@/models/interfaces';
 
 import { rarityCompareFn } from '@/fsd/5-shared/lib/rarity-comparison';
-import { FactionId, Rank, RarityKey } from '@/fsd/5-shared/model';
+import { FactionId, Rank, Rarity } from '@/fsd/5-shared/model';
 import { AccessibleTooltip } from '@/fsd/5-shared/ui';
 
 import { IMow2 } from '@/fsd/4-entities/mow';
@@ -21,16 +21,16 @@ interface Props {
     selectedChars: string[];
     selectedMows: string[];
     searchText: string;
-    minRarity: RarityKey;
-    maxRarity: RarityKey;
+    minRarity: Rarity;
+    maxRarity: Rarity;
     minRank: Rank;
     maxRank: Rank;
     factions: FactionId[];
     onSelectedCharsChange: (ids: string[]) => void;
     onSelectedMowsChange: (ids: string[]) => void;
     onSearchTextChange: (text: string) => void;
-    onMinRarityChange: (rarity: RarityKey) => void;
-    onMaxRarityChange: (rarity: RarityKey) => void;
+    onMinRarityChange: (rarity: Rarity) => void;
+    onMaxRarityChange: (rarity: Rarity) => void;
     onMinRankChange: (rank: Rank) => void;
     onMaxRankChange: (rank: Rank) => void;
     onFactionsChange: (factions: FactionId[]) => void;

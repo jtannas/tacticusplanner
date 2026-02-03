@@ -1,4 +1,4 @@
-﻿import { RarityStars, Rank, UnitType, RarityKey } from '@/fsd/5-shared/model';
+﻿import { RarityStars, Rank, UnitType, Rarity } from '@/fsd/5-shared/model';
 
 import { ICharacter2 } from '@/fsd/4-entities/character';
 
@@ -16,7 +16,7 @@ export const unsetCharacter: Partial<ICharacter2> = {
     level: 1,
 };
 
-export const rarityCaps: Record<RarityKey, IRarityCap> = {
+export const rarityCaps: Record<Rarity, IRarityCap> = {
     Common: {
         rarity: 'Common',
         abilitiesLevel: 8,

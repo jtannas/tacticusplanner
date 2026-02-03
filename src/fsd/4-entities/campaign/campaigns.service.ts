@@ -3,7 +3,7 @@ import { groupBy, orderBy, sortBy, uniq } from 'lodash';
 // eslint-disable-next-line import-x/no-internal-modules
 import factionData from '@/data/factions.json';
 
-import { Alliance, FactionId, RarityKey } from '@/fsd/5-shared/model';
+import { Alliance, FactionId, Rarity } from '@/fsd/5-shared/model';
 
 import { recipeDataByName } from '@/fsd/4-entities/upgrade/@x/campaign';
 
@@ -195,7 +195,7 @@ export class CampaignsService {
     public static passLocationFilter(
         location: ICampaignBattleComposed,
         filters: ICampaignsFilters,
-        materialRarity?: RarityKey
+        materialRarity?: Rarity
     ): boolean {
         const {
             alliesFactions,
@@ -269,9 +269,9 @@ export class CampaignsService {
         return true;
     }
 
-    public static getItemAcquiredPerEnergyUsed(campaignType: CampaignType, rarity: RarityKey) {
+    public static getItemAcquiredPerEnergyUsed(campaignType: CampaignType, rarity: Rarity) {
         const config = campaignConfigs[campaignType];
-        const dropRateKey: keyof IDropRate = rarity.toLowerCase() as Lowercase<RarityKey>;
+        const dropRateKey: keyof IDropRate = rarity.toLowerCase() as Lowercase<Rarity>;
         const dropRate = config.dropRate[dropRateKey];
         if (!dropRate) {
             return 0;

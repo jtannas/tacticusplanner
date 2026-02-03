@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 import { ICharacter2 } from '@/models/interfaces';
 
 import { maxRarity } from '@/fsd/5-shared/lib';
-import { RarityKey, RarityStars } from '@/fsd/5-shared/model';
+import { Rarity, RarityStars } from '@/fsd/5-shared/model';
 
 import { CharactersService } from '@/fsd/4-entities/character';
 import { IMow2 } from '@/fsd/4-entities/mow';
@@ -114,7 +114,7 @@ export class RosterSnapshotsService {
         };
     }
 
-    private static getMinimumStarsForRarity(rarity: RarityKey): RarityStars {
+    private static getMinimumStarsForRarity(rarity: Rarity): RarityStars {
         switch (rarity) {
             case 'Common':
                 return RarityStars.None;

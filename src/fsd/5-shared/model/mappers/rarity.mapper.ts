@@ -1,7 +1,7 @@
-import { RarityStars, Rank, RarityKey } from '../enums';
+import { RarityStars, Rank, Rarity } from '../enums';
 
 export class RarityMapper {
-    public static toStars: Record<RarityKey, RarityStars> = {
+    public static toStars: Record<Rarity, RarityStars> = {
         Common: RarityStars.None,
         Uncommon: RarityStars.TwoStars,
         Rare: RarityStars.FourStars,
@@ -10,7 +10,7 @@ export class RarityMapper {
         Mythic: RarityStars.OneBlueStar,
     };
 
-    public static toMaxStars: Record<RarityKey, RarityStars> = {
+    public static toMaxStars: Record<Rarity, RarityStars> = {
         Common: RarityStars.TwoStars,
         Uncommon: RarityStars.FourStars,
         Rare: RarityStars.RedOneStar,
@@ -19,7 +19,7 @@ export class RarityMapper {
         Mythic: RarityStars.MythicWings,
     };
 
-    public static toMaxRank: Record<RarityKey, Rank> = {
+    public static toMaxRank: Record<Rarity, Rank> = {
         Common: Rank.Iron1,
         Uncommon: Rank.Bronze1,
         Rare: Rank.Silver1,
@@ -28,7 +28,7 @@ export class RarityMapper {
         Mythic: Rank.Adamantine1,
     };
 
-    public static getRarityFromLevel(level: number): RarityKey {
+    public static getRarityFromLevel(level: number): Rarity {
         if (level <= 8) return 'Common';
         if (level <= 17) return 'Uncommon';
         if (level <= 26) return 'Rare';

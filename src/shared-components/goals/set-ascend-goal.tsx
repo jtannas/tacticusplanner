@@ -7,14 +7,14 @@ import { CampaignsUsageSelect } from 'src/shared-components/goals/campaigns-usag
 import { NumbersInput } from 'src/shared-components/goals/numbers-input';
 
 import { getEnumValues, raritiesBetween } from '@/fsd/5-shared/lib';
-import { RarityKey, RarityStars } from '@/fsd/5-shared/model';
+import { Rarity, RarityStars } from '@/fsd/5-shared/model';
 import { RaritySelect, StarsSelect } from '@/fsd/5-shared/ui';
 
 import { CampaignLocation } from '@/fsd/4-entities/campaign/campaign-location';
 
 interface Props {
-    currentRarity: RarityKey;
-    targetRarity: RarityKey;
+    currentRarity: Rarity;
+    targetRarity: Rarity;
     currentStars: RarityStars;
     targetStars: RarityStars;
     possibleLocations: ICampaignBattleComposed[];

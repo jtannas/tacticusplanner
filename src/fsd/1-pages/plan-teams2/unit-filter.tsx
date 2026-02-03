@@ -1,7 +1,7 @@
 import { MenuItem, OutlinedInput, Select, SelectChangeEvent } from '@mui/material';
 import React from 'react';
 
-import { FactionId, Rank, RARITIES, RarityKey } from '@/fsd/5-shared/model';
+import { FactionId, Rank, RARITIES, Rarity } from '@/fsd/5-shared/model';
 import { RaritySelect } from '@/fsd/5-shared/ui';
 
 import { RankSelect } from '@/fsd/4-entities/character';
@@ -44,15 +44,15 @@ const FilterGroup: React.FC<FilterGroupProps> = ({ label, children }) => (
 
 interface Props {
     searchText: string;
-    minRarity: RarityKey;
-    maxRarity: RarityKey;
+    minRarity: Rarity;
+    maxRarity: Rarity;
     minRank: Rank;
     maxRank: Rank;
     factions: FactionId[];
     allFactions: FactionId[];
     onSearchTextChange: (text: string) => void;
-    onMinRarityChange: (rarity: RarityKey) => void;
-    onMaxRarityChange: (rarity: RarityKey) => void;
+    onMinRarityChange: (rarity: Rarity) => void;
+    onMaxRarityChange: (rarity: Rarity) => void;
     onMinRankChange: (rank: Rank) => void;
     onMaxRankChange: (rank: Rank) => void;
     onFactionsChange: (factions: FactionId[]) => void;

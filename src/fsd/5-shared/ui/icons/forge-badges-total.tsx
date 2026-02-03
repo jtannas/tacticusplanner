@@ -4,12 +4,12 @@ import { Badge } from '@mui/material';
 import React from 'react';
 
 import { raritiesBetween } from '@/fsd/5-shared/lib';
-import { RarityKey } from '@/fsd/5-shared/model/enums';
+import { Rarity } from '@/fsd/5-shared/model/enums';
 
 import { MiscIcon } from './misc.icon';
 
 interface Props {
-    badges: Record<RarityKey, number>;
+    badges: Record<Rarity, number>;
     size?: 'small' | 'medium';
 }
 

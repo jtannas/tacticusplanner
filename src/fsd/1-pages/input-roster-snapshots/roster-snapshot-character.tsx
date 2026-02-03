@@ -4,7 +4,7 @@ import React from 'react';
 
 import { getImageUrl } from 'src/shared-logic/functions';
 
-import { RarityKey } from '@/fsd/5-shared/model';
+import { Rarity } from '@/fsd/5-shared/model';
 import { Rank } from '@/fsd/5-shared/model/enums/rank.enum';
 import { starsIcons, tacticusIcons } from '@/fsd/5-shared/ui/icons/iconList';
 
@@ -15,7 +15,7 @@ import { RosterSnapshotShowVariableSettings } from '@/fsd/3-features/view-settin
 
 import { ISnapshotCharacter, ISnapshotMachineOfWar } from './models';
 
-function getFrame(isMow: boolean, rarity: RarityKey): keyof typeof tacticusIcons {
+function getFrame(isMow: boolean, rarity: Rarity): keyof typeof tacticusIcons {
     return isMow ? `mow${rarity}Frame` : `${rarity.toLowerCase()}Frame`;
 }
 

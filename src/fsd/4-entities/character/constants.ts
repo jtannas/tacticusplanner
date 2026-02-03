@@ -1,6 +1,6 @@
-import { RarityKey } from '@/fsd/5-shared/model';
+import { Rarity } from '@/fsd/5-shared/model';
 
-export const charsUnlockShards: Record<RarityKey, number> = {
+export const charsUnlockShards: Record<Rarity, number> = {
     Common: 40,
     Uncommon: 80,
     Rare: 130,
@@ -9,7 +9,7 @@ export const charsUnlockShards: Record<RarityKey, number> = {
     Mythic: 1400,
 };
 
-export const charsReleaseShards: Record<RarityKey | 'LegendaryOld', number> = {
+export const charsReleaseShards: Record<Rarity | 'LegendaryOld', number> = {
     Common: 40,
     Uncommon: 100,
     Rare: 280,

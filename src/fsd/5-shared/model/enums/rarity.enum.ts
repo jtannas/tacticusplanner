@@ -1,13 +1,4 @@
-export enum RarityString {
-    Common = 'Common',
-    Uncommon = 'Uncommon',
-    Rare = 'Rare',
-    Epic = 'Epic',
-    Legendary = 'Legendary',
-    Mythic = 'Mythic',
-}
-
-export enum Rarity {
+export enum RarityEnum {
     Common,
     Uncommon,
     Rare,

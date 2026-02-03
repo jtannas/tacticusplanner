@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import React, { useContext, useMemo, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
-import { RarityKey } from '@/fsd/5-shared/model';
+import { Rarity } from '@/fsd/5-shared/model';
 import { FlexBox, Conditional, RaritySelect } from '@/fsd/5-shared/ui';
 
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
@@ -26,8 +26,8 @@ type Props = {
     characters: ICharacter2[];
     blockedCharacters: string[];
     team: ICharacter2[];
-    rarityCap: RarityKey;
-    onClose: (team?: ICharacter2[], rarityCap?: RarityKey, teamName?: string) => void;
+    rarityCap: Rarity;
+    onClose: (team?: ICharacter2[], rarityCap?: Rarity, teamName?: string) => void;
     size?: 5 | 7;
     allowPropsEdit?: boolean;
 };

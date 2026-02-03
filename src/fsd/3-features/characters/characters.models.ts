@@ -1,7 +1,7 @@
 ﻿// eslint-disable-next-line import-x/no-internal-modules
 import type factions from '@/data/factions.json';
 
-import { Alliance, Rank, RarityKey, RarityStars } from '@/fsd/5-shared/model';
+import { Alliance, Rank, Rarity, RarityStars } from '@/fsd/5-shared/model';
 
 import { ICharacter2 } from '@/fsd/4-entities/character';
 import { IMow, IMow2, IMowDb } from '@/fsd/4-entities/mow';
@@ -10,7 +10,7 @@ import { IUnit } from '@/fsd/4-entities/unit';
 type IFactionStatic = (typeof factions)[number];
 
 export interface IRarityCap {
-    rarity: RarityKey;
+    rarity: Rarity;
     rank: Rank;
     abilitiesLevel: number;
     stars: RarityStars;
@@ -58,13 +58,13 @@ export interface ICharacterAbilityLevel {
     lvl: number;
     gold: number;
     badges: number;
-    rarity: RarityKey;
+    rarity: Rarity;
 }
 
 export interface ICharacterAbilitiesMaterialsTotal {
     gold: number;
     alliance: Alliance;
-    badges: Record<RarityKey, number>;
+    badges: Record<Rarity, number>;
 }
 
 // Re-export types from FSD entities

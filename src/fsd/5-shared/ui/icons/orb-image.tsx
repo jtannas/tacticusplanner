@@ -1,17 +1,17 @@
 import React from 'react';
 
-import { Alliance, RarityKey } from '@/fsd/5-shared/model';
+import { Alliance, Rarity } from '@/fsd/5-shared/model';
 
 import { tacticusIcons } from './iconList';
 
 interface OrbIconProps {
     alliance: Alliance;
-    rarity: RarityKey;
+    rarity: Rarity;
     size: number; // Size in pixels (e.g., 60 for 60px)
 }
 
 // Maps Rarity enum to the required 'rareOrb', 'uncommonOrb', etc. key.
-const mapRarityToKey = (rarity: RarityKey): string => {
+const mapRarityToKey = (rarity: Rarity): string => {
     return `${rarity.toLowerCase()}Orb`;
 };
 

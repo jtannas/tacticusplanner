@@ -14,7 +14,7 @@ import { DispatchContext, StoreContext } from 'src/reducers/store.provider';
 import { getCompletionRateColor } from 'src/shared-logic/functions';
 
 import { raritiesBetween } from '@/fsd/5-shared/lib';
-import { Rarity, Rank, RarityKey } from '@/fsd/5-shared/model';
+import { RarityEnum, Rank, Rarity } from '@/fsd/5-shared/model';
 import { AccessibleTooltip, Conditional, FlexBox } from '@/fsd/5-shared/ui';
 import { MiscIcon } from '@/fsd/5-shared/ui/icons';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
@@ -86,7 +86,7 @@ export const GuildWarOffense = () => {
         });
     };
 
-    const endEditTeam = (team?: ICharacter2[], rarityCap?: RarityKey, teamName?: string): void => {
+    const endEditTeam = (team?: ICharacter2[], rarityCap?: Rarity, teamName?: string): void => {
         if (team && rarityCap && editedTeam && teamName) {
             dispatch.guildWar({
                 type: 'UpdateTeam',
@@ -214,7 +214,7 @@ export const GuildWarOffense = () => {
         [teamsWithCharacters, teamsPotential, guildWar.deployedCharacters]
     );
 
-    const getCharactersWithPotential = (rarityCap: RarityKey) => {
+    const getCharactersWithPotential = (rarityCap: Rarity) => {
         return orderBy(
             characters
                 .filter(x => x.rank > Rank.Locked)
@@ -442,7 +442,7 @@ const TeamCard: React.FC<{
                         </div>
                     </FlexBox>
                 }
-                subheader={Rarity[team.rarityCap]}
+                subheader={RarityEnum[team.rarityCap]}
             />
             <CardContent className="py-0">
                 <Team

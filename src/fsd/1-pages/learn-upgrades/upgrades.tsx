@@ -6,7 +6,7 @@ import { useMemo, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
 import { useFitGridOnWindowResize } from '@/fsd/5-shared/lib';
-import { Rank, stringToRank, FactionId, RarityKey } from '@/fsd/5-shared/model';
+import { Rank, stringToRank, FactionId, Rarity } from '@/fsd/5-shared/model';
 import { MiscIcon, UnitShardIcon, RarityIcon } from '@/fsd/5-shared/ui/icons';
 
 import { CampaignsService, CampaignLocation, ICampaignBattleComposed } from '@/fsd/4-entities/campaign';
@@ -20,7 +20,7 @@ interface IUpgradesTableRow {
     upgradeId: string;
     upgradeIcon: string;
     faction?: FactionId; // omitted when the upgrade is not faction-specific
-    rarity: RarityKey;
+    rarity: Rarity;
     type: string;
     locations: ICampaignBattleComposed[];
     recipe: string;

@@ -1,6 +1,6 @@
 ﻿import React, { useState, CSSProperties, useMemo } from 'react';
 
-import { RarityKey } from '@/fsd/5-shared/model';
+import { Rarity } from '@/fsd/5-shared/model';
 import { AccessibleTooltip, getImageUrl } from '@/fsd/5-shared/ui';
 
 import { UpgradesService } from './upgrades.service';
@@ -16,7 +16,7 @@ export const UpgradeImage = ({
     iconPath: string;
     size?: number;
     tooltip?: React.ReactNode;
-    rarity?: RarityKey;
+    rarity?: Rarity;
 }) => {
     const [imgError, setImgError] = useState(false);
     const width = size ?? 50;
@@ -27,7 +27,7 @@ export const UpgradeImage = ({
     const bgImgUrl = getImageUrl(`${frameImageDir}/ui_underlay_upgrades.png`);
     const upgradeHeightRatio = 0.78;
 
-    function getFrameUrl(rarity?: RarityKey) {
+    function getFrameUrl(rarity?: Rarity) {
         switch (rarity) {
             case 'Mythic':
                 return getImageUrl(`${frameImageDir}/ui_frame_upgrades_mythic.png`);

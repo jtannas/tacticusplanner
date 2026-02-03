@@ -11,7 +11,7 @@ import {
     Trait,
     RarityMapper,
     getLabelFromTraitString,
-    RarityKey,
+    Rarity,
 } from '@/fsd/5-shared/model';
 import { RarityIcon } from '@/fsd/5-shared/ui/icons';
 
@@ -28,7 +28,7 @@ const minStarsMap = {
 };
 
 export const useCharacters = () => {
-    const [targetRarity, setTargetRarity] = useState<RarityKey>('Legendary');
+    const [targetRarity, setTargetRarity] = useState<Rarity>('Legendary');
     const [targetStars, setTargetStars] = useState<RarityStars>(RarityStars.MythicWings);
     const [targetRank, setTargetRank] = useState<Rank>(Rank.Adamantine1);
 
@@ -71,7 +71,7 @@ export const useCharacters = () => {
         return getEnumValues(RarityStars).filter(x => x >= minStars && x <= maxStars);
     }, [minStars, maxStars]);
 
-    const onTargetRarityChanged = (rarity: RarityKey) => {
+    const onTargetRarityChanged = (rarity: Rarity) => {
         if (rarity < targetRarity) {
             const maxRank = RarityMapper.toMaxRank[rarity];
             setTargetRarity(rarity);

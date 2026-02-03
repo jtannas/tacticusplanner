@@ -2,7 +2,7 @@
 /* eslint-disable import-x/no-internal-modules */
 import { ICharacter2 } from '@/models/interfaces';
 
-import { FactionId, Rank, RarityKey } from '@/fsd/5-shared/model';
+import { FactionId, Rank, Rarity } from '@/fsd/5-shared/model';
 
 import { IMow2 } from '@/fsd/4-entities/mow';
 
@@ -13,8 +13,8 @@ export class Teams2Service {
         c: ICharacter2,
         minRank: Rank,
         maxRank: Rank,
-        minRarity: RarityKey,
-        maxRarity: RarityKey,
+        minRarity: Rarity,
+        maxRarity: Rarity,
         factions: FactionId[],
         searchText: string
     ): boolean {
@@ -69,8 +69,8 @@ export class Teams2Service {
 
     public static passesMowFilter(
         m: IMow2,
-        minRarity: RarityKey,
-        maxRarity: RarityKey,
+        minRarity: Rarity,
+        maxRarity: Rarity,
         factions: FactionId[],
         searchText: string
     ): boolean {

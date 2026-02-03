@@ -3,7 +3,7 @@
 import { Badge } from '@mui/material';
 import React, { useMemo } from 'react';
 
-import { RARITIES, RarityKey } from '@/fsd/5-shared/model/enums';
+import { RARITIES, Rarity } from '@/fsd/5-shared/model/enums';
 
 import { MiscIcon } from './misc.icon';
 
@@ -15,7 +15,7 @@ interface Props {
 export const XpBooksTotal: React.FC<Props> = ({ xp, size = 'small' }) => {
     const sizePx = size === 'small' ? 25 : 35;
     const xpBooks = useMemo(() => {
-        const books: Record<RarityKey, number> = {
+        const books: Record<Rarity, number> = {
             Common: 0,
             Uncommon: 0,
             Rare: 0,
@@ -40,7 +40,7 @@ export const XpBooksTotal: React.FC<Props> = ({ xp, size = 'small' }) => {
         <div className="flex-box gap20">
             {RARITIES.map(rarity => {
                 const booksCount = xpBooks[rarity];
-                const bookName = (rarity.toLowerCase() + 'Book') as `${Lowercase<RarityKey>}Book`;
+                const bookName = (rarity.toLowerCase() + 'Book') as `${Lowercase<Rarity>}Book`;
                 return (
                     booksCount > 0 && (
                         <Badge key={rarity} badgeContent={<b>{booksCount}</b>}>

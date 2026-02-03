@@ -1,4 +1,4 @@
-import { FactionId, RarityKey } from '@/fsd/5-shared/model';
+import { FactionId, Rarity } from '@/fsd/5-shared/model';
 
 import { ICampaignBattleComposed } from '@/fsd/4-entities/campaign/@x/upgrade';
 
@@ -14,7 +14,7 @@ export interface ICraftedUpgrade {
     id: string;
     snowprintId: string; // The ID from snowprint assets.
     label: string;
-    rarity: RarityKey;
+    rarity: Rarity;
     iconPath: string;
     baseUpgrades: IUpgradeRecipe[];
     craftedUpgrades: IUpgradeRecipe[];
@@ -27,7 +27,7 @@ export interface IBaseUpgrade {
     id: string;
     snowprintId: string;
     label: string;
-    rarity: RarityKey;
+    rarity: Rarity;
     iconPath: string;
     locations: ICampaignBattleComposed[];
     crafted: false;
@@ -42,7 +42,7 @@ export interface IMaterialFull {
     id: string;
     snowprintId: string;
     label: string;
-    rarity: RarityKey;
+    rarity: Rarity;
     craftable: boolean;
     stat: string | 'Health' | 'Damage' | 'Armour' | 'Shard';
     faction?: FactionId; // if not specific to faction then this property can be omitted ("undefined");
@@ -58,7 +58,7 @@ export interface IMaterialRecipeIngredientFull {
     snowprintId: string;
     label: string | 'Gold';
     count: number;
-    rarity: RarityKey;
+    rarity: Rarity;
     stat: string;
     craftable: boolean;
     recipe?: IMaterialRecipeIngredientFull[];
@@ -85,7 +85,7 @@ export interface IMaterialEstimated2 {
     dailyBattles: number;
     count: number;
     craftedCount: number;
-    rarity: RarityKey;
+    rarity: Rarity;
     // energyPerBattle: number;
     quantity: number;
     countLeft: number;
@@ -104,7 +104,7 @@ export interface IMaterial {
     snowprintId: string; // The ID from snowprint assets.
     label?: string;
     tacticusId?: string;
-    rarity: RarityKey;
+    rarity: Rarity;
     craftable: boolean;
     stat: string | 'Health' | 'Damage' | 'Armour' | 'Shard';
     icon?: string;
@@ -128,7 +128,7 @@ export interface IRecipeExpandedUpgrade {
     id: string;
     snowprintId: string; // The ID from snowprint assets.
     label: string;
-    rarity: RarityKey;
+    rarity: Rarity;
     iconPath: string;
     expandedRecipe: Record<string, number>;
     crafted: boolean;

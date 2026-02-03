@@ -7,7 +7,7 @@ import { CampaignsLocationsUsage, PersonalGoalType } from 'src/models/enums';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { IInventory, IPersonalGoal } from 'src/models/interfaces';
 
-import { Alliance, Rank, RarityKey } from '@/fsd/5-shared/model';
+import { Alliance, Rank, Rarity } from '@/fsd/5-shared/model';
 
 import { CharactersService } from '@/fsd/4-entities/character';
 import { IMow2, MowsService } from '@/fsd/4-entities/mow';
@@ -34,8 +34,8 @@ import { XpUseState } from '@/fsd/1-pages/input-resources';
 import { XpIncomeState } from '@/fsd/1-pages/input-xp-income';
 interface RevisedGoals {
     goalEstimates: IGoalEstimate[];
-    neededBadges: Record<Alliance, Record<RarityKey, number>>;
-    neededForgeBadges: Record<RarityKey, number>;
+    neededBadges: Record<Alliance, Record<Rarity, number>>;
+    neededForgeBadges: Record<Rarity, number>;
     neededComponents: Record<Alliance, number>;
     neededXp: number;
 }
@@ -389,7 +389,7 @@ export class GoalsService {
         };
     }
 
-    private static adjustNeededXp(xpNeeded: number, heldBooks: Record<RarityKey, number>): number {
+    private static adjustNeededXp(xpNeeded: number, heldBooks: Record<Rarity, number>): number {
         while (xpNeeded >= 62500 && heldBooks.Mythic > 0) {
             xpNeeded -= 62500;
             heldBooks.Mythic -= 1;
@@ -443,7 +443,7 @@ export class GoalsService {
         return xpNeeded;
     }
 
-    private static computeHeldBooks(inventory: IInventory, xpUseState: XpUseState): Record<RarityKey, number> {
+    private static computeHeldBooks(inventory: IInventory, xpUseState: XpUseState): Record<Rarity, number> {
         const heldBooks = { ...inventory.xpBooks };
         if (!xpUseState.useCommon) heldBooks.Common = 0;
         if (!xpUseState.useUncommon) heldBooks.Uncommon = 0;
@@ -466,7 +466,7 @@ export class GoalsService {
         upgradeRankOrMowGoals: (ICharacterUpgradeRankGoal | ICharacterUpgradeMow)[],
         xpIncomeState: XpIncomeState
     ): RevisedGoals {
-        const createRarityRecord = (): Record<RarityKey, number> => ({
+        const createRarityRecord = (): Record<Rarity, number> => ({
             Common: 0,
             Uncommon: 0,
             Rare: 0,
@@ -477,13 +477,13 @@ export class GoalsService {
 
         const heldBooks = this.computeHeldBooks(inventory, xpUseState);
 
-        const neededBadges: Record<Alliance, Record<RarityKey, number>> = {
+        const neededBadges: Record<Alliance, Record<Rarity, number>> = {
             [Alliance.Chaos]: createRarityRecord(),
             [Alliance.Imperial]: createRarityRecord(),
             [Alliance.Xenos]: createRarityRecord(),
         };
 
-        const neededForgeBadges: Record<RarityKey, number> = createRarityRecord();
+        const neededForgeBadges: Record<Rarity, number> = createRarityRecord();
         const neededComponents: Record<Alliance, number> = {
             [Alliance.Chaos]: 0,
             [Alliance.Imperial]: 0,
@@ -556,7 +556,7 @@ export class GoalsService {
             if (goal.abilitiesEstimate === undefined && goal.mowEstimate === undefined) continue;
             const badges = goal.mowEstimate?.badges ?? goal.abilitiesEstimate!.badges;
             for (const [rarityStr, count] of Object.entries(badges)) {
-                const rarity = rarityStr as RarityKey;
+                const rarity = rarityStr as Rarity;
                 const alliance =
                     goal.abilitiesEstimate?.alliance ??
                     GoalsService.getGoalAlliance(goal.goalId, upgradeRankOrMowGoals)!;

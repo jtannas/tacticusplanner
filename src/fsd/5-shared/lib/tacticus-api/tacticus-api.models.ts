@@ -1,4 +1,4 @@
-import { Rarity, RarityKey } from '@/fsd/5-shared/model';
+import { RarityEnum, Rarity } from '@/fsd/5-shared/model';
 
 export interface TacticusPlayerResponse {
     player: TacticusPlayer;
@@ -30,7 +30,7 @@ export interface TacticusInventory {
 }
 
 interface TacticusOrb {
-    rarity: RarityKey;
+    rarity: Rarity;
     amount: number;
 }
 
@@ -42,7 +42,7 @@ interface TacticusOrbs {
 
 interface TacticusForgeBadge {
     name: string;
-    rarity: RarityKey;
+    rarity: Rarity;
     amount: number;
 }
 
@@ -69,7 +69,7 @@ interface TacticusXpBook {
     id: string;
 
     /** Rarity of the book. */
-    rarity: RarityKey;
+    rarity: Rarity;
 
     /** Amount of XP books owned. */
     amount: number;
@@ -80,7 +80,7 @@ interface TacticusAbilityBadge {
     id: string;
 
     /** Rarity of the ability badge. */
-    rarity: RarityKey;
+    rarity: Rarity;
 
     /** Amount of this badge owned. */
     amount: number;
@@ -271,7 +271,7 @@ export interface TacticusGuildRaidEntry {
     encounterType: TacticusEncounterType;
     unitId: string;
     type: string;
-    rarity: Rarity;
+    rarity: RarityEnum;
     damageDealt: number;
     damageType: TacticusDamageType;
     startedOn?: number | null;

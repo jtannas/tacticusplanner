@@ -7,7 +7,7 @@ import { isMobile } from 'react-device-detect';
 // eslint-disable-next-line import-x/no-internal-modules
 import { DispatchContext, StoreContext } from '@/reducers/store.provider';
 
-import { RarityKey } from '@/fsd/5-shared/model';
+import { Rarity } from '@/fsd/5-shared/model';
 import { RarityIcon } from '@/fsd/5-shared/ui/icons';
 
 import { UpgradesService } from '@/fsd/4-entities/upgrade';
@@ -62,7 +62,7 @@ export const Inventory: React.FC<Props> = ({ itemsFilter = [], onUpdate }) => {
     const itemsGrouped = useMemo(() => {
         return map(
             groupBy(itemsList.filter(filterItem), 'rarity'),
-            (items, rarity: RarityKey): IUpgradesGroup => ({
+            (items, rarity: Rarity): IUpgradesGroup => ({
                 label: rarity,
                 rarity: rarity,
                 items: map(

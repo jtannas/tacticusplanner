@@ -1,4 +1,4 @@
-import { RarityKey } from '@/fsd/5-shared/model';
+import { Rarity } from '@/fsd/5-shared/model';
 
 export enum ArenaLeague {
     kHonorGuard,
@@ -22,7 +22,7 @@ export interface XpIncomeState {
     loopsRaids: 'yes' | 'no';
 
     /** Highest raid rarity fully cleared (only if loopsRaids is 'no') */
-    clearRarity: RarityKey;
+    clearRarity: Rarity;
 
     /** Number of additional bosses cleared (only if loopsRaids is 'no') */
     additionalBosses: number;

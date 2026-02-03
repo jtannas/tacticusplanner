@@ -6,7 +6,7 @@ import abilitiesLvlUpJson from 'src/data/characters-lvl-up-abilities.json';
 import xpData from 'src/data/xp.json';
 
 import { mutableCopy } from '@/fsd/5-shared/lib';
-import { Alliance, RarityKey } from '@/fsd/5-shared/model';
+import { Alliance, Rarity } from '@/fsd/5-shared/model';
 
 import {
     ICharacterAbilitiesMaterialsTotal,
@@ -41,7 +41,7 @@ export class CharactersAbilitiesService {
         const gold = sum(materials.map(x => x.gold));
 
         const badges = mapValues(groupBy(materials, 'rarity'), x => sum(x.map(y => y.badges))) as Record<
-            RarityKey,
+            Rarity,
             number
         >;
 

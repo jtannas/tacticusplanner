@@ -1,4 +1,4 @@
-import { RarityKey } from '@/fsd/5-shared/model';
+import { Rarity } from '@/fsd/5-shared/model';
 
 /** Stats about an equipment. */
 export interface IEquipmentStats {
@@ -73,7 +73,7 @@ export interface IEquipmentStatic {
 export interface IEquipment {
     id: string;
     name: string;
-    rarity: RarityKey;
+    rarity: Rarity;
     type: string;
     abilityId: string;
     isRelic: boolean;

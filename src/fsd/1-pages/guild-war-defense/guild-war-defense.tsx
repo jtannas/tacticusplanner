@@ -13,7 +13,7 @@ import { DispatchContext, StoreContext } from 'src/reducers/store.provider';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { getCompletionRateColor } from 'src/shared-logic/functions';
 
-import { Rank, RarityKey } from '@/fsd/5-shared/model';
+import { Rank, Rarity } from '@/fsd/5-shared/model';
 import { AccessibleTooltip, FlexBox, Conditional } from '@/fsd/5-shared/ui';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { RarityIcon } from '@/fsd/5-shared/ui/icons/rarity.icon';
@@ -150,7 +150,7 @@ export const GuildWarDefense = () => {
         [teamsWithCharacters, teamsPotential]
     );
 
-    const getCharactersWithPotential = (rarityCap: RarityKey) => {
+    const getCharactersWithPotential = (rarityCap: Rarity) => {
         return orderBy(
             characters
                 .filter(x => x.rank > Rank.Locked)

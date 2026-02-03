@@ -1,8 +1,8 @@
-﻿import { RarityKey } from '@/fsd/5-shared/model';
+﻿import { Rarity } from '@/fsd/5-shared/model';
 
 import { getImageUrl } from '../get-image-url';
 
-export const RarityIcon = ({ rarity }: { rarity: RarityKey }) => {
+export const RarityIcon = ({ rarity }: { rarity: Rarity }) => {
     const image = getImageUrl(`rarity/resized/${rarity.toLowerCase()}.png`);
 
     return (

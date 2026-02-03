@@ -6,14 +6,14 @@ import guildWarData from 'src/data/guildWar.json';
 import { Difficulty } from 'src/models/enums';
 
 import { mutableCopy } from '@/fsd/5-shared/lib';
-import { RarityKey } from '@/fsd/5-shared/model';
+import { Rarity } from '@/fsd/5-shared/model';
 
 import { IGWData, IGWDataRaw, IGWZone } from './guild-war.models';
 
 export class GuildWarService {
-    static readonly defaultRarityCaps: RarityKey[] = ['Legendary', 'Legendary', 'Legendary', 'Legendary', 'Legendary'];
+    static readonly defaultRarityCaps: Rarity[] = ['Legendary', 'Legendary', 'Legendary', 'Legendary', 'Legendary'];
 
-    static readonly shortRarityStringToFull: Record<string, RarityKey> = {
+    static readonly shortRarityStringToFull: Record<string, Rarity> = {
         C: 'Common',
         U: 'Uncommon',
         R: 'Rare',
@@ -24,7 +24,7 @@ export class GuildWarService {
     private static readonly gwDataRaw = mutableCopy(guildWarData) satisfies IGWDataRaw;
     static readonly gwData: IGWData = this.convertRawDataToGWData(this.gwDataRaw);
 
-    public static getRarityCaps(bfLevel: number, sectionId: string): RarityKey[] {
+    public static getRarityCaps(bfLevel: number, sectionId: string): Rarity[] {
         const section = this.gwData.zones.find(x => x.id === sectionId);
         if (!section) {
             return this.defaultRarityCaps;
@@ -39,30 +39,30 @@ export class GuildWarService {
         return rarityCaps.caps;
     }
 
-    public static getDifficultyRarityCaps(difficulty: Difficulty): RarityKey[] {
+    public static getDifficultyRarityCaps(difficulty: Difficulty): Rarity[] {
         const difficultyLabel = this.gwData.difficulties[difficulty - 1];
         return this.gwData.rarityCaps[difficultyLabel].map(raw => this.shortRarityStringToFull[raw]);
     }
 
-    public static getTotalRarityCaps(bfLevel: number): Record<RarityKey, number> {
+    public static getTotalRarityCaps(bfLevel: number): Record<Rarity, number> {
         const totalRarity = this.gwData.zones.flatMap(section =>
-            Array<RarityKey[]>(section.count)
+            Array<Rarity[]>(section.count)
                 .fill(section.rarityCaps[bfLevel].caps)
                 .flatMap(x => x)
         );
 
-        return mapValues(groupBy(totalRarity), x => x.length * 2) as Record<RarityKey, number>;
+        return mapValues(groupBy(totalRarity), x => x.length * 2) as Record<Rarity, number>;
     }
 
-    public static getDifficultyRarityCapsGrouped(difficulty: Difficulty): Record<RarityKey, number> {
-        return mapValues(groupBy(this.getDifficultyRarityCaps(difficulty)), x => x.length) as Record<RarityKey, number>;
+    public static getDifficultyRarityCapsGrouped(difficulty: Difficulty): Record<Rarity, number> {
+        return mapValues(groupBy(this.getDifficultyRarityCaps(difficulty)), x => x.length) as Record<Rarity, number>;
     }
 
     private static convertRawDataToGWData(rawData: IGWDataRaw): IGWData {
         const sections: IGWZone[] = rawData.sections
             .filter(x => !x.inactive)
             .map(rawSection => {
-                const rarityCaps: Record<number, { difficulty: string; caps: RarityKey[] }> = {};
+                const rarityCaps: Record<number, { difficulty: string; caps: Rarity[] }> = {};
                 for (const bfLevel in rawSection.difficulty) {
                     const difficulty = rawSection.difficulty[bfLevel];
                     const caps = rawData.rarityCaps[difficulty].map(x => this.shortRarityStringToFull[x]);

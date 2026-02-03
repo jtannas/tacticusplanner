@@ -1,7 +1,7 @@
 ﻿import { cloneDeep } from 'lodash';
 import { v4 } from 'uuid';
 
-import { Rank, RarityStars, RarityMapper, Alliance, RarityKey } from '@/fsd/5-shared/model';
+import { Rank, RarityStars, RarityMapper, Alliance, Rarity } from '@/fsd/5-shared/model';
 
 import { ICampaignsProgress, Campaign } from '@/fsd/4-entities/campaign';
 import { CharactersFilterBy, CharactersOrderBy } from '@/fsd/4-entities/character';
@@ -46,7 +46,7 @@ export const rankToLevel: Record<Rank, number> = {
     [Rank.Adamantine3]: 65,
 };
 
-export const rankToRarity: Record<Rank, RarityKey> = {
+export const rankToRarity: Record<Rank, Rarity> = {
     [Rank.Locked]: 'Common',
     [Rank.Stone1]: 'Common',
     [Rank.Stone2]: 'Common',
@@ -99,7 +99,7 @@ export const charsProgression = {
     ['Mythic' + RarityStars.TwoBlueStars]: { mythicShards: 30, orbs: 10, rarity: 'Mythic' },
     ['Mythic' + RarityStars.ThreeBlueStars]: { mythicShards: 50, orbs: 15, rarity: 'Mythic' },
     ['Mythic' + RarityStars.MythicWings]: { mythicShards: 100, orbs: 20, rarity: 'Mythic' },
-} as const satisfies Record<`${RarityKey}${number}`, ICharProgression>;
+} as const satisfies Record<`${Rarity}${number}`, ICharProgression>;
 
 const defaultCampaignsProgress: ICampaignsProgress = {
     Indomitus: 75,
@@ -164,7 +164,7 @@ const defaultGWLayout: IGWLayoutZone[] = [
     { id: 'frontline', players: [] },
 ];
 
-function createRarityRecord<T>(initialValue: T): Record<RarityKey, T> {
+function createRarityRecord<T>(initialValue: T): Record<Rarity, T> {
     return {
         Common: cloneDeep(initialValue),
         Uncommon: cloneDeep(initialValue),

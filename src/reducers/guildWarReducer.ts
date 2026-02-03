@@ -1,6 +1,6 @@
 ﻿import { clamp } from 'lodash';
 
-import { RarityKey } from '@/fsd/5-shared/model';
+import { Rarity } from '@/fsd/5-shared/model';
 
 import { GuildWarTeamType } from '@/fsd/3-features/guild-war/guild-war.models';
 
@@ -12,12 +12,12 @@ export type GuildWarAction =
           type: 'UpdateTeam';
           teamId: string;
           lineup: string[];
-          rarityCap: RarityKey;
+          rarityCap: Rarity;
           teamName?: string;
       }
     | {
           type: 'UpdateDefenseRarityCaps';
-          rarityCaps: RarityKey[];
+          rarityCaps: Rarity[];
       }
     | {
           type: 'ClearTeamLineup';

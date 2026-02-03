@@ -8,7 +8,7 @@ import { isMobile } from 'react-device-detect';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { ICharacter2 } from 'src/models/interfaces';
 
-import { RarityKey } from '@/fsd/5-shared/model';
+import { Rarity } from '@/fsd/5-shared/model';
 import { RaritySelect } from '@/fsd/5-shared/ui';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { MultipleSelect } from '@/fsd/5-shared/ui/input/multiple-select';
@@ -44,7 +44,7 @@ export const AddTeamDialog: React.FC<Props> = ({ onClose, characters, mows, addT
     const [selectedSubModes, setSelectedSubModes] = useState<string[]>([]);
     const [notes, setNotes] = useState<string>('');
     const [teamName, setTeamName] = useState<string>('Team');
-    const [rarityCap, setRarityCap] = useState<RarityKey>('Legendary');
+    const [rarityCap, setRarityCap] = useState<Rarity>('Legendary');
     const [team, setTeam] = useState<ICharacter2[]>([]);
     const [mow, setMow] = useState<IMow2 | null>(null);
 

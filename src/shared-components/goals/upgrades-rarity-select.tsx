@@ -1,12 +1,12 @@
 ﻿import { Info } from '@mui/icons-material';
 import React from 'react';
 
-import { RARITIES, RarityKey } from '@/fsd/5-shared/model';
+import { RARITIES, Rarity } from '@/fsd/5-shared/model';
 import { MultipleSelectCheckmarks, AccessibleTooltip } from '@/fsd/5-shared/ui';
 
 interface Props {
-    upgradesRarity: RarityKey[];
-    upgradesRarityChange: (value: RarityKey[]) => void;
+    upgradesRarity: Rarity[];
+    upgradesRarityChange: (value: Rarity[]) => void;
 }
 
 export const UpgradesRaritySelect: React.FC<Props> = ({ upgradesRarity, upgradesRarityChange }) => {

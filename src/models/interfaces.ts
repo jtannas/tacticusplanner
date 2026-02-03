@@ -10,7 +10,7 @@ import { GuildWarAction } from 'src/reducers/guildWarReducer';
 import { MowsAction } from 'src/reducers/mows.reducer';
 import { TeamsAction } from 'src/reducers/teams.reducer';
 
-import { Alliance, Rank, RarityKey, RarityStars } from '@/fsd/5-shared/model';
+import { Alliance, Rank, Rarity, RarityStars } from '@/fsd/5-shared/model';
 
 import {
     ICampaignsProgress,
@@ -255,7 +255,7 @@ export interface IDailyRaidsPreferences {
     campaignEvent?: CampaignGroupType | 'none';
 }
 
-export type ICustomDailyRaidsSettings = Record<RarityKey, CampaignType[]>;
+export type ICustomDailyRaidsSettings = Record<Rarity, CampaignType[]>;
 
 export interface ISelectedTeamsOrdering {
     orderBy: 'name' | 'rank' | 'rarity';
@@ -269,7 +269,7 @@ interface IPersonalCharacterData {
     unlocked: boolean;
     progress: boolean;
     rank: Rank;
-    rarity: RarityKey;
+    rarity: Rarity;
     rarityStars: RarityStars;
     alwaysRecommend?: boolean;
     neverRecommend?: boolean;
@@ -284,7 +284,7 @@ export interface IPersonalCharacterDataEquipment {
 export interface IPersonalCharacterData2 {
     name: string;
     rank: Rank;
-    rarity: RarityKey;
+    rarity: Rarity;
     stars: RarityStars;
     level: number;
     xp: number;
@@ -313,7 +313,7 @@ export interface ICharProgression {
     shards?: number;
     mythicShards?: number;
     orbs?: number;
-    rarity?: RarityKey;
+    rarity?: Rarity;
 }
 
 export interface IPersonalGoal {
@@ -328,9 +328,9 @@ export interface IPersonalGoal {
     startingRankPoint5?: boolean;
     targetRank?: Rank;
     rankPoint5?: boolean;
-    upgradesRarity?: RarityKey[];
+    upgradesRarity?: Rarity[];
     // ascend
-    targetRarity?: RarityKey;
+    targetRarity?: Rarity;
     targetStars?: RarityStars;
     shardsPerToken?: number;
     mythicShardsPerToken?: number;
@@ -355,11 +355,11 @@ export interface IEstimatedRanksSettings {
 }
 
 export interface IInventory {
-    xpBooks: Record<RarityKey, number>;
-    abilityBadges: Record<Alliance, Record<RarityKey, number>>;
+    xpBooks: Record<Rarity, number>;
+    abilityBadges: Record<Alliance, Record<Rarity, number>>;
     components: Record<Alliance, number>;
-    forgeBadges: Record<RarityKey, number>;
-    orbs: Record<Alliance, Record<RarityKey, number>>;
+    forgeBadges: Record<Rarity, number>;
+    orbs: Record<Alliance, Record<Rarity, number>>;
     upgrades: Record<string, number>;
 }
 

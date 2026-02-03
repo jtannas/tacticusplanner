@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 // eslint-disable-next-line import-x/no-internal-modules
 import { ILreTeam } from '@/models/interfaces';
 
-import { RarityKey, RarityStars } from '@/fsd/5-shared/model';
+import { Rarity, RarityStars } from '@/fsd/5-shared/model';
 
 import { CharactersService } from '@/fsd/4-entities/character';
 
@@ -38,7 +38,7 @@ export class TokenDisplay {
     public track: string = '(null track)';
     public incrementalPoints: number = -1;
     public totalPoints: number = -1;
-    public rarity: RarityKey = 'Legendary';
+    public rarity: Rarity = 'Legendary';
     public stars: RarityStars = RarityStars.None;
     public shardsToNextMilestone: number = 400;
     public achievedPointsMilestone: boolean = false;
@@ -196,7 +196,7 @@ export const pointMilestones: readonly PointMilestone[] = [
 ];
 interface ShardMilestone {
     shards: PositiveInteger<number>;
-    rarity: RarityKey;
+    rarity: Rarity;
     stars: RarityStars;
     totalNeededCurrency: PositiveInteger<number>;
 }
@@ -259,7 +259,7 @@ export const chestMilestones: readonly ShardMilestone[] = [
 export interface StarMilestone {
     totalShards: number;
     incrementalShards: number;
-    rarity: RarityKey;
+    rarity: Rarity;
     stars: RarityStars;
 }
 
@@ -280,7 +280,7 @@ export interface EventProgress {
     currency: number;
 
     // The current rarity of the character.
-    rarity: RarityKey;
+    rarity: Rarity;
 
     // The current stars of the character.
     stars: RarityStars;
@@ -716,7 +716,7 @@ export class TokenEstimationService {
      * Returns -1 if the character has no stars (`RarityStars.None`).
      * Returns `starMilestones.length` if the character has surpassed all defined milestones.
      */
-    private static getCurrentStarIndex(currentRarity: RarityKey, currentStars: RarityStars): number {
+    private static getCurrentStarIndex(currentRarity: Rarity, currentStars: RarityStars): number {
         if (currentStars === RarityStars.None) return -1;
         for (let i = 0; i < ascensionMilestones.length; ++i) {
             if (currentRarity === ascensionMilestones[i].rarity && currentStars <= ascensionMilestones[i].stars) {
@@ -786,7 +786,7 @@ export class TokenEstimationService {
      */
     private static computeSyncedProgress(
         progress: ILreProgressModel,
-        currentRarity: RarityKey,
+        currentRarity: Rarity,
         currentStars: RarityStars
     ): EventProgress {
         if (progress.syncedProgress === undefined) {
@@ -844,7 +844,7 @@ export class TokenEstimationService {
      */
     public static computeCurrentProgress(
         progress: ILreProgressModel,
-        currentRarity: RarityKey,
+        currentRarity: Rarity,
         currentStars: RarityStars,
         p2p: boolean
     ): EventProgress {
@@ -885,7 +885,7 @@ export class TokenEstimationService {
     public static getTokenDisplays(
         tokens: TokenUse[],
         progress: ILreProgressModel,
-        currentRarity: RarityKey,
+        currentRarity: Rarity,
         currentStars: RarityStars,
         p2p: boolean
     ): TokenDisplay[] {

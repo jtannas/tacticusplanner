@@ -1,7 +1,7 @@
 ﻿import { cloneDeep } from 'lodash';
 
 import { TacticusInventory } from '@/fsd/5-shared/lib/tacticus-api/tacticus-api.models';
-import { Alliance, RarityKey } from '@/fsd/5-shared/model';
+import { Alliance, Rarity } from '@/fsd/5-shared/model';
 
 import { TacticusIntegrationService } from '@/fsd/3-features/tacticus-integration/tacticus-integration.service';
 
@@ -57,7 +57,7 @@ export const inventoryReducer = (state: IInventory, action: InventoryAction): II
         }
         case 'ResetUpgrades': {
             const upgrades: Record<string, number> = {};
-            const createEmptyRarityRecord = (): Record<RarityKey, number> => ({
+            const createEmptyRarityRecord = (): Record<Rarity, number> => ({
                 Common: 0,
                 Uncommon: 0,
                 Rare: 0,
@@ -65,8 +65,8 @@ export const inventoryReducer = (state: IInventory, action: InventoryAction): II
                 Legendary: 0,
                 Mythic: 0,
             });
-            const books: Record<RarityKey, number> = createEmptyRarityRecord();
-            const badges: Record<Alliance, Record<RarityKey, number>> = {
+            const books: Record<Rarity, number> = createEmptyRarityRecord();
+            const badges: Record<Alliance, Record<Rarity, number>> = {
                 [Alliance.Imperial]: createEmptyRarityRecord(),
                 [Alliance.Xenos]: createEmptyRarityRecord(),
                 [Alliance.Chaos]: createEmptyRarityRecord(),
@@ -94,7 +94,7 @@ export const inventoryReducer = (state: IInventory, action: InventoryAction): II
                 components: syncComponents,
             } = action.inventory;
             const result: Record<string, number> = {};
-            const createEmptyRarityRecord = (): Record<RarityKey, number> => {
+            const createEmptyRarityRecord = (): Record<Rarity, number> => {
                 return {
                     Common: 0,
                     Uncommon: 0,
@@ -104,8 +104,8 @@ export const inventoryReducer = (state: IInventory, action: InventoryAction): II
                     Mythic: 0,
                 };
             };
-            const books: Record<RarityKey, number> = createEmptyRarityRecord();
-            const badges: Record<Alliance, Record<RarityKey, number>> = {
+            const books: Record<Rarity, number> = createEmptyRarityRecord();
+            const badges: Record<Alliance, Record<Rarity, number>> = {
                 [Alliance.Imperial]: createEmptyRarityRecord(),
                 [Alliance.Xenos]: createEmptyRarityRecord(),
                 [Alliance.Chaos]: createEmptyRarityRecord(),

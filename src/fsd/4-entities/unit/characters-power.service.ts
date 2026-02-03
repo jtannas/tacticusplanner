@@ -1,4 +1,4 @@
-import { RarityStars, Rank, RarityKey } from '@/fsd/5-shared/model';
+import { RarityStars, Rank, Rarity } from '@/fsd/5-shared/model';
 
 import { IUnit } from './model';
 import { isCharacter, isMow, isUnlocked } from './units.functions';
@@ -80,7 +80,7 @@ export class CharactersPowerService {
         }
     }
 
-    public static getRarityCoeff(unit: IUnit, rarity: RarityKey): number {
+    public static getRarityCoeff(unit: IUnit, rarity: Rarity): number {
         if (isCharacter(unit)) {
             switch (rarity) {
                 case 'Common':

@@ -1,4 +1,4 @@
-﻿import { Alliance, RarityKey } from '@/fsd/5-shared/model';
+﻿import { Alliance, Rarity } from '@/fsd/5-shared/model';
 
 import { getImageUrl } from '../get-image-url';
 
@@ -8,7 +8,7 @@ export const BadgeImage = ({
     size = 'medium',
 }: {
     alliance: Alliance;
-    rarity: RarityKey;
+    rarity: Rarity;
     size?: 'small' | 'medium';
 }) => {
     const sizePx = size === 'medium' ? 35 : 25;

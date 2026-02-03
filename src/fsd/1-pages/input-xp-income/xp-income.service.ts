@@ -1,4 +1,4 @@
-import { RarityKey } from '@/fsd/5-shared/model';
+import { Rarity } from '@/fsd/5-shared/model';
 
 import { ArenaLeague, BlueStarCharacter } from './models';
 
@@ -12,7 +12,7 @@ const kShardsPerL10Incursion = 203;
 const kShardsPerL12Incursion = 231;
 const kShardsPerMythicIncursion = 210;
 
-const kArenaBooksPerWeek: Record<ArenaLeague, Partial<Record<RarityKey, number>>> = {
+const kArenaBooksPerWeek: Record<ArenaLeague, Partial<Record<Rarity, number>>> = {
     [ArenaLeague.kHonorGuard]: { Epic: 18, Legendary: 7 },
     [ArenaLeague.kCaptain]: { Epic: 20, Legendary: 4, Mythic: 1 },
     [ArenaLeague.kChapterMaster]: { Epic: 22, Legendary: 5, Mythic: 1 },
@@ -34,7 +34,7 @@ export class XpIncomeService {
         loopsRaids: 'yes' | 'no',
         raidLoops: number,
         extraBossesAfterLoop: number,
-        clearRarity: RarityKey,
+        clearRarity: Rarity,
         additionalBosses: number,
         useAtForBooks: 'yes' | 'no',
         blueStarCharIds: string[],

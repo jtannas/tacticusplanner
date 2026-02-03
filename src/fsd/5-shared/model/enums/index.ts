@@ -2,7 +2,7 @@
 import type factions from '@/data/factions.json';
 
 export { Alliance } from './alliance.enum';
-export { Rarity } from './rarity.enum';
+export { RarityEnum } from './rarity.enum';
 export { RarityStars } from './rarity-stars.enum';
 export { Rank, rankToString } from './rank.enum';
 export { Trait, getTraitStringFromLabel, getLabelFromTraitString } from './trait.enum';
@@ -15,4 +15,4 @@ export type FactionName = (typeof factions)[number]['name'];
 
 // Arranged from lowest to highest rarity to allow sorting
 export const RARITIES = ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'Mythic'] as const;
-export type RarityKey = (typeof RARITIES)[number];
+export type Rarity = (typeof RARITIES)[number];
