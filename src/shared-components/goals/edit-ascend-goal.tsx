@@ -6,8 +6,8 @@ import { ICampaignBattleComposed } from 'src/models/interfaces';
 import { CampaignsUsageSelect } from 'src/shared-components/goals/campaigns-usage-select';
 import { NumbersInput } from 'src/shared-components/goals/numbers-input';
 
-import { getEnumValues } from '@/fsd/5-shared/lib';
-import { RARITIES, RarityStars } from '@/fsd/5-shared/model';
+import { getEnumValues, raritiesBetween } from '@/fsd/5-shared/lib';
+import { RarityStars } from '@/fsd/5-shared/model';
 import { RaritySelect, StarsSelect } from '@/fsd/5-shared/ui';
 
 import { CampaignLocation } from '@/fsd/4-entities/campaign/campaign-location';
@@ -32,7 +32,7 @@ export const EditAscendGoal: React.FC<Props> = ({
     onChange,
 }) => {
     const rarityValues = useMemo(() => {
-        return RARITIES.slice(RARITIES.indexOf(goal.rarityStart));
+        return raritiesBetween(goal.rarityStart, 'Mythic');
     }, [goal.rarityStart]);
 
     const starsEntries = useMemo(() => {

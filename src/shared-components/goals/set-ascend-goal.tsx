@@ -6,8 +6,8 @@ import { ICampaignBattleComposed, IPersonalGoal } from 'src/models/interfaces';
 import { CampaignsUsageSelect } from 'src/shared-components/goals/campaigns-usage-select';
 import { NumbersInput } from 'src/shared-components/goals/numbers-input';
 
-import { getEnumValues } from '@/fsd/5-shared/lib';
-import { RARITIES, RarityKey, RarityStars } from '@/fsd/5-shared/model';
+import { getEnumValues, raritiesBetween } from '@/fsd/5-shared/lib';
+import { RarityKey, RarityStars } from '@/fsd/5-shared/model';
 import { RaritySelect, StarsSelect } from '@/fsd/5-shared/ui';
 
 import { CampaignLocation } from '@/fsd/4-entities/campaign/campaign-location';
@@ -43,9 +43,7 @@ export const SetAscendGoal: React.FC<Props> = ({
     mythicShardsPerToken,
     onChange,
 }) => {
-    const rarityValues = useMemo(() => {
-        return RARITIES.slice(RARITIES.indexOf(currentRarity));
-    }, [currentRarity]);
+    const rarityValues = raritiesBetween(currentRarity, 'Mythic');
 
     const starsEntries = useMemo(() => {
         const minStars = rarityToStars[targetRarity];

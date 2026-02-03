@@ -3,7 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { ICharacter2 } from '@/models/interfaces';
 
-import { FactionId, Rank, RARITIES, RarityKey } from '@/fsd/5-shared/model';
+import { rarityCompareFn } from '@/fsd/5-shared/lib/rarity-comparison';
+import { FactionId, Rank, RarityKey } from '@/fsd/5-shared/model';
 import { AccessibleTooltip } from '@/fsd/5-shared/ui';
 
 import { IMow2 } from '@/fsd/4-entities/mow';
@@ -151,7 +152,7 @@ export const AddTeamDialog: React.FC<Props> = ({
             const powerA = Math.pow(a.activeAbilityLevel ?? 0, 2) + Math.pow(a.passiveAbilityLevel ?? 0, 2);
             const powerB = Math.pow(b.activeAbilityLevel ?? 0, 2) + Math.pow(b.passiveAbilityLevel ?? 0, 2);
             if (powerB !== powerA) return powerB - powerA;
-            return RARITIES.indexOf(b.rarity) - RARITIES.indexOf(a.rarity);
+            return rarityCompareFn(b.rarity, a.rarity);
         });
 
     const filteredMows = mows
@@ -161,7 +162,7 @@ export const AddTeamDialog: React.FC<Props> = ({
             const powerA = Math.pow(a.primaryAbilityLevel ?? 0, 2) + Math.pow(a.secondaryAbilityLevel ?? 0, 2);
             const powerB = Math.pow(b.primaryAbilityLevel ?? 0, 2) + Math.pow(b.secondaryAbilityLevel ?? 0, 2);
             if (powerB !== powerA) return powerB - powerA;
-            return RARITIES.indexOf(b.rarity) - RARITIES.indexOf(a.rarity);
+            return rarityCompareFn(b.rarity, a.rarity);
         });
 
     const handleBattleFieldLevelsChange = (level: number) => {

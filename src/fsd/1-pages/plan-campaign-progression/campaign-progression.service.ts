@@ -3,7 +3,8 @@ import { uniq } from 'lodash';
 // eslint-disable-next-line import-x/no-internal-modules
 import factions from '@/data/factions.json';
 
-import { FactionId, Rank, RARITIES } from '@/fsd/5-shared/model';
+import { rarityCompareFn } from '@/fsd/5-shared/lib';
+import { FactionId, Rank } from '@/fsd/5-shared/model';
 
 import { CampaignsService, CampaignType, ICampaignBattleComposed, ICampaignsProgress } from '@/fsd/4-entities/campaign';
 import {
@@ -293,10 +294,11 @@ export class CampaignsProgressionService {
             }
             materialReqs.materials = newMaterials;
         }
-        const sortedMaterials: string[] = Object.keys(materialReqs.materials).sort(
-            (a, b) =>
-                RARITIES.indexOf(UpgradesService.recipeExpandedUpgradeData[b].rarity) -
-                RARITIES.indexOf(UpgradesService.recipeExpandedUpgradeData[a].rarity)
+        const sortedMaterials: string[] = Object.keys(materialReqs.materials).sort((a, b) =>
+            rarityCompareFn(
+                UpgradesService.recipeExpandedUpgradeData[b].rarity,
+                UpgradesService.recipeExpandedUpgradeData[a].rarity
+            )
         );
         for (const materialId of sortedMaterials) {
             const count: number = materialReqs.materials[materialId];

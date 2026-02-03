@@ -4,7 +4,8 @@ import React, { useContext, useMemo } from 'react';
 // eslint-disable-next-line import-x/no-internal-modules
 import { StoreContext } from '@/reducers/store.provider';
 
-import { Trait, Rank, RARITIES } from '@/fsd/5-shared/model';
+import { maxRarity } from '@/fsd/5-shared/lib';
+import { Trait, Rank } from '@/fsd/5-shared/model';
 import { TraitImage, pooEmoji, RarityIcon, starEmoji, UnitShardIcon } from '@/fsd/5-shared/ui/icons';
 
 import { CharacterBias, CharactersService, ICharacter2, RankIcon } from '@/fsd/4-entities/character';
@@ -90,9 +91,7 @@ export const LreTile: React.FC<Props> = ({ character, settings, upgradeRankOrMow
         return 'Mythic';
     }, [rank]);
 
-    const rarity = useMemo(() => {
-        return RARITIES[Math.max(RARITIES.indexOf(character.rarity), RARITIES.indexOf(rarityFromRank))];
-    }, [character, rarityFromRank]);
+    const rarity = maxRarity(character.rarity, rarityFromRank);
 
     const emoji =
         character.bias === CharacterBias.recommendFirst

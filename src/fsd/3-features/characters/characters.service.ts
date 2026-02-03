@@ -8,7 +8,7 @@ import { charsUnlockShards, charsProgression } from 'src/models/constants';
 import { IPersonalCharacterData2, ICharProgression } from 'src/models/interfaces';
 
 import { minRarity, rarityCompareFn } from '@/fsd/5-shared/lib';
-import { Rank, UnitType, RarityStars, RarityKey, RARITIES } from '@/fsd/5-shared/model';
+import { Rank, UnitType, RarityStars, RarityKey } from '@/fsd/5-shared/model';
 
 import { ICharacter2 } from '@/fsd/4-entities/character';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
@@ -214,7 +214,7 @@ export class CharactersService {
 
         return {
             ...mow,
-            rarity: RARITIES[Math.min(RARITIES.indexOf(mow.rarity), RARITIES.indexOf(capped.rarity))],
+            rarity: minRarity(mow.rarity, capped.rarity),
             stars: Math.min(mow.stars, capped.stars),
             primaryAbilityLevel: Math.min(mow.primaryAbilityLevel, capped.abilitiesLevel),
             secondaryAbilityLevel: Math.min(mow.secondaryAbilityLevel, capped.abilitiesLevel),
