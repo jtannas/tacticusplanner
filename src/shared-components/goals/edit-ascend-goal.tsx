@@ -7,7 +7,7 @@ import { CampaignsUsageSelect } from 'src/shared-components/goals/campaigns-usag
 import { NumbersInput } from 'src/shared-components/goals/numbers-input';
 
 import { getEnumValues } from '@/fsd/5-shared/lib';
-import { Rarity, RarityStars } from '@/fsd/5-shared/model';
+import { RARITIES, RarityStars } from '@/fsd/5-shared/model';
 import { RaritySelect, StarsSelect } from '@/fsd/5-shared/ui';
 
 import { CampaignLocation } from '@/fsd/4-entities/campaign/campaign-location';
@@ -20,7 +20,7 @@ interface Props {
     unlockedLocations: string[];
     possibleMythicLocations: ICampaignBattleComposed[];
     unlockedMythicLocations: string[];
-    onChange: (key: keyof ICharacterAscendGoal, value: number) => void;
+    onChange: <K extends keyof ICharacterAscendGoal>(key: K, value: ICharacterAscendGoal[K]) => void;
 }
 
 export const EditAscendGoal: React.FC<Props> = ({
@@ -32,7 +32,7 @@ export const EditAscendGoal: React.FC<Props> = ({
     onChange,
 }) => {
     const rarityValues = useMemo(() => {
-        return getEnumValues(Rarity).filter(x => x >= goal.rarityStart);
+        return RARITIES.slice(RARITIES.indexOf(goal.rarityStart));
     }, [goal.rarityStart]);
 
     const starsEntries = useMemo(() => {
@@ -79,7 +79,7 @@ export const EditAscendGoal: React.FC<Props> = ({
                 />
             </div>
 
-            {(goal.rarityStart < Rarity.Mythic || goal.starsStart < RarityStars.OneBlueStar) && (
+            {(goal.rarityStart !== 'Mythic' || goal.starsStart < RarityStars.OneBlueStar) && (
                 <>
                     <div className="flex gap-2">
                         {possibleLocations.map(location => (
@@ -125,7 +125,7 @@ export const EditAscendGoal: React.FC<Props> = ({
                 </>
             )}
 
-            {goal.rarityEnd >= Rarity.Mythic && (
+            {goal.rarityEnd === 'Mythic' && (
                 <>
                     <div className="flex gap-2">
                         {possibleMythicLocations.map(location => (

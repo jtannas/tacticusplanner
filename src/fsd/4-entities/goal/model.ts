@@ -1,4 +1,4 @@
-import { Alliance, FactionId, Rank, Rarity, RarityStars } from '@/fsd/5-shared/model';
+import { Alliance, FactionId, Rank, RarityKey, RarityStars } from '@/fsd/5-shared/model';
 
 import { IRankLookup } from '@/fsd/4-entities/character/@x/goal';
 
@@ -19,7 +19,7 @@ export interface ICharacterRaidGoalSelectBase {
 export interface ICharacterUpgradeRankGoal extends ICharacterRaidGoalSelectBase, IRankLookup {
     type: PersonalGoalType.UpgradeRank;
 
-    rarity: Rarity;
+    rarity: RarityKey;
     level: number;
     xp: number;
 }
@@ -32,11 +32,11 @@ export interface ICharacterUpgradeMow extends ICharacterRaidGoalSelectBase {
 
     secondaryStart: number;
     secondaryEnd: number;
-    upgradesRarity: Rarity[];
+    upgradesRarity: RarityKey[];
 
     shards: number;
     stars: RarityStars;
-    rarity: Rarity;
+    rarity: RarityKey;
 }
 
 export interface ICharacterUnlockGoal extends ICharacterRaidGoalSelectBase {
@@ -45,7 +45,7 @@ export interface ICharacterUnlockGoal extends ICharacterRaidGoalSelectBase {
     shards: number;
     mythicShards: 0;
     rank: Rank;
-    rarity: Rarity;
+    rarity: RarityKey;
     faction: FactionId;
     campaignsUsage: CampaignsLocationsUsage;
 }
@@ -53,10 +53,10 @@ export interface ICharacterUnlockGoal extends ICharacterRaidGoalSelectBase {
 export interface ICharacterAscendGoal extends ICharacterRaidGoalSelectBase {
     type: PersonalGoalType.Ascend;
 
-    rarityStart: Rarity;
+    rarityStart: RarityKey;
     starsStart: RarityStars;
     starsEnd: RarityStars;
-    rarityEnd: Rarity;
+    rarityEnd: RarityKey;
     shards: number;
     mythicShards: number;
     onslaughtShards: number;

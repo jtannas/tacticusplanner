@@ -1,7 +1,7 @@
 ﻿import { cloneDeep } from 'lodash';
 
 import { TacticusInventory } from '@/fsd/5-shared/lib/tacticus-api/tacticus-api.models';
-import { Alliance, Rarity, RarityMapper } from '@/fsd/5-shared/model';
+import { Alliance, RarityKey } from '@/fsd/5-shared/model';
 
 import { TacticusIntegrationService } from '@/fsd/3-features/tacticus-integration/tacticus-integration.service';
 
@@ -57,16 +57,16 @@ export const inventoryReducer = (state: IInventory, action: InventoryAction): II
         }
         case 'ResetUpgrades': {
             const upgrades: Record<string, number> = {};
-            const createEmptyRarityRecord = (): Record<Rarity, number> => ({
-                [Rarity.Common]: 0,
-                [Rarity.Uncommon]: 0,
-                [Rarity.Rare]: 0,
-                [Rarity.Epic]: 0,
-                [Rarity.Legendary]: 0,
-                [Rarity.Mythic]: 0,
+            const createEmptyRarityRecord = (): Record<RarityKey, number> => ({
+                Common: 0,
+                Uncommon: 0,
+                Rare: 0,
+                Epic: 0,
+                Legendary: 0,
+                Mythic: 0,
             });
-            const books: Record<Rarity, number> = createEmptyRarityRecord();
-            const badges: Record<Alliance, Record<Rarity, number>> = {
+            const books: Record<RarityKey, number> = createEmptyRarityRecord();
+            const badges: Record<Alliance, Record<RarityKey, number>> = {
                 [Alliance.Imperial]: createEmptyRarityRecord(),
                 [Alliance.Xenos]: createEmptyRarityRecord(),
                 [Alliance.Chaos]: createEmptyRarityRecord(),
@@ -94,18 +94,18 @@ export const inventoryReducer = (state: IInventory, action: InventoryAction): II
                 components: syncComponents,
             } = action.inventory;
             const result: Record<string, number> = {};
-            const createEmptyRarityRecord = (): Record<Rarity, number> => {
+            const createEmptyRarityRecord = (): Record<RarityKey, number> => {
                 return {
-                    [Rarity.Common]: 0,
-                    [Rarity.Uncommon]: 0,
-                    [Rarity.Rare]: 0,
-                    [Rarity.Epic]: 0,
-                    [Rarity.Legendary]: 0,
-                    [Rarity.Mythic]: 0,
+                    Common: 0,
+                    Uncommon: 0,
+                    Rare: 0,
+                    Epic: 0,
+                    Legendary: 0,
+                    Mythic: 0,
                 };
             };
-            const books: Record<Rarity, number> = createEmptyRarityRecord();
-            const badges: Record<Alliance, Record<Rarity, number>> = {
+            const books: Record<RarityKey, number> = createEmptyRarityRecord();
+            const badges: Record<Alliance, Record<RarityKey, number>> = {
                 [Alliance.Imperial]: createEmptyRarityRecord(),
                 [Alliance.Xenos]: createEmptyRarityRecord(),
                 [Alliance.Chaos]: createEmptyRarityRecord(),
@@ -114,41 +114,41 @@ export const inventoryReducer = (state: IInventory, action: InventoryAction): II
             const forgeBadges = createEmptyRarityRecord();
             const components = { [Alliance.Imperial]: 0, [Alliance.Xenos]: 0, [Alliance.Chaos]: 0 };
             xpBooks.forEach(book => {
-                books[RarityMapper.stringToRarity(book.rarity) ?? Rarity.Common] = book.amount;
+                books[book.rarity ?? 'Common'] = book.amount;
             });
             Imperial.forEach(badge => {
-                badges[Alliance.Imperial][RarityMapper.stringToRarity(badge.rarity) ?? Rarity.Common] = badge.amount;
+                badges[Alliance.Imperial][badge.rarity ?? 'Common'] = badge.amount;
             });
             Xenos.forEach(badge => {
-                badges[Alliance.Xenos][RarityMapper.stringToRarity(badge.rarity) ?? Rarity.Common] = badge.amount;
+                badges[Alliance.Xenos][badge.rarity ?? 'Common'] = badge.amount;
             });
             Chaos.forEach(badge => {
-                badges[Alliance.Chaos][RarityMapper.stringToRarity(badge.rarity) ?? Rarity.Common] = badge.amount;
+                badges[Alliance.Chaos][badge.rarity ?? 'Common'] = badge.amount;
             });
 
             syncOrbs.Imperial.forEach(orb => {
-                const rarity = RarityMapper.stringToRarity(orb.rarity) ?? Rarity.Common;
+                const rarity = orb.rarity ?? 'Common';
                 if (!orbs[Alliance.Imperial][rarity]) {
                     orbs[Alliance.Imperial][rarity] = 0;
                 }
                 orbs[Alliance.Imperial][rarity] += orb.amount;
             });
             syncOrbs.Xenos.forEach(orb => {
-                const rarity = RarityMapper.stringToRarity(orb.rarity) ?? Rarity.Common;
+                const rarity = orb.rarity ?? 'Common';
                 if (!orbs[Alliance.Xenos][rarity]) {
                     orbs[Alliance.Xenos][rarity] = 0;
                 }
                 orbs[Alliance.Xenos][rarity] += orb.amount;
             });
             syncOrbs.Chaos.forEach(orb => {
-                const rarity = RarityMapper.stringToRarity(orb.rarity) ?? Rarity.Common;
+                const rarity = orb.rarity ?? 'Common';
                 if (!orbs[Alliance.Chaos][rarity]) {
                     orbs[Alliance.Chaos][rarity] = 0;
                 }
                 orbs[Alliance.Chaos][rarity] += orb.amount;
             });
             syncForgeBadges.forEach(badge => {
-                const rarity = RarityMapper.stringToRarity(badge.rarity) ?? Rarity.Common;
+                const rarity = badge.rarity ?? 'Common';
                 if (!forgeBadges[rarity]) {
                     forgeBadges[rarity] = 0;
                 }

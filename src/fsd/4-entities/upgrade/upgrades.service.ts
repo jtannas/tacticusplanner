@@ -1,7 +1,5 @@
 ﻿import { groupBy, map, orderBy, sumBy, uniq } from 'lodash';
 
-import { Rarity, RarityMapper, RarityString } from '@/fsd/5-shared/model';
-
 import { CampaignsService } from '@/fsd/4-entities/campaign/@x/upgrade';
 // eslint-disable-next-line boundaries/element-types
 import { CharactersService } from '@/fsd/4-entities/character';
@@ -58,7 +56,7 @@ export class UpgradesService {
             id: 'gold',
             snowprintId: 'gold',
             label: 'Gold',
-            rarity: Rarity.Common,
+            rarity: 'Common',
             iconPath: 'gold',
             expandedRecipe: {},
             crafted: false,
@@ -301,7 +299,7 @@ export class UpgradesService {
                 id: upgrade.snowprintId,
                 snowprintId: upgrade.snowprintId,
                 label: upgrade.label ?? upgrade.material,
-                rarity: RarityMapper.stringToNumber[upgrade.rarity as RarityString],
+                rarity: upgrade.rarity,
                 locations: locationsComposed,
                 iconPath: upgrade.icon!,
                 crafted: false,
@@ -338,7 +336,7 @@ export class UpgradesService {
                 id: upgrade.snowprintId,
                 snowprintId: upgrade.snowprintId,
                 label: upgrade.label ?? id,
-                rarity: RarityMapper.stringToNumber[upgrade.rarity as RarityString],
+                rarity: upgrade.rarity,
                 iconPath: upgrade.icon!,
                 baseUpgrades: recipeDetails.flatMap(x => x.baseUpgrades),
                 craftedUpgrades: recipeDetails.flatMap(x => x.craftedUpgrades),
@@ -429,7 +427,7 @@ export class UpgradesService {
                     iconPath: '',
                     characters: [],
                     priority: 0,
-                    rarity: RarityMapper.stringToNumber[RarityString.Common],
+                    rarity: 'Common',
                 };
                 return item;
             } else if (!upgrade.recipe?.length) {
@@ -438,7 +436,7 @@ export class UpgradesService {
                     snowprintId: upgrade.snowprintId,
                     label: upgrade?.label ?? upgrade?.material ?? materialId,
                     count,
-                    rarity: RarityMapper.stringToNumber[upgrade?.rarity as RarityString],
+                    rarity: upgrade?.rarity,
                     stat: upgrade?.stat ?? '',
                     locations: locations,
                     craftable: upgrade?.craftable,
@@ -459,7 +457,7 @@ export class UpgradesService {
                     craftable: upgrade.craftable,
                     locations: locations,
                     locationsComposed: locations.map(x => CampaignsService.campaignsComposed[x]),
-                    rarity: RarityMapper.stringToNumber[upgrade.rarity as RarityString],
+                    rarity: upgrade.rarity,
                     recipe: upgrade.recipe.map(item => getRecipe(item.material, count * item.count, allMaterials)),
                     iconPath: upgrade.icon ?? '',
                     characters: [],
@@ -476,7 +474,7 @@ export class UpgradesService {
                     snowprintId: upgrade.snowprintId,
                     label: upgrade.label ?? upgrade.material,
                     stat: upgrade.stat,
-                    rarity: RarityMapper.stringToNumber[upgrade.rarity as RarityString],
+                    rarity: upgrade.rarity,
                     craftable: upgrade.craftable,
                     allMaterials: [getRecipe(upgrade.snowprintId, 1, [])],
                     iconPath: upgrade.icon ?? '',
@@ -488,7 +486,7 @@ export class UpgradesService {
                     snowprintId: upgrade.snowprintId,
                     label: upgrade.label ?? upgrade.material,
                     stat: upgrade.stat,
-                    rarity: RarityMapper.stringToNumber[upgrade.rarity as RarityString],
+                    rarity: upgrade.rarity,
                     craftable: upgrade.craftable,
                     recipe: upgrade.recipe?.map(item => getRecipe(item.material, item.count, allMaterials)),
                     iconPath: upgrade.icon ?? '',
@@ -529,7 +527,7 @@ export class UpgradesService {
                     snowprintId: upgradeId,
                     label: upgradeName,
                     count: 1,
-                    rarity: type == kMythic ? Rarity.Mythic : Rarity.Common,
+                    rarity: type == kMythic ? 'Mythic' : 'Common',
                     stat: type == kRegular ? 'Shard' : 'MythicShard',
                     locations: locations,
                     craftable: false,

@@ -1,7 +1,7 @@
 ﻿// eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { rankToLevel } from 'src/models/constants';
 
-import { UnitType, Rank, Rarity } from '@/fsd/5-shared/model';
+import { UnitType, Rank } from '@/fsd/5-shared/model';
 
 import { IUnit } from '@/fsd/4-entities/unit';
 
@@ -17,22 +17,22 @@ export const needToLevelCharacter = (unit: IUnit) => {
 
     let maxRank;
     switch (unit.rarity) {
-        case Rarity.Common:
+        case 'Common':
             maxRank = Rank.Iron1;
             break;
-        case Rarity.Uncommon:
+        case 'Uncommon':
             maxRank = Rank.Bronze1;
             break;
-        case Rarity.Rare:
+        case 'Rare':
             maxRank = Rank.Silver1;
             break;
-        case Rarity.Epic:
+        case 'Epic':
             maxRank = Rank.Gold1;
             break;
-        case Rarity.Legendary:
+        case 'Legendary':
             maxRank = Rank.Diamond3;
             break;
-        case Rarity.Mythic:
+        case 'Mythic':
             maxRank = Rank.Adamantine3;
             break;
     }

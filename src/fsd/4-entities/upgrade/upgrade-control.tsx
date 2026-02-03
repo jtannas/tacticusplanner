@@ -24,11 +24,7 @@ export const UpgradeControl: React.FC<Props> = ({ upgrade, checked, checkedChang
             }
             label={
                 <div className="flex items-center gap-2.5" style={{ opacity: checked ? 1 : 0.5 }}>
-                    <UpgradeImage
-                        material={upgrade.label}
-                        iconPath={upgrade.iconPath}
-                        rarity={RarityMapper.rarityToRarityString(upgrade.rarity)}
-                    />
+                    <UpgradeImage material={upgrade.label} iconPath={upgrade.iconPath} rarity={upgrade.rarity} />
                 </div>
             }
         />

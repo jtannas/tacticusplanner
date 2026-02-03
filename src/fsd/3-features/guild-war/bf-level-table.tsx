@@ -4,7 +4,6 @@ import { AgGridReact } from 'ag-grid-react';
 import { sum } from 'lodash';
 import { useState } from 'react';
 
-import { Rarity } from '@/fsd/5-shared/model';
 import { FlexBox } from '@/fsd/5-shared/ui';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { RarityIcon } from '@/fsd/5-shared/ui/icons/rarity.icon';
@@ -55,7 +54,7 @@ export const BfLevelTable = ({ rows }: { rows: IGWZone[] }) => {
                     </FlexBox>
                 ) : (
                     <FlexBox gap={10} className="h-full">
-                        {[Rarity.Legendary, Rarity.Epic, Rarity.Rare, Rarity.Uncommon].map(rarity => {
+                        {(['Legendary', 'Epic', 'Rare', 'Uncommon'] as const).map(rarity => {
                             const slotsCount = slots[rarity];
                             if (slotsCount) {
                                 return (

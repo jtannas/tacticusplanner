@@ -3,7 +3,7 @@ import { groupBy, orderBy, sortBy, uniq } from 'lodash';
 // eslint-disable-next-line import-x/no-internal-modules
 import factionData from '@/data/factions.json';
 
-import { Alliance, FactionId, Rarity } from '@/fsd/5-shared/model';
+import { Alliance, FactionId, Rarity, RarityKey } from '@/fsd/5-shared/model';
 
 import { recipeDataByName } from '@/fsd/4-entities/upgrade/@x/campaign';
 
@@ -144,7 +144,6 @@ export class CampaignsService {
                 energyPerDay,
                 nodeNumber: battle.nodeNumber,
                 rarity: recipe?.rarity,
-                rarityEnum: Rarity[recipe?.rarity as unknown as number] as unknown as Rarity,
                 rewards: battle.rewards,
                 slots: battle.slots,
                 enemiesAlliances: (battle.enemiesAlliances ?? [enemies.alliance]) as Alliance[],
@@ -196,7 +195,7 @@ export class CampaignsService {
     public static passLocationFilter(
         location: ICampaignBattleComposed,
         filters: ICampaignsFilters,
-        materialRarity?: Rarity
+        materialRarity?: RarityKey
     ): boolean {
         const {
             alliesFactions,

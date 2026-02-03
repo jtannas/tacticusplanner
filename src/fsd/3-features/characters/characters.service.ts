@@ -7,7 +7,7 @@ import { charsUnlockShards, charsProgression } from 'src/models/constants';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { IPersonalCharacterData2, ICharProgression } from 'src/models/interfaces';
 
-import { Rank, Rarity, UnitType, RarityStars } from '@/fsd/5-shared/model';
+import { Rank, Rarity, UnitType, RarityStars, RarityKey, RARITIES } from '@/fsd/5-shared/model';
 
 import { ICharacter2 } from '@/fsd/4-entities/character';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
@@ -195,11 +195,11 @@ export class CharactersService {
         return result.sort((a, b) => b[orderByKey] - a[orderByKey]);
     }
 
-    static capCharacterAtRarity(character: ICharacter2, rarity: Rarity): ICharacter2 {
+    static capCharacterAtRarity(character: ICharacter2, rarity: RarityKey): ICharacter2 {
         const capped = rarityCaps[rarity];
         return {
             ...character,
-            rarity: Math.min(character.rarity, capped.rarity),
+            rarity: RARITIES[Math.min(RARITIES.indexOf(character.rarity), RARITIES.indexOf(capped.rarity))],
             rank: Math.min(character.rank, capped.rank),
             stars: Math.min(character.stars, capped.stars),
             level: Math.min(character.level, capped.abilitiesLevel),
@@ -208,19 +208,19 @@ export class CharactersService {
         };
     }
 
-    static capMowAtRarity(mow: IMow2, rarity: Rarity): IMow2 {
+    static capMowAtRarity(mow: IMow2, rarity: RarityKey): IMow2 {
         const capped = rarityCaps[rarity];
 
         return {
             ...mow,
-            rarity: Math.min(mow.rarity, capped.rarity),
+            rarity: RARITIES[Math.min(RARITIES.indexOf(mow.rarity), RARITIES.indexOf(capped.rarity))],
             stars: Math.min(mow.stars, capped.stars),
             primaryAbilityLevel: Math.min(mow.primaryAbilityLevel, capped.abilitiesLevel),
             secondaryAbilityLevel: Math.min(mow.secondaryAbilityLevel, capped.abilitiesLevel),
         };
     }
 
-    static calculateCharacterPotential(character: IPersonalCharacterData2, rarityCap: Rarity): number {
+    static calculateCharacterPotential(character: IPersonalCharacterData2, rarityCap: RarityKey): number {
         const capped = rarityCaps[rarityCap];
 
         const cappedPower = CharactersPowerService.getCharacterPower({
@@ -245,38 +245,32 @@ export class CharactersService {
         return characterPower > cappedPower ? 100 : Math.round((characterPower / cappedPower) * 100); // Round potential to the nearest whole number
     }
 
-    public static groupByRarityPools(availableCharacters: IPersonalCharacterData2[]): Record<Rarity, number> {
+    public static groupByRarityPools(availableCharacters: IPersonalCharacterData2[]): Record<RarityKey, number> {
         // TODO(mythic): is rank right? what is this for?
-        const mythicPool = availableCharacters.filter(
-            x => x.rarity === Rarity.Mythic && x.rank >= Rank.Diamond1
-        ).length;
-        const legendaryPool = availableCharacters.filter(
-            x => x.rarity === Rarity.Legendary && x.rank >= Rank.Gold1
-        ).length;
-        const epicPool = availableCharacters.filter(x => x.rarity >= Rarity.Epic && x.rank >= Rank.Gold1).length;
-        const rarePool = availableCharacters.filter(x => x.rarity >= Rarity.Rare && x.rank >= Rank.Silver1).length;
-        const uncommonPool = availableCharacters.filter(
-            x => x.rarity >= Rarity.Uncommon && x.rank >= Rank.Bronze1
-        ).length;
+        const mythicPool = availableCharacters.filter(x => x.rarity === 'Mythic' && x.rank >= Rank.Diamond1).length;
+        const legendaryPool = availableCharacters.filter(x => x.rarity === 'Legendary' && x.rank >= Rank.Gold1).length;
+        const epicPool = availableCharacters.filter(x => x.rarity === 'Epic' && x.rank >= Rank.Gold1).length;
+        const rarePool = availableCharacters.filter(x => x.rarity === 'Rare' && x.rank >= Rank.Silver1).length;
+        const uncommonPool = availableCharacters.filter(x => x.rarity === 'Uncommon' && x.rank >= Rank.Bronze1).length;
 
         return {
-            [Rarity.Mythic]: mythicPool,
-            [Rarity.Legendary]: legendaryPool,
-            [Rarity.Epic]: epicPool,
-            [Rarity.Rare]: rarePool,
-            [Rarity.Uncommon]: uncommonPool,
-            [Rarity.Common]: 0,
+            Mythic: mythicPool,
+            Legendary: legendaryPool,
+            Epic: epicPool,
+            Rare: rarePool,
+            Uncommon: uncommonPool,
+            Common: 0,
         };
     }
 
     public static getRosterPotential(
         availableCharacters: IPersonalCharacterData2[],
-        rarityCaps: Record<Rarity, number>
+        rarityCaps: Record<RarityKey, number>
     ): number {
-        const uncommonCharactersCount = rarityCaps[Rarity.Uncommon];
-        const rareCharactersCount = rarityCaps[Rarity.Rare];
-        const epicCharactersCount = rarityCaps[Rarity.Epic];
-        const legendaryCharactersCount = rarityCaps[Rarity.Legendary];
+        const uncommonCharactersCount = rarityCaps['Uncommon'];
+        const rareCharactersCount = rarityCaps['Rare'];
+        const epicCharactersCount = rarityCaps['Epic'];
+        const legendaryCharactersCount = rarityCaps['Legendary'];
 
         let total = 0;
         let raritiesCount = 0;
@@ -286,7 +280,7 @@ export class CharactersService {
             total += this.getRosterRarityPotential(
                 usedCharacters,
                 availableCharacters,
-                Rarity.Legendary,
+                'Legendary',
                 legendaryCharactersCount
             );
             raritiesCount++;
@@ -296,7 +290,7 @@ export class CharactersService {
             total += this.getRosterRarityPotential(
                 usedCharacters,
                 availableCharacters.filter(x => !usedCharacters.includes(x.name)),
-                Rarity.Epic,
+                'Epic',
                 epicCharactersCount
             );
             raritiesCount++;
@@ -306,7 +300,7 @@ export class CharactersService {
             total += this.getRosterRarityPotential(
                 usedCharacters,
                 availableCharacters.filter(x => !usedCharacters.includes(x.name)),
-                Rarity.Rare,
+                'Rare',
                 rareCharactersCount
             );
             raritiesCount++;
@@ -316,7 +310,7 @@ export class CharactersService {
             total += this.getRosterRarityPotential(
                 usedCharacters,
                 availableCharacters.filter(x => !usedCharacters.includes(x.name)),
-                Rarity.Uncommon,
+                'Uncommon',
                 uncommonCharactersCount
             );
             raritiesCount++;
@@ -328,7 +322,7 @@ export class CharactersService {
     private static getRosterRarityPotential(
         usedCharacters: string[],
         availableCharacters: IPersonalCharacterData2[],
-        rarityCap: Rarity,
+        rarityCap: RarityKey,
         charactersCount: number
     ): number {
         const charactersByPotential = orderBy(
@@ -358,7 +352,7 @@ export class CharactersService {
      * const totalProgression = CharactersService.getTotalProgressionUntil(Rarity.RARE, RarityStars.THREE);
      * console.log(totalProgression); // { shards: 100, orbs: 50, mythicShards: 10 }
      */
-    public static getTotalProgressionUntil(rarity: Rarity, stars: RarityStars) {
+    public static getTotalProgressionUntil(rarity: RarityKey, stars: RarityStars) {
         const key = rarity + stars;
         const totals: ICharProgression = {
             shards: 0,
@@ -389,8 +383,8 @@ export class CharactersService {
      * sorts them in ascending order, and returns the rarity that follows the provided
      * current rarity. If the current rarity is the highest, the method will return undefined.
      */
-    public static getNextRarity(current: Rarity): Rarity {
-        const rarities = new Set<Rarity>();
+    public static getNextRarity(current: RarityKey): RarityKey {
+        const rarities = new Set<RarityKey>();
 
         for (const value of Object.values(charsProgression)) {
             if (value.rarity !== undefined) {
@@ -398,7 +392,7 @@ export class CharactersService {
             }
         }
 
-        const sorted = Array.from(rarities).sort((a, b) => a - b);
+        const sorted = Array.from(rarities).sort((a, b) => RARITIES.indexOf(a) - RARITIES.indexOf(b));
 
         const index = sorted.indexOf(current);
 
@@ -410,7 +404,7 @@ export class CharactersService {
      * @param rarity - The rarity level to find the minimum stars for.
      * @returns The minimum number of stars needed to achieve the specified rarity.
      */
-    public static getMinimumStarsForRarity(rarity: Rarity): RarityStars {
+    public static getMinimumStarsForRarity(rarity: RarityKey): RarityStars {
         const matches: number[] = [];
 
         for (const [kString, value] of Object.entries(charsProgression)) {

@@ -1,7 +1,7 @@
 ﻿// eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { ICharacter2 } from 'src/models/interfaces';
 
-import { Rarity } from '@/fsd/5-shared/model';
+import { RarityKey } from '@/fsd/5-shared/model';
 
 type ZoneId =
     | 'armoury'
@@ -38,7 +38,7 @@ export interface IGWZone {
         number,
         {
             difficulty: string;
-            caps: Rarity[];
+            caps: RarityKey[];
         }
     >; // battlefield level to rarityCaps array
     buff?: string;
@@ -60,7 +60,7 @@ export interface IGWTeam {
     id: string;
     name: string;
     type: GuildWarTeamType;
-    rarityCap: Rarity;
+    rarityCap: RarityKey;
     lineup: string[];
 }
 

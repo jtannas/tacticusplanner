@@ -15,8 +15,6 @@ import { isMobile } from 'react-device-detect';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { ICampaignBattleComposed } from 'src/models/interfaces';
 
-import { Rarity, RarityMapper } from '@/fsd/5-shared/model';
-
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { CampaignLocation } from '@/fsd/4-entities/campaign/campaign-location';
 import { CharactersService } from '@/fsd/4-entities/character';
@@ -69,13 +67,7 @@ export const MaterialsTable: React.FC<Props> = ({
                     cellRenderer: (params: ICellRendererParams<IRaidMaterialRow>) => {
                         const { data } = params;
                         if (data) {
-                            return (
-                                <UpgradeImage
-                                    material={data.label}
-                                    iconPath={data.iconPath}
-                                    rarity={RarityMapper.rarityToRarityString(data.rarity)}
-                                />
-                            );
+                            return <UpgradeImage material={data.label} iconPath={data.iconPath} rarity={data.rarity} />;
                         }
                     },
                     valueFormatter: () => {
@@ -94,9 +86,8 @@ export const MaterialsTable: React.FC<Props> = ({
                     field: 'rarity',
                     maxWidth: 120,
                     columnGroupShow: 'open',
-                    valueFormatter: (params: ValueFormatterParams<IRaidMaterialRow>) =>
-                        Rarity[params.data?.rarity ?? 0],
-                    cellClass: params => Rarity[params.data?.rarity ?? 0].toLowerCase(),
+                    valueFormatter: (params: ValueFormatterParams<IRaidMaterialRow>) => params.data?.rarity ?? 'Common',
+                    cellClass: params => params.data?.rarity?.toLowerCase() ?? 'common',
                 },
                 {
                     columnGroupShow: 'open',

@@ -2,8 +2,6 @@
 import Button from '@mui/material/Button';
 import React, { useEffect } from 'react';
 
-import { RarityMapper } from '@/fsd/5-shared/model';
-
 import { UpgradeImage } from '@/fsd/4-entities/upgrade';
 
 import { IInventoryUpgrade } from './inventory-models';
@@ -45,11 +43,7 @@ const InventoryItemFn: React.FC<Props> = ({ data, showIncDec, dataUpdate }) => {
     return (
         <div key={data.snowprintId} className="flex flex-col max-w-[60px]">
             <div className="py-0 px-[5px]">
-                <UpgradeImage
-                    material={data.material}
-                    iconPath={data.iconPath}
-                    rarity={RarityMapper.rarityToRarityString(data.rarity)}
-                />
+                <UpgradeImage material={data.material} iconPath={data.iconPath} rarity={data.rarity} />
             </div>
             <Input
                 className="justify-center"

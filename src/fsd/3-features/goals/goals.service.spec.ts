@@ -5,7 +5,7 @@ import { CampaignsLocationsUsage, PersonalGoalType } from 'src/models/enums';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { IPersonalGoal } from 'src/models/interfaces';
 
-import { Alliance, Rank, Rarity, RarityStars, UnitType } from '@/fsd/5-shared/model';
+import { Alliance, Rank, RarityStars, UnitType } from '@/fsd/5-shared/model';
 
 import { ICharacter2 } from '@/fsd/4-entities/character';
 
@@ -33,7 +33,7 @@ describe('Goal service', () => {
                 upgrades: ['item1', 'item2'],
                 level: 51,
                 xp: 124,
-                rarity: Rarity.Rare,
+                rarity: 'Rare',
             } as ICharacter2;
 
             const goalMock: IPersonalGoal = {
@@ -87,7 +87,7 @@ describe('Goal service', () => {
                 faction: 'ThousandSons',
                 icon: 'path',
                 shards: 10,
-                rarity: Rarity.Legendary,
+                rarity: 'Legendary',
                 rank: Rank.Silver1,
             } as ICharacter2;
 
@@ -132,7 +132,7 @@ describe('Goal service', () => {
                 name: 'Ragnar Blackmane',
                 shortName: 'Ragnar',
                 shards: 10,
-                rarity: Rarity.Epic,
+                rarity: 'Epic',
                 stars: RarityStars.FiveStars,
             } as ICharacter2;
 
@@ -143,7 +143,7 @@ describe('Goal service', () => {
                 priority: 1,
                 dailyRaids: false,
                 notes: 'myNotes',
-                targetRarity: Rarity.Legendary,
+                targetRarity: 'Legendary',
             };
 
             const expectedResult: ICharacterAscendGoal = {

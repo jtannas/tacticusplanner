@@ -7,7 +7,6 @@ import { DifficultyImage } from '@/shared-components/images/difficulty-image';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { Difficulty } from 'src/models/enums';
 
-import { Rarity } from '@/fsd/5-shared/model';
 import { FlexBox } from '@/fsd/5-shared/ui';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { RarityIcon } from '@/fsd/5-shared/ui/icons/rarity.icon';
@@ -25,7 +24,7 @@ export const BfZoneDifficultySelect: React.FC<Props> = ({ value, valueChange }) 
         const slots = GuildWarService.getDifficultyRarityCapsGrouped(index + 1);
         const rarityCaps = (
             <FlexBox gap={5}>
-                {[Rarity.Legendary, Rarity.Epic, Rarity.Rare, Rarity.Uncommon].map(rarity => {
+                {(['Legendary', 'Epic', 'Rare', 'Uncommon'] as const).map(rarity => {
                     const slotsCount = slots[rarity];
                     if (slotsCount) {
                         return (

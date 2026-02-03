@@ -1,10 +1,10 @@
-﻿import { FactionId, Rarity } from '@/fsd/5-shared/model';
+﻿import { FactionId, RarityKey } from '@/fsd/5-shared/model';
 
 export interface IInventoryUpgrade {
     material: string;
     snowprintId: string;
     label: string;
-    rarity: Rarity;
+    rarity: RarityKey;
     craftable: boolean;
     stat: string | 'Health' | 'Damage' | 'Armour' | 'Shard';
     quantity: number;
@@ -20,7 +20,7 @@ interface IUpgradesAlphabetGroup {
 
 export interface IUpgradesGroup {
     label: string;
-    rarity: Rarity;
+    rarity: RarityKey;
     items: IUpgradesAlphabetGroup[];
     itemsCrafted: IUpgradesAlphabetGroup[];
     itemsAll: IInventoryUpgrade[];

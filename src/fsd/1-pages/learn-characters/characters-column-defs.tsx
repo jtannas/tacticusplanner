@@ -5,20 +5,30 @@ import { isMobile } from 'react-device-detect';
 import { getEnumValues } from '@/fsd/5-shared/lib';
 import {
     RarityStars,
-    Rarity,
     DamageType,
     Rank,
     Trait,
     RarityMapper,
     getLabelFromTraitString,
+    RarityKey,
+    RARITIES,
 } from '@/fsd/5-shared/model';
 import { RarityIcon } from '@/fsd/5-shared/ui/icons';
 
 import { ICharacter2, CharacterTitleShort, RankIcon } from '@/fsd/4-entities/character';
 import { StatCell, DamageCell, StatsCalculatorService } from '@/fsd/4-entities/unit';
 
+const minStarsMap = {
+    Common: RarityStars.None,
+    Uncommon: RarityStars.TwoStars,
+    Rare: RarityStars.FourStars,
+    Epic: RarityStars.RedOneStar,
+    Legendary: RarityStars.RedThreeStars,
+    Mythic: RarityStars.OneBlueStar,
+};
+
 export const useCharacters = () => {
-    const [targetRarity, setTargetRarity] = useState<Rarity>(Rarity.Legendary);
+    const [targetRarity, setTargetRarity] = useState<RarityKey>('Legendary');
     const [targetStars, setTargetStars] = useState<RarityStars>(RarityStars.MythicWings);
     const [targetRank, setTargetRank] = useState<Rank>(Rank.Adamantine1);
 
@@ -42,15 +52,6 @@ export const useCharacters = () => {
         }
     };
 
-    const minStarsMap: Map<Rarity, RarityStars> = new Map([
-        [Rarity.Common, RarityStars.None],
-        [Rarity.Uncommon, RarityStars.TwoStars],
-        [Rarity.Rare, RarityStars.FourStars],
-        [Rarity.Epic, RarityStars.RedOneStar],
-        [Rarity.Legendary, RarityStars.RedThreeStars],
-        [Rarity.Mythic, RarityStars.OneBlueStar],
-    ]);
-
     const minRank = useMemo(() => {
         return Rank.Stone1;
     }, [targetRarity]);
@@ -60,11 +61,12 @@ export const useCharacters = () => {
     }, [targetRarity]);
 
     const minStars = useMemo(() => {
-        return minStarsMap.get(targetRarity) ?? RarityStars.None;
+        return minStarsMap[targetRarity] ?? RarityStars.None;
     }, [targetRarity]);
 
     const maxStars = useMemo(() => {
-        return minStarsMap.get(targetRarity + 1) ?? RarityStars.MythicWings;
+        const nextRarity = RARITIES[Math.min(RARITIES.indexOf(targetRarity) + 1, RARITIES.length - 1)];
+        return minStarsMap[nextRarity];
     }, [targetRarity]);
 
     const rankValues = useMemo(() => {
@@ -75,17 +77,18 @@ export const useCharacters = () => {
         return getEnumValues(RarityStars).filter(x => x >= minStars && x <= maxStars);
     }, [minStars, maxStars]);
 
-    const onTargetRarityChanged = (rarity: Rarity) => {
+    const onTargetRarityChanged = (rarity: RarityKey) => {
         if (rarity < targetRarity) {
             const maxRank = RarityMapper.toMaxRank[rarity];
             setTargetRarity(rarity);
-            setTargetStars(minStarsMap.get(rarity + 1) ?? RarityStars.MythicWings);
+            const nextRarity = RARITIES[Math.min(RARITIES.indexOf(rarity) + 1, RARITIES.length - 1)];
+            setTargetStars(minStarsMap[nextRarity]);
             if (targetRank > maxRank) {
                 setTargetRank(maxRank);
             }
         } else if (rarity > targetRarity) {
             setTargetRarity(rarity);
-            setTargetStars(minStarsMap.get(rarity) ?? RarityStars.None);
+            setTargetStars(minStarsMap[rarity]);
         }
     };
 

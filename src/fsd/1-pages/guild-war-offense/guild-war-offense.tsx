@@ -13,7 +13,7 @@ import { DispatchContext, StoreContext } from 'src/reducers/store.provider';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { getCompletionRateColor } from 'src/shared-logic/functions';
 
-import { Rarity, Rank } from '@/fsd/5-shared/model';
+import { Rarity, Rank, RarityKey } from '@/fsd/5-shared/model';
 import { AccessibleTooltip, Conditional, FlexBox } from '@/fsd/5-shared/ui';
 import { MiscIcon } from '@/fsd/5-shared/ui/icons';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
@@ -85,7 +85,7 @@ export const GuildWarOffense = () => {
         });
     };
 
-    const endEditTeam = (team?: ICharacter2[], rarityCap?: Rarity, teamName?: string): void => {
+    const endEditTeam = (team?: ICharacter2[], rarityCap?: RarityKey, teamName?: string): void => {
         if (team && rarityCap && editedTeam && teamName) {
             dispatch.guildWar({
                 type: 'UpdateTeam',
@@ -213,7 +213,7 @@ export const GuildWarOffense = () => {
         [teamsWithCharacters, teamsPotential, guildWar.deployedCharacters]
     );
 
-    const getCharactersWithPotential = (rarityCap: Rarity) => {
+    const getCharactersWithPotential = (rarityCap: RarityKey) => {
         return orderBy(
             characters
                 .filter(x => x.rank > Rank.Locked)
@@ -253,7 +253,7 @@ export const GuildWarOffense = () => {
             return 'Empty. Add some characters to the teams below';
         }
 
-        return [Rarity.Legendary, Rarity.Epic, Rarity.Rare, Rarity.Uncommon].map(rarity => {
+        return (['Legendary', 'Epic', 'Rare', 'Uncommon'] as const).map(rarity => {
             const slotsCount = slots[rarity];
             if (slotsCount) {
                 return (
@@ -274,7 +274,7 @@ export const GuildWarOffense = () => {
     const groupByRarityPools = () => {
         const slots = CharactersService.groupByRarityPools(availableCharacters);
 
-        return [Rarity.Legendary, Rarity.Epic, Rarity.Rare, Rarity.Uncommon].map(rarity => {
+        return (['Legendary', 'Epic', 'Rare', 'Uncommon'] as const).map(rarity => {
             const slotsCount = slots[rarity];
             if (slotsCount) {
                 return (
@@ -352,10 +352,7 @@ export const GuildWarOffense = () => {
                             onlyBlocked
                             characters={orderBy(
                                 characters,
-                                [
-                                    character =>
-                                        CharactersService.calculateCharacterPotential(character, Rarity.Legendary),
-                                ],
+                                [character => CharactersService.calculateCharacterPotential(character, 'Legendary')],
                                 ['desc']
                             )}
                             blockedCharacters={guildWar.deployedCharacters}

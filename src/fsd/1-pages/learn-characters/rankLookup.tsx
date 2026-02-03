@@ -11,7 +11,7 @@ import { useSearchParams } from 'react-router-dom';
 import { StoreContext } from '@/reducers/store.provider';
 
 import { getEnumValues } from '@/fsd/5-shared/lib';
-import { Rarity, Rank, RarityMapper } from '@/fsd/5-shared/model';
+import { Rank } from '@/fsd/5-shared/model';
 import { AccessibleTooltip } from '@/fsd/5-shared/ui';
 import { MiscIcon } from '@/fsd/5-shared/ui/icons';
 
@@ -127,14 +127,9 @@ export const RankLookup = () => {
             {materials.map(item => (
                 <li key={item.id}>
                     <div className="flex items-center gap-[5px]">
-                        <span className={Rarity[item.rarity]?.toLowerCase()}>{Rarity[item.rarity]}</span> -{' '}
-                        <UpgradeImage
-                            material={item.label}
-                            iconPath={item.iconPath}
-                            rarity={RarityMapper.rarityToRarityString(item.rarity)}
-                            size={30}
-                        />{' '}
-                        - <span className="font-bold">{item.count}</span>
+                        <span className={item.rarity.toLowerCase()}>{item.rarity}</span> -{' '}
+                        <UpgradeImage material={item.label} iconPath={item.iconPath} rarity={item.rarity} size={30} /> -{' '}
+                        <span className="font-bold">{item.count}</span>
                     </div>
                     {item.recipe?.length ? renderUpgradesMaterials(item.recipe) : undefined}
                 </li>
@@ -154,13 +149,7 @@ export const RankLookup = () => {
             cellRenderer: (params: ICellRendererParams<IMaterialEstimated2>) => {
                 const { data } = params;
                 if (data) {
-                    return (
-                        <UpgradeImage
-                            material={data.label}
-                            iconPath={data.iconPath}
-                            rarity={RarityMapper.rarityToRarityString(data.rarity)}
-                        />
-                    );
+                    return <UpgradeImage material={data.label} iconPath={data.iconPath} rarity={data.rarity} />;
                 }
             },
             equals: () => true,
@@ -184,8 +173,8 @@ export const RankLookup = () => {
         {
             field: 'rarity',
             maxWidth: 120,
-            valueFormatter: (params: ValueFormatterParams<IMaterialEstimated2>) => Rarity[params.data?.rarity ?? 0],
-            cellClass: params => Rarity[params.data?.rarity ?? 0].toLowerCase(),
+            valueFormatter: (params: ValueFormatterParams<IMaterialEstimated2>) => params.data?.rarity ?? 'Common',
+            cellClass: params => params.data?.rarity?.toLowerCase() ?? 'common',
         },
         {
             headerName: 'Locations',
@@ -255,11 +244,7 @@ export const RankLookup = () => {
                     {healthUpgrades.map((x, index) => {
                         return (
                             <div key={x.id + index} onClick={event => handleRecipeClick(event.currentTarget, x)}>
-                                <UpgradeImage
-                                    material={x.label}
-                                    iconPath={x.iconPath}
-                                    rarity={RarityMapper.rarityToRarityString(x.rarity)}
-                                />
+                                <UpgradeImage material={x.label} iconPath={x.iconPath} rarity={x.rarity} />
                             </div>
                         );
                     })}
@@ -268,11 +253,7 @@ export const RankLookup = () => {
                     <MiscIcon icon={'damage'} height={30} />
                     {damageUpgrades.map((x, index) => (
                         <div key={x.id + index} onClick={event => handleRecipeClick(event.currentTarget, x)}>
-                            <UpgradeImage
-                                material={x.label}
-                                iconPath={x.iconPath}
-                                rarity={RarityMapper.rarityToRarityString(x.rarity)}
-                            />
+                            <UpgradeImage material={x.label} iconPath={x.iconPath} rarity={x.rarity} />
                         </div>
                     ))}
                 </div>
@@ -280,11 +261,7 @@ export const RankLookup = () => {
                     <MiscIcon icon={'armour'} height={30} />
                     {armourUpgrades.map((x, index) => (
                         <div key={x.id + index} onClick={event => handleRecipeClick(event.currentTarget, x)}>
-                            <UpgradeImage
-                                material={x.label}
-                                iconPath={x.iconPath}
-                                rarity={RarityMapper.rarityToRarityString(x.rarity)}
-                            />
+                            <UpgradeImage material={x.label} iconPath={x.iconPath} rarity={x.rarity} />
                         </div>
                     ))}
                 </div>
@@ -407,14 +384,14 @@ export const RankLookup = () => {
                             <div className="m-5 w-[300px]">
                                 <div className="flex items-center gap-[5px]">
                                     <MiscIcon icon={materialRecipe.stat.toLowerCase() as any} />
-                                    <span className={Rarity[materialRecipe.rarity]?.toLowerCase()}>
-                                        {Rarity[materialRecipe.rarity]}
+                                    <span className={materialRecipe.rarity.toLowerCase()}>
+                                        {materialRecipe.rarity}
                                     </span>{' '}
                                     -{' '}
                                     <UpgradeImage
                                         material={materialRecipe.label}
                                         iconPath={materialRecipe.iconPath}
-                                        rarity={RarityMapper.rarityToRarityString(materialRecipe.rarity)}
+                                        rarity={materialRecipe.rarity}
                                         size={30}
                                     />
                                 </div>

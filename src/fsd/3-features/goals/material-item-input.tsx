@@ -1,8 +1,6 @@
 ﻿import Button from '@mui/material/Button';
 import React from 'react';
 
-import { RarityMapper } from '@/fsd/5-shared/model';
-
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { CampaignLocation } from '@/fsd/4-entities/campaign/campaign-location';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
@@ -30,7 +28,7 @@ export const MaterialItemInput: React.FC<Props> = ({ upgradeRaid, acquiredCount,
                 <UpgradeImage
                     material={upgradeRaid.label}
                     iconPath={upgradeRaid.iconPath}
-                    rarity={RarityMapper.rarityToRarityString(upgradeRaid.rarity)}
+                    rarity={upgradeRaid.rarity}
                     tooltip={
                         <div>
                             {upgradeRaid.label}

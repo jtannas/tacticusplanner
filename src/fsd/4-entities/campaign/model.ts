@@ -1,4 +1,4 @@
-import { Alliance, Rarity, FactionId } from '@/fsd/5-shared/model';
+import { Alliance, FactionId, RarityKey } from '@/fsd/5-shared/model';
 
 import { Campaign, CampaignDifficulty, CampaignGroupType, CampaignReleaseType, CampaignType } from './enums';
 
@@ -13,8 +13,7 @@ export interface ICampaignBattleComposed {
     itemsPerDay: number;
     energyPerDay: number;
     nodeNumber: number;
-    rarity: string;
-    rarityEnum: Rarity;
+    rarity: RarityKey | 'Shard';
     rewards: IRewards;
     slots?: number;
     enemiesFactions: FactionId[];
@@ -169,7 +168,7 @@ export interface ICampaignsFilters {
     alliesAlliance: Alliance[];
     alliesFactions: FactionId[];
     campaignTypes: CampaignType[];
-    upgradesRarity: Rarity[];
+    upgradesRarity: RarityKey[];
     slotsCount?: number[];
     enemiesTypes?: string[];
     enemiesMinCount?: number;

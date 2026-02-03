@@ -5,8 +5,6 @@ import { DailyRaidsStrategy } from 'src/models/enums';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { IDailyRaidsFarmOrder, IDailyRaidsHomeScreenEvent, IEstimatedRanksSettings } from 'src/models/interfaces';
 
-import { Rarity } from '@/fsd/5-shared/model';
-
 import { Campaign, CampaignsService, CampaignGroupType } from '@/fsd/4-entities/campaign';
 
 import { ICombinedUpgrade } from './goals.models';
@@ -27,7 +25,7 @@ describe('UpgradesService - CE challenge unlocks based on base progress', () => 
                 id: 'testUpgrade',
                 snowprintId: 'testUpgrade',
                 label: 'Test',
-                rarity: Rarity.Rare,
+                rarity: 'Rare',
                 iconPath: '',
                 locations: [location],
                 crafted: false,

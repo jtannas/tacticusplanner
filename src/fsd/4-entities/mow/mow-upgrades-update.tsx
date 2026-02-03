@@ -105,11 +105,7 @@ export const MowUpgradesUpdate: React.FC<Props> = ({
                     <ul className="p-0">
                         {inventoryUpgrades.map((x, index) => (
                             <li key={x.id + index} className="list-none flex items-center gap-2.5 pb-2.5">
-                                <UpgradeImage
-                                    material={x.label}
-                                    iconPath={x.iconPath}
-                                    rarity={RarityMapper.rarityToRarityString(x.rarity)}
-                                />{' '}
+                                <UpgradeImage material={x.label} iconPath={x.iconPath} rarity={x.rarity} />{' '}
                                 {inventory[x.id] ?? 0} - {inventoryUpdate[x.id]} ={' '}
                                 {(inventory[x.id] ?? 0) - inventoryUpdate[x.id] < 0
                                     ? 0

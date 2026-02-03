@@ -1,13 +1,11 @@
 import { MenuItem, OutlinedInput, Select, SelectChangeEvent } from '@mui/material';
 import React from 'react';
 
-import { FactionId, Rank, Rarity } from '@/fsd/5-shared/model';
+import { FactionId, Rank, RARITIES, RarityKey } from '@/fsd/5-shared/model';
 import { RaritySelect } from '@/fsd/5-shared/ui';
 
 import { RankSelect } from '@/fsd/4-entities/character';
 import { FactionImage } from '@/fsd/4-entities/faction';
-
-const RARITIES = [Rarity.Common, Rarity.Uncommon, Rarity.Rare, Rarity.Epic, Rarity.Legendary, Rarity.Mythic];
 
 const RANKS = [
     Rank.Stone1,
@@ -46,15 +44,15 @@ const FilterGroup: React.FC<FilterGroupProps> = ({ label, children }) => (
 
 interface Props {
     searchText: string;
-    minRarity: Rarity;
-    maxRarity: Rarity;
+    minRarity: RarityKey;
+    maxRarity: RarityKey;
     minRank: Rank;
     maxRank: Rank;
     factions: FactionId[];
     allFactions: FactionId[];
     onSearchTextChange: (text: string) => void;
-    onMinRarityChange: (rarity: Rarity) => void;
-    onMaxRarityChange: (rarity: Rarity) => void;
+    onMinRarityChange: (rarity: RarityKey) => void;
+    onMaxRarityChange: (rarity: RarityKey) => void;
     onMinRankChange: (rank: Rank) => void;
     onMaxRankChange: (rank: Rank) => void;
     onFactionsChange: (factions: FactionId[]) => void;
@@ -89,8 +87,8 @@ export const UnitFilter: React.FC<Props> = ({
 
     const handleResetAllFilters = () => {
         onSearchTextChange('');
-        onMinRarityChange(Rarity.Common);
-        onMaxRarityChange(Rarity.Mythic);
+        onMinRarityChange(RARITIES[0]);
+        onMaxRarityChange(RARITIES[RARITIES.length - 1]);
         onMinRankChange(Rank.Stone1);
         onMaxRankChange(Rank.Adamantine3);
         onFactionsChange([]);
@@ -111,20 +109,10 @@ export const UnitFilter: React.FC<Props> = ({
             </FilterGroup>
             <FilterGroup label="Rarity">
                 <div className="min-w-[180px]">
-                    <RaritySelect
-                        label="Min"
-                        rarityValues={RARITIES}
-                        value={minRarity}
-                        valueChanges={onMinRarityChange}
-                    />
+                    <RaritySelect label="Min" value={minRarity} valueChanges={onMinRarityChange} />
                 </div>
                 <div className="min-w-[180px]">
-                    <RaritySelect
-                        label="Max"
-                        rarityValues={RARITIES}
-                        value={maxRarity}
-                        valueChanges={onMaxRarityChange}
-                    />
+                    <RaritySelect label="Max" value={maxRarity} valueChanges={onMaxRarityChange} />
                 </div>
             </FilterGroup>
             <FilterGroup label="Rank">

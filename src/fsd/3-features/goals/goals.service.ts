@@ -7,7 +7,7 @@ import { CampaignsLocationsUsage, PersonalGoalType } from 'src/models/enums';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { IInventory, IPersonalGoal } from 'src/models/interfaces';
 
-import { Alliance, Rank, Rarity } from '@/fsd/5-shared/model';
+import { Alliance, Rank, RarityKey } from '@/fsd/5-shared/model';
 
 import { CharactersService } from '@/fsd/4-entities/character';
 import { IMow2, MowsService } from '@/fsd/4-entities/mow';
@@ -34,8 +34,8 @@ import { XpUseState } from '@/fsd/1-pages/input-resources';
 import { XpIncomeState } from '@/fsd/1-pages/input-xp-income';
 interface RevisedGoals {
     goalEstimates: IGoalEstimate[];
-    neededBadges: Record<Alliance, Record<Rarity, number>>;
-    neededForgeBadges: Record<Rarity, number>;
+    neededBadges: Record<Alliance, Record<RarityKey, number>>;
+    neededForgeBadges: Record<RarityKey, number>;
     neededComponents: Record<Alliance, number>;
     neededXp: number;
 }
@@ -389,68 +389,68 @@ export class GoalsService {
         };
     }
 
-    private static adjustNeededXp(xpNeeded: number, heldBooks: Record<Rarity, number>): number {
-        while (xpNeeded >= 62500 && heldBooks[Rarity.Mythic] > 0) {
+    private static adjustNeededXp(xpNeeded: number, heldBooks: Record<RarityKey, number>): number {
+        while (xpNeeded >= 62500 && heldBooks.Mythic > 0) {
             xpNeeded -= 62500;
-            heldBooks[Rarity.Mythic] -= 1;
+            heldBooks.Mythic -= 1;
         }
-        while (xpNeeded >= 12500 && heldBooks[Rarity.Legendary] > 0) {
+        while (xpNeeded >= 12500 && heldBooks.Legendary > 0) {
             xpNeeded -= 12500;
-            heldBooks[Rarity.Legendary] -= 1;
+            heldBooks.Legendary -= 1;
         }
-        while (xpNeeded >= 2500 && heldBooks[Rarity.Epic] > 0) {
+        while (xpNeeded >= 2500 && heldBooks.Epic > 0) {
             xpNeeded -= 2500;
-            heldBooks[Rarity.Epic] -= 1;
+            heldBooks.Epic -= 1;
         }
-        while (xpNeeded >= 500 && heldBooks[Rarity.Rare] > 0) {
+        while (xpNeeded >= 500 && heldBooks.Rare > 0) {
             xpNeeded -= 500;
-            heldBooks[Rarity.Rare] -= 1;
+            heldBooks.Rare -= 1;
         }
-        while (xpNeeded >= 100 && heldBooks[Rarity.Uncommon] > 0) {
+        while (xpNeeded >= 100 && heldBooks.Uncommon > 0) {
             xpNeeded -= 100;
-            heldBooks[Rarity.Uncommon] -= 1;
+            heldBooks.Uncommon -= 1;
         }
-        while (xpNeeded >= 20 && heldBooks[Rarity.Common] > 0) {
+        while (xpNeeded >= 20 && heldBooks.Common > 0) {
             xpNeeded -= 20;
-            heldBooks[Rarity.Common] -= 1;
+            heldBooks.Common -= 1;
         }
         if (xpNeeded > 0) {
-            while (xpNeeded > 0 && heldBooks[Rarity.Common] > 0) {
+            while (xpNeeded > 0 && heldBooks.Common > 0) {
                 xpNeeded = Math.max(0, xpNeeded - 20);
-                heldBooks[Rarity.Common] -= 1;
+                heldBooks.Common -= 1;
             }
-            while (xpNeeded > 0 && heldBooks[Rarity.Uncommon] > 0) {
+            while (xpNeeded > 0 && heldBooks.Uncommon > 0) {
                 xpNeeded = Math.max(0, xpNeeded - 100);
-                heldBooks[Rarity.Uncommon] -= 1;
+                heldBooks.Uncommon -= 1;
             }
-            while (xpNeeded > 0 && heldBooks[Rarity.Rare] > 0) {
+            while (xpNeeded > 0 && heldBooks.Rare > 0) {
                 xpNeeded = Math.max(0, xpNeeded - 500);
-                heldBooks[Rarity.Rare] -= 1;
+                heldBooks.Rare -= 1;
             }
-            while (xpNeeded > 0 && heldBooks[Rarity.Epic] > 0) {
+            while (xpNeeded > 0 && heldBooks.Epic > 0) {
                 xpNeeded = Math.max(0, xpNeeded - 2500);
-                heldBooks[Rarity.Epic] -= 1;
+                heldBooks.Epic -= 1;
             }
-            while (xpNeeded > 0 && heldBooks[Rarity.Legendary] > 0) {
+            while (xpNeeded > 0 && heldBooks.Legendary > 0) {
                 xpNeeded = Math.max(0, xpNeeded - 12500);
-                heldBooks[Rarity.Legendary] -= 1;
+                heldBooks.Legendary -= 1;
             }
-            while (xpNeeded > 0 && heldBooks[Rarity.Mythic] > 0) {
+            while (xpNeeded > 0 && heldBooks.Mythic > 0) {
                 xpNeeded = Math.max(0, xpNeeded - 62500);
-                heldBooks[Rarity.Mythic] -= 1;
+                heldBooks.Mythic -= 1;
             }
         }
         return xpNeeded;
     }
 
-    private static computeHeldBooks(inventory: IInventory, xpUseState: XpUseState): Record<Rarity, number> {
+    private static computeHeldBooks(inventory: IInventory, xpUseState: XpUseState): Record<RarityKey, number> {
         const heldBooks = { ...inventory.xpBooks };
-        if (!xpUseState.useCommon) heldBooks[Rarity.Common] = 0;
-        if (!xpUseState.useUncommon) heldBooks[Rarity.Uncommon] = 0;
-        if (!xpUseState.useRare) heldBooks[Rarity.Rare] = 0;
-        if (!xpUseState.useEpic) heldBooks[Rarity.Epic] = 0;
-        if (!xpUseState.useLegendary) heldBooks[Rarity.Legendary] = 0;
-        if (!xpUseState.useMythic) heldBooks[Rarity.Mythic] = 0;
+        if (!xpUseState.useCommon) heldBooks.Common = 0;
+        if (!xpUseState.useUncommon) heldBooks.Uncommon = 0;
+        if (!xpUseState.useRare) heldBooks.Rare = 0;
+        if (!xpUseState.useEpic) heldBooks.Epic = 0;
+        if (!xpUseState.useLegendary) heldBooks.Legendary = 0;
+        if (!xpUseState.useMythic) heldBooks.Mythic = 0;
         return heldBooks;
     }
 
@@ -466,24 +466,24 @@ export class GoalsService {
         upgradeRankOrMowGoals: (ICharacterUpgradeRankGoal | ICharacterUpgradeMow)[],
         xpIncomeState: XpIncomeState
     ): RevisedGoals {
-        const createRarityRecord = (): Record<Rarity, number> => ({
-            [Rarity.Common]: 0,
-            [Rarity.Uncommon]: 0,
-            [Rarity.Rare]: 0,
-            [Rarity.Epic]: 0,
-            [Rarity.Legendary]: 0,
-            [Rarity.Mythic]: 0,
+        const createRarityRecord = (): Record<RarityKey, number> => ({
+            Common: 0,
+            Uncommon: 0,
+            Rare: 0,
+            Epic: 0,
+            Legendary: 0,
+            Mythic: 0,
         });
 
         const heldBooks = this.computeHeldBooks(inventory, xpUseState);
 
-        const neededBadges: Record<Alliance, Record<Rarity, number>> = {
+        const neededBadges: Record<Alliance, Record<RarityKey, number>> = {
             [Alliance.Chaos]: createRarityRecord(),
             [Alliance.Imperial]: createRarityRecord(),
             [Alliance.Xenos]: createRarityRecord(),
         };
 
-        const neededForgeBadges: Record<Rarity, number> = createRarityRecord();
+        const neededForgeBadges: Record<RarityKey, number> = createRarityRecord();
         const neededComponents: Record<Alliance, number> = {
             [Alliance.Chaos]: 0,
             [Alliance.Imperial]: 0,
@@ -556,7 +556,7 @@ export class GoalsService {
             if (goal.abilitiesEstimate === undefined && goal.mowEstimate === undefined) continue;
             const badges = goal.mowEstimate?.badges ?? goal.abilitiesEstimate!.badges;
             for (const [rarityStr, count] of Object.entries(badges)) {
-                const rarity = Number(rarityStr) as Rarity;
+                const rarity = rarityStr as RarityKey;
                 const alliance =
                     goal.abilitiesEstimate?.alliance ??
                     GoalsService.getGoalAlliance(goal.goalId, upgradeRankOrMowGoals)!;

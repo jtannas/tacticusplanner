@@ -4,8 +4,6 @@ import React, { useMemo, useState } from 'react';
 // eslint-disable-next-line import-x/no-internal-modules
 import { ICampaignBattleComposed } from '@/models/interfaces';
 
-// eslint-disable-next-line import-x/no-internal-modules
-import { RarityMapper } from '@/fsd/5-shared/model/mappers/rarity.mapper';
 import { MiscIcon, UnitShardIcon } from '@/fsd/5-shared/ui/icons';
 
 import { CampaignLocation } from '@/fsd/4-entities/campaign';
@@ -59,13 +57,7 @@ export const CampaignBattleCard: React.FC<Props> = ({ battle }) => {
             return reward;
         }
 
-        return (
-            <UpgradeImage
-                material={upgrade.label}
-                iconPath={upgrade.iconPath}
-                rarity={RarityMapper.rarityToRarityString(upgrade.rarity)}
-            />
-        );
+        return <UpgradeImage material={upgrade.label} iconPath={upgrade.iconPath} rarity={upgrade.rarity} />;
     }, [reward]);
     return (
         <>

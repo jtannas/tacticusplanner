@@ -27,7 +27,7 @@ import { DispatchContext, StoreContext } from 'src/reducers/store.provider';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { getCompletionRateColor } from 'src/shared-logic/functions';
 
-import { Rank } from '@/fsd/5-shared/model';
+import { Rank, RARITIES } from '@/fsd/5-shared/model';
 import { LoaderWithText, AccessibleTooltip, FlexBox } from '@/fsd/5-shared/ui';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { RarityIcon } from '@/fsd/5-shared/ui/icons/rarity.icon';
@@ -344,7 +344,7 @@ interface ZoneCardProps extends React.DOMAttributes<HTMLElement>, CommonProps {
 const ZoneCard: React.FC<ZoneCardProps> = ({ zone, bfLevel, onClick, style, players }) => {
     const zoneStats = GuildWarService.getZone(zone.id);
     const { difficulty, caps } = zoneStats.rarityCaps[bfLevel];
-    const maxRarity = Math.max(...caps);
+    const maxRarity = RARITIES[Math.max(...caps.map(x => RARITIES.indexOf(x)))];
     const maxRarityCount = caps.filter(x => x === maxRarity).length;
     const difficultyEnum: Difficulty = GuildWarService.gwData.difficulties.indexOf(difficulty) + 1;
 

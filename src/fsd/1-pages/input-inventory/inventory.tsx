@@ -7,7 +7,7 @@ import { isMobile } from 'react-device-detect';
 // eslint-disable-next-line import-x/no-internal-modules
 import { DispatchContext, StoreContext } from '@/reducers/store.provider';
 
-import { Rarity } from '@/fsd/5-shared/model';
+import { RarityKey } from '@/fsd/5-shared/model';
 import { RarityIcon } from '@/fsd/5-shared/ui/icons';
 
 import { UpgradesService } from '@/fsd/4-entities/upgrade';
@@ -37,7 +37,7 @@ export const Inventory: React.FC<Props> = ({ itemsFilter = [], onUpdate }) => {
                     material: x.material,
                     snowprintId: x.snowprintId,
                     label: x.label ?? x.material,
-                    rarity: Rarity[x.rarity as unknown as number] as unknown as Rarity,
+                    rarity: x.rarity,
                     craftable: x.craftable,
                     stat: x.stat,
                     quantity: inventory.upgrades[x.snowprintId] ?? 0,
@@ -62,9 +62,9 @@ export const Inventory: React.FC<Props> = ({ itemsFilter = [], onUpdate }) => {
     const itemsGrouped = useMemo(() => {
         return map(
             groupBy(itemsList.filter(filterItem), 'rarity'),
-            (items, rarity): IUpgradesGroup => ({
-                label: Rarity[+rarity],
-                rarity: +rarity,
+            (items, rarity: RarityKey): IUpgradesGroup => ({
+                label: rarity,
+                rarity: rarity,
                 items: map(
                     groupBy(
                         items.filter(x => !x.craftable).filter(x => x.material.indexOf('Coming soon') === -1),

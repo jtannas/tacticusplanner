@@ -6,7 +6,7 @@ import { useMemo, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
 import { useFitGridOnWindowResize } from '@/fsd/5-shared/lib';
-import { Rarity, RarityString, Rank, stringToRank, RarityMapper, FactionId } from '@/fsd/5-shared/model';
+import { Rank, stringToRank, FactionId, RarityKey } from '@/fsd/5-shared/model';
 import { MiscIcon, UnitShardIcon, RarityIcon } from '@/fsd/5-shared/ui/icons';
 
 import { CampaignsService, CampaignLocation, ICampaignBattleComposed } from '@/fsd/4-entities/campaign';
@@ -20,7 +20,7 @@ interface IUpgradesTableRow {
     upgradeId: string;
     upgradeIcon: string;
     faction?: FactionId; // omitted when the upgrade is not faction-specific
-    rarity: Rarity;
+    rarity: RarityKey;
     type: string;
     locations: ICampaignBattleComposed[];
     recipe: string;
@@ -90,7 +90,7 @@ export const Upgrades = () => {
                             <UpgradeImage
                                 material={data.upgradeLabel}
                                 iconPath={data.upgradeIcon}
-                                rarity={RarityMapper.rarityToRarityString(data.rarity)}
+                                rarity={data.rarity}
                             />
                         );
                     }
@@ -114,7 +114,7 @@ export const Upgrades = () => {
                         return <RarityIcon rarity={data.rarity} />;
                     }
                 },
-                cellClass: params => Rarity[params.data?.rarity ?? 0].toLowerCase(),
+                cellClass: params => params.data?.rarity?.toLowerCase() ?? 'common',
             },
             {
                 field: 'type',
@@ -249,7 +249,7 @@ export const Upgrades = () => {
                     upgradeId: x.snowprintId,
                     upgradeIcon: x.icon ?? '',
                     faction: x.faction,
-                    rarity: RarityMapper.stringToNumber[x.rarity as unknown as RarityString],
+                    rarity: x.rarity,
                     type: x.stat,
                     locations,
                     partOf,

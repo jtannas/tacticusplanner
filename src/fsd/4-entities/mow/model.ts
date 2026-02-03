@@ -1,4 +1,4 @@
-import { Alliance, DynamicProps, FactionId, Rarity, RarityStars, RarityString, UnitType } from '@/fsd/5-shared/model';
+import { Alliance, DynamicProps, FactionId, RarityKey, RarityStars, UnitType } from '@/fsd/5-shared/model';
 
 import { IBaseUpgrade, ICraftedUpgrade } from '@/fsd/4-entities/upgrade/@x/mow';
 
@@ -13,7 +13,7 @@ export interface IMowStatic {
     alliance: Alliance;
     deployableAlliance: Alliance;
     faction: FactionId;
-    initialRarity: RarityString;
+    initialRarity: RarityKey;
 }
 
 interface IMowStaticAbility {
@@ -53,7 +53,7 @@ export interface IMowsAndUpgradeCosts {
 export interface IMowDb {
     id: string;
     unlocked: boolean;
-    rarity: Rarity;
+    rarity: RarityKey;
     stars: RarityStars;
     primaryAbilityLevel: number;
     secondaryAbilityLevel: number;
@@ -81,7 +81,7 @@ export interface IMowLevelMaterials {
     badges: number;
     salvage: number;
     forgeBadges: number;
-    rarity: Rarity;
+    rarity: RarityKey;
     primaryUpgrades: Array<IBaseUpgrade | ICraftedUpgrade>;
     secondaryUpgrades: Array<IBaseUpgrade | ICraftedUpgrade>;
 }

@@ -10,7 +10,7 @@ import { rarityToMaxStars, rarityToStars } from 'src/models/constants';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { getEnumValues } from 'src/shared-logic/functions';
 
-import { RarityStars, Rarity, Alliance } from '@/fsd/5-shared/model';
+import { RarityStars, Alliance, RARITIES } from '@/fsd/5-shared/model';
 import { StarsSelect, RaritySelect } from '@/fsd/5-shared/ui';
 import { MiscIcon, UnitShardIcon } from '@/fsd/5-shared/ui/icons';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
@@ -50,15 +50,13 @@ export const EditMowDialog: React.FC<Props> = ({
     const [editedMow, setEditedMow] = useState(() => ({ ...mow }));
 
     const starsEntries = useMemo(() => {
-        const minStars = rarityToStars[editedMow.rarity as Rarity];
-        const maxStars = rarityToMaxStars[editedMow.rarity as Rarity];
+        const minStars = rarityToStars[editedMow.rarity];
+        const maxStars = rarityToMaxStars[editedMow.rarity];
 
         return getEnumValues(RarityStars).filter(x => x >= minStars && x <= maxStars);
     }, [editedMow.rarity]);
 
-    const rarityEntries: number[] = getEnumValues(Rarity);
-
-    const handleInputChange = (name: keyof IMow2, value: boolean | number) => {
+    const handleInputChange = <K extends keyof IMow2>(name: K, value: IMow2[K]) => {
         setEditedMow(curr => ({
             ...curr,
             [name]: value,
@@ -90,7 +88,6 @@ export const EditMowDialog: React.FC<Props> = ({
                     <Grid item xs={6}>
                         <RaritySelect
                             label="Rarity"
-                            rarityValues={rarityEntries}
                             value={editedMow.rarity}
                             valueChanges={value => handleInputChange('rarity', value)}
                         />

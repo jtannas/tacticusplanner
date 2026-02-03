@@ -60,7 +60,7 @@ export const MowUpgrades: React.FC<Props> = ({ primaryLevel, secondaryLevel, mow
                                 key={x.id + index}
                                 material={x.label}
                                 iconPath={x.iconPath}
-                                rarity={RarityMapper.rarityToRarityString(x.rarity)}
+                                rarity={x.rarity}
                                 size={40}
                             />
                         ))}

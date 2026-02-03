@@ -1,6 +1,6 @@
 ﻿import { groupBy, mapValues, orderBy, sum } from 'lodash';
 
-import { Rarity } from '@/fsd/5-shared/model';
+import { RarityKey } from '@/fsd/5-shared/model';
 
 import { IMowLevelMaterials } from '@/fsd/4-entities/mow';
 import { IBaseUpgrade, ICraftedUpgrade, IUpgradeRecipe, UpgradesService } from '@/fsd/4-entities/upgrade';
@@ -13,15 +13,15 @@ export class MowLookupService {
         const gold = sum(materials.map(x => x.gold)) * multiplier;
         const salvage = sum(materials.map(x => x.salvage)) * multiplier;
 
-        const badges: Record<Rarity, number> = {
-            [Rarity.Common]: 0,
-            [Rarity.Uncommon]: 0,
-            [Rarity.Rare]: 0,
-            [Rarity.Epic]: 0,
-            [Rarity.Legendary]: 0,
-            [Rarity.Mythic]: 0,
+        const badges: Record<RarityKey, number> = {
+            Common: 0,
+            Uncommon: 0,
+            Rare: 0,
+            Epic: 0,
+            Legendary: 0,
+            Mythic: 0,
         };
-        const forgeBadges = new Map<Rarity, number>();
+        const forgeBadges = new Map<RarityKey, number>();
         for (const material of materials) {
             badges[material.rarity] += material.badges;
             forgeBadges.set(material.rarity, (forgeBadges.get(material.rarity) ?? 0) + material.forgeBadges);

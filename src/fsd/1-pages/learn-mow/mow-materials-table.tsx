@@ -83,7 +83,7 @@ export const MowMaterialsTable: React.FC<Props> = ({ rows }) => {
                                         key={x.id + index}
                                         material={x.label}
                                         iconPath={x.iconPath}
-                                        rarity={RarityMapper.rarityToRarityString(x.rarity)}
+                                        rarity={x.rarity}
                                         size={40}
                                     />
                                 ))}
@@ -117,7 +117,7 @@ export const MowMaterialsTable: React.FC<Props> = ({ rows }) => {
                                         key={x.id + index}
                                         material={x.label}
                                         iconPath={x.iconPath}
-                                        rarity={RarityMapper.rarityToRarityString(x.rarity)}
+                                        rarity={x.rarity}
                                         size={40}
                                     />
                                 ))}

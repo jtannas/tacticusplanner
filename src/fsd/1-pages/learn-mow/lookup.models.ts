@@ -1,4 +1,4 @@
-﻿import { Rarity } from '@/fsd/5-shared/model';
+﻿import { RarityKey } from '@/fsd/5-shared/model';
 
 import { IMow2 } from '@/fsd/4-entities/mow';
 import { IBaseUpgrade } from '@/fsd/4-entities/upgrade';
@@ -15,8 +15,8 @@ export interface IMowMaterialsTotal {
     components: number;
     salvage: number;
     gold: number;
-    badges: Record<Rarity, number>;
-    forgeBadges: Map<Rarity, number>;
+    badges: Record<RarityKey, number>;
+    forgeBadges: Map<RarityKey, number>;
 }
 
 export interface IMowUpgrade extends IBaseUpgrade {

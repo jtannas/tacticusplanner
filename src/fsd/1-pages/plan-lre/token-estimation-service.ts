@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 // eslint-disable-next-line import-x/no-internal-modules
 import { ILreTeam } from '@/models/interfaces';
 
-import { Rarity, RarityStars } from '@/fsd/5-shared/model';
+import { RarityKey, RarityStars } from '@/fsd/5-shared/model';
 
 import { CharactersService } from '@/fsd/4-entities/character';
 
@@ -38,7 +38,7 @@ export class TokenDisplay {
     public track: string = '(null track)';
     public incrementalPoints: number = -1;
     public totalPoints: number = -1;
-    public rarity: Rarity = Rarity.Legendary;
+    public rarity: RarityKey = 'Legendary';
     public stars: RarityStars = RarityStars.None;
     public shardsToNextMilestone: number = 400;
     public achievedPointsMilestone: boolean = false;
@@ -196,80 +196,80 @@ export const pointMilestones: readonly PointMilestone[] = [
 ];
 interface ShardMilestone {
     shards: PositiveInteger<number>;
-    rarity: Rarity;
+    rarity: RarityKey;
     stars: RarityStars;
     totalNeededCurrency: PositiveInteger<number>;
 }
 
 export const chestMilestones: readonly ShardMilestone[] = [
-    { shards: 25, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 60 },
-    { shards: 50, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 140 },
-    { shards: 75, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 240 },
-    { shards: 100, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 360 },
-    { shards: 125, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 500 },
-    { shards: 150, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 660 },
-    { shards: 175, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 840 },
-    { shards: 200, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 1040 },
-    { shards: 225, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 1260 },
-    { shards: 250, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 1500 },
-    { shards: 275, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 1760 },
-    { shards: 300, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 2040 },
-    { shards: 325, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 2340 },
-    { shards: 350, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 2660 },
-    { shards: 375, rarity: Rarity.Legendary, stars: RarityStars.None, totalNeededCurrency: 3000 },
-    { shards: 400, rarity: Rarity.Legendary, stars: RarityStars.RedThreeStars, totalNeededCurrency: 3350 },
-    { shards: 425, rarity: Rarity.Legendary, stars: RarityStars.RedThreeStars, totalNeededCurrency: 3710 },
-    { shards: 450, rarity: Rarity.Legendary, stars: RarityStars.RedThreeStars, totalNeededCurrency: 4080 },
-    { shards: 475, rarity: Rarity.Legendary, stars: RarityStars.RedThreeStars, totalNeededCurrency: 4460 },
-    { shards: 500, rarity: Rarity.Legendary, stars: RarityStars.RedThreeStars, totalNeededCurrency: 4850 },
-    { shards: 525, rarity: Rarity.Legendary, stars: RarityStars.RedFourStars, totalNeededCurrency: 5250 },
-    { shards: 550, rarity: Rarity.Legendary, stars: RarityStars.RedFourStars, totalNeededCurrency: 5650 },
-    { shards: 575, rarity: Rarity.Legendary, stars: RarityStars.RedFourStars, totalNeededCurrency: 6050 },
-    { shards: 600, rarity: Rarity.Legendary, stars: RarityStars.RedFourStars, totalNeededCurrency: 6450 },
-    { shards: 625, rarity: Rarity.Legendary, stars: RarityStars.RedFourStars, totalNeededCurrency: 6850 },
-    { shards: 650, rarity: Rarity.Legendary, stars: RarityStars.RedFourStars, totalNeededCurrency: 7250 },
-    { shards: 675, rarity: Rarity.Legendary, stars: RarityStars.RedFourStars, totalNeededCurrency: 7650 },
-    { shards: 700, rarity: Rarity.Legendary, stars: RarityStars.RedFiveStars, totalNeededCurrency: 8050 },
-    { shards: 725, rarity: Rarity.Legendary, stars: RarityStars.RedFiveStars, totalNeededCurrency: 8450 },
-    { shards: 750, rarity: Rarity.Legendary, stars: RarityStars.RedFiveStars, totalNeededCurrency: 8850 },
-    { shards: 775, rarity: Rarity.Legendary, stars: RarityStars.RedFiveStars, totalNeededCurrency: 9250 },
-    { shards: 800, rarity: Rarity.Legendary, stars: RarityStars.RedFiveStars, totalNeededCurrency: 9650 },
-    { shards: 825, rarity: Rarity.Legendary, stars: RarityStars.RedFiveStars, totalNeededCurrency: 10050 },
-    { shards: 850, rarity: Rarity.Legendary, stars: RarityStars.RedFiveStars, totalNeededCurrency: 10450 },
-    { shards: 875, rarity: Rarity.Legendary, stars: RarityStars.RedFiveStars, totalNeededCurrency: 10850 },
-    { shards: 900, rarity: Rarity.Legendary, stars: RarityStars.OneBlueStar, totalNeededCurrency: 11250 },
-    { shards: 925, rarity: Rarity.Legendary, stars: RarityStars.OneBlueStar, totalNeededCurrency: 12050 },
-    { shards: 950, rarity: Rarity.Legendary, stars: RarityStars.OneBlueStar, totalNeededCurrency: 12950 },
-    { shards: 975, rarity: Rarity.Legendary, stars: RarityStars.OneBlueStar, totalNeededCurrency: 13950 },
-    { shards: 1000, rarity: Rarity.Legendary, stars: RarityStars.OneBlueStar, totalNeededCurrency: 15050 },
-    { shards: 1025, rarity: Rarity.Legendary, stars: RarityStars.OneBlueStar, totalNeededCurrency: 16250 },
-    { shards: 1050, rarity: Rarity.Legendary, stars: RarityStars.OneBlueStar, totalNeededCurrency: 17550 },
-    { shards: 1075, rarity: Rarity.Legendary, stars: RarityStars.OneBlueStar, totalNeededCurrency: 18950 },
-    { shards: 1100, rarity: Rarity.Legendary, stars: RarityStars.OneBlueStar, totalNeededCurrency: 20450 },
-    { shards: 1125, rarity: Rarity.Legendary, stars: RarityStars.OneBlueStar, totalNeededCurrency: 21950 },
-    { shards: 1150, rarity: Rarity.Mythic, stars: RarityStars.OneBlueStar, totalNeededCurrency: 23450 },
-    { shards: 1175, rarity: Rarity.Mythic, stars: RarityStars.OneBlueStar, totalNeededCurrency: 24950 },
-    { shards: 1200, rarity: Rarity.Mythic, stars: RarityStars.OneBlueStar, totalNeededCurrency: 26450 },
-    { shards: 1225, rarity: Rarity.Mythic, stars: RarityStars.OneBlueStar, totalNeededCurrency: 27950 },
-    { shards: 1250, rarity: Rarity.Mythic, stars: RarityStars.OneBlueStar, totalNeededCurrency: 29450 },
-    { shards: 1275, rarity: Rarity.Mythic, stars: RarityStars.OneBlueStar, totalNeededCurrency: 30950 },
-    { shards: 1300, rarity: Rarity.Mythic, stars: RarityStars.TwoBlueStars, totalNeededCurrency: 32450 },
+    { shards: 25, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 60 },
+    { shards: 50, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 140 },
+    { shards: 75, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 240 },
+    { shards: 100, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 360 },
+    { shards: 125, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 500 },
+    { shards: 150, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 660 },
+    { shards: 175, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 840 },
+    { shards: 200, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 1040 },
+    { shards: 225, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 1260 },
+    { shards: 250, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 1500 },
+    { shards: 275, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 1760 },
+    { shards: 300, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 2040 },
+    { shards: 325, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 2340 },
+    { shards: 350, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 2660 },
+    { shards: 375, rarity: 'Legendary', stars: RarityStars.None, totalNeededCurrency: 3000 },
+    { shards: 400, rarity: 'Legendary', stars: RarityStars.RedThreeStars, totalNeededCurrency: 3350 },
+    { shards: 425, rarity: 'Legendary', stars: RarityStars.RedThreeStars, totalNeededCurrency: 3710 },
+    { shards: 450, rarity: 'Legendary', stars: RarityStars.RedThreeStars, totalNeededCurrency: 4080 },
+    { shards: 475, rarity: 'Legendary', stars: RarityStars.RedThreeStars, totalNeededCurrency: 4460 },
+    { shards: 500, rarity: 'Legendary', stars: RarityStars.RedThreeStars, totalNeededCurrency: 4850 },
+    { shards: 525, rarity: 'Legendary', stars: RarityStars.RedFourStars, totalNeededCurrency: 5250 },
+    { shards: 550, rarity: 'Legendary', stars: RarityStars.RedFourStars, totalNeededCurrency: 5650 },
+    { shards: 575, rarity: 'Legendary', stars: RarityStars.RedFourStars, totalNeededCurrency: 6050 },
+    { shards: 600, rarity: 'Legendary', stars: RarityStars.RedFourStars, totalNeededCurrency: 6450 },
+    { shards: 625, rarity: 'Legendary', stars: RarityStars.RedFourStars, totalNeededCurrency: 6850 },
+    { shards: 650, rarity: 'Legendary', stars: RarityStars.RedFourStars, totalNeededCurrency: 7250 },
+    { shards: 675, rarity: 'Legendary', stars: RarityStars.RedFourStars, totalNeededCurrency: 7650 },
+    { shards: 700, rarity: 'Legendary', stars: RarityStars.RedFiveStars, totalNeededCurrency: 8050 },
+    { shards: 725, rarity: 'Legendary', stars: RarityStars.RedFiveStars, totalNeededCurrency: 8450 },
+    { shards: 750, rarity: 'Legendary', stars: RarityStars.RedFiveStars, totalNeededCurrency: 8850 },
+    { shards: 775, rarity: 'Legendary', stars: RarityStars.RedFiveStars, totalNeededCurrency: 9250 },
+    { shards: 800, rarity: 'Legendary', stars: RarityStars.RedFiveStars, totalNeededCurrency: 9650 },
+    { shards: 825, rarity: 'Legendary', stars: RarityStars.RedFiveStars, totalNeededCurrency: 10050 },
+    { shards: 850, rarity: 'Legendary', stars: RarityStars.RedFiveStars, totalNeededCurrency: 10450 },
+    { shards: 875, rarity: 'Legendary', stars: RarityStars.RedFiveStars, totalNeededCurrency: 10850 },
+    { shards: 900, rarity: 'Legendary', stars: RarityStars.OneBlueStar, totalNeededCurrency: 11250 },
+    { shards: 925, rarity: 'Legendary', stars: RarityStars.OneBlueStar, totalNeededCurrency: 12050 },
+    { shards: 950, rarity: 'Legendary', stars: RarityStars.OneBlueStar, totalNeededCurrency: 12950 },
+    { shards: 975, rarity: 'Legendary', stars: RarityStars.OneBlueStar, totalNeededCurrency: 13950 },
+    { shards: 1000, rarity: 'Legendary', stars: RarityStars.OneBlueStar, totalNeededCurrency: 15050 },
+    { shards: 1025, rarity: 'Legendary', stars: RarityStars.OneBlueStar, totalNeededCurrency: 16250 },
+    { shards: 1050, rarity: 'Legendary', stars: RarityStars.OneBlueStar, totalNeededCurrency: 17550 },
+    { shards: 1075, rarity: 'Legendary', stars: RarityStars.OneBlueStar, totalNeededCurrency: 18950 },
+    { shards: 1100, rarity: 'Legendary', stars: RarityStars.OneBlueStar, totalNeededCurrency: 20450 },
+    { shards: 1125, rarity: 'Legendary', stars: RarityStars.OneBlueStar, totalNeededCurrency: 21950 },
+    { shards: 1150, rarity: 'Mythic', stars: RarityStars.OneBlueStar, totalNeededCurrency: 23450 },
+    { shards: 1175, rarity: 'Mythic', stars: RarityStars.OneBlueStar, totalNeededCurrency: 24950 },
+    { shards: 1200, rarity: 'Mythic', stars: RarityStars.OneBlueStar, totalNeededCurrency: 26450 },
+    { shards: 1225, rarity: 'Mythic', stars: RarityStars.OneBlueStar, totalNeededCurrency: 27950 },
+    { shards: 1250, rarity: 'Mythic', stars: RarityStars.OneBlueStar, totalNeededCurrency: 29450 },
+    { shards: 1275, rarity: 'Mythic', stars: RarityStars.OneBlueStar, totalNeededCurrency: 30950 },
+    { shards: 1300, rarity: 'Mythic', stars: RarityStars.TwoBlueStars, totalNeededCurrency: 32450 },
 ];
 
 export interface StarMilestone {
     totalShards: number;
     incrementalShards: number;
-    rarity: Rarity;
+    rarity: RarityKey;
     stars: RarityStars;
 }
 
 export const ascensionMilestones: readonly StarMilestone[] = [
-    { totalShards: 400, incrementalShards: 400, rarity: Rarity.Legendary, stars: RarityStars.RedThreeStars },
-    { totalShards: 520, incrementalShards: 120, rarity: Rarity.Legendary, stars: RarityStars.RedFourStars },
-    { totalShards: 700, incrementalShards: 180, rarity: Rarity.Legendary, stars: RarityStars.RedFiveStars },
-    { totalShards: 900, incrementalShards: 200, rarity: Rarity.Legendary, stars: RarityStars.OneBlueStar },
-    { totalShards: 1150, incrementalShards: 250, rarity: Rarity.Mythic, stars: RarityStars.OneBlueStar },
-    { totalShards: 1300, incrementalShards: 150, rarity: Rarity.Mythic, stars: RarityStars.TwoBlueStars },
+    { totalShards: 400, incrementalShards: 400, rarity: 'Legendary', stars: RarityStars.RedThreeStars },
+    { totalShards: 520, incrementalShards: 120, rarity: 'Legendary', stars: RarityStars.RedFourStars },
+    { totalShards: 700, incrementalShards: 180, rarity: 'Legendary', stars: RarityStars.RedFiveStars },
+    { totalShards: 900, incrementalShards: 200, rarity: 'Legendary', stars: RarityStars.OneBlueStar },
+    { totalShards: 1150, incrementalShards: 250, rarity: 'Mythic', stars: RarityStars.OneBlueStar },
+    { totalShards: 1300, incrementalShards: 150, rarity: 'Mythic', stars: RarityStars.TwoBlueStars },
 ];
 
 export interface EventProgress {
@@ -280,7 +280,7 @@ export interface EventProgress {
     currency: number;
 
     // The current rarity of the character.
-    rarity: Rarity;
+    rarity: RarityKey;
 
     // The current stars of the character.
     stars: RarityStars;
@@ -716,7 +716,7 @@ export class TokenEstimationService {
      * Returns -1 if the character has no stars (`RarityStars.None`).
      * Returns `starMilestones.length` if the character has surpassed all defined milestones.
      */
-    private static getCurrentStarIndex(currentRarity: Rarity, currentStars: RarityStars): number {
+    private static getCurrentStarIndex(currentRarity: RarityKey, currentStars: RarityStars): number {
         if (currentStars === RarityStars.None) return -1;
         for (let i = 0; i < ascensionMilestones.length; ++i) {
             if (currentRarity === ascensionMilestones[i].rarity && currentStars <= ascensionMilestones[i].stars) {
@@ -786,7 +786,7 @@ export class TokenEstimationService {
      */
     private static computeSyncedProgress(
         progress: ILreProgressModel,
-        currentRarity: Rarity,
+        currentRarity: RarityKey,
         currentStars: RarityStars
     ): EventProgress {
         if (progress.syncedProgress === undefined) {
@@ -844,7 +844,7 @@ export class TokenEstimationService {
      */
     public static computeCurrentProgress(
         progress: ILreProgressModel,
-        currentRarity: Rarity,
+        currentRarity: RarityKey,
         currentStars: RarityStars,
         p2p: boolean
     ): EventProgress {
@@ -885,7 +885,7 @@ export class TokenEstimationService {
     public static getTokenDisplays(
         tokens: TokenUse[],
         progress: ILreProgressModel,
-        currentRarity: Rarity,
+        currentRarity: RarityKey,
         currentStars: RarityStars,
         p2p: boolean
     ): TokenDisplay[] {

@@ -167,7 +167,7 @@ export const HomeScreenEvent = () => {
             <UpgradeImage
                 material={upgrade.label}
                 iconPath={upgrade.iconPath}
-                rarity={RarityMapper.rarityToRarityString(upgrade.rarity)}
+                rarity={upgrade.rarity}
             />
         );
     };

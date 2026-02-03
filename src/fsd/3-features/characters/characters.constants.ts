@@ -1,4 +1,4 @@
-﻿import { RarityStars, Rarity, Rank, UnitType } from '@/fsd/5-shared/model';
+﻿import { RarityStars, Rarity, Rank, UnitType, RarityKey } from '@/fsd/5-shared/model';
 
 import { ICharacter2 } from '@/fsd/4-entities/character';
 
@@ -16,39 +16,39 @@ export const unsetCharacter: Partial<ICharacter2> = {
     level: 1,
 };
 
-export const rarityCaps: Record<Rarity, IRarityCap> = {
-    [Rarity.Common]: {
-        rarity: Rarity.Common,
+export const rarityCaps: Record<RarityKey, IRarityCap> = {
+    Common: {
+        rarity: 'Common',
         abilitiesLevel: 8,
         rank: Rank.Iron1,
         stars: RarityStars.TwoStars,
     },
-    [Rarity.Uncommon]: {
-        rarity: Rarity.Uncommon,
+    Uncommon: {
+        rarity: 'Uncommon',
         abilitiesLevel: 17,
         rank: Rank.Bronze1,
         stars: RarityStars.FourStars,
     },
-    [Rarity.Rare]: {
-        rarity: Rarity.Rare,
+    Rare: {
+        rarity: 'Rare',
         abilitiesLevel: 26,
         rank: Rank.Silver1,
         stars: RarityStars.RedOneStar,
     },
-    [Rarity.Epic]: {
-        rarity: Rarity.Epic,
+    Epic: {
+        rarity: 'Epic',
         abilitiesLevel: 35,
         rank: Rank.Gold1,
         stars: RarityStars.RedThreeStars,
     },
-    [Rarity.Legendary]: {
-        rarity: Rarity.Legendary,
+    Legendary: {
+        rarity: 'Legendary',
         abilitiesLevel: 50,
         rank: Rank.Diamond3,
         stars: RarityStars.OneBlueStar,
     },
-    [Rarity.Mythic]: {
-        rarity: Rarity.Mythic,
+    Mythic: {
+        rarity: 'Mythic',
         abilitiesLevel: 55,
         rank: Rank.Adamantine1,
         stars: RarityStars.OneBlueStar,

@@ -7,14 +7,14 @@ import { CampaignsUsageSelect } from 'src/shared-components/goals/campaigns-usag
 import { NumbersInput } from 'src/shared-components/goals/numbers-input';
 
 import { getEnumValues } from '@/fsd/5-shared/lib';
-import { Rarity, RarityStars } from '@/fsd/5-shared/model';
+import { RARITIES, RarityKey, RarityStars } from '@/fsd/5-shared/model';
 import { RaritySelect, StarsSelect } from '@/fsd/5-shared/ui';
 
 import { CampaignLocation } from '@/fsd/4-entities/campaign/campaign-location';
 
 interface Props {
-    currentRarity: Rarity;
-    targetRarity: Rarity;
+    currentRarity: RarityKey;
+    targetRarity: RarityKey;
     currentStars: RarityStars;
     targetStars: RarityStars;
     possibleLocations: ICampaignBattleComposed[];
@@ -25,7 +25,7 @@ interface Props {
     mythicCampaignsUsage: CampaignsLocationsUsage;
     shardsPerToken: number;
     mythicShardsPerToken: number;
-    onChange: (key: keyof IPersonalGoal, value: number) => void;
+    onChange: <K extends keyof IPersonalGoal>(key: K, value: IPersonalGoal[K]) => void;
 }
 
 export const SetAscendGoal: React.FC<Props> = ({
@@ -44,7 +44,7 @@ export const SetAscendGoal: React.FC<Props> = ({
     onChange,
 }) => {
     const rarityValues = useMemo(() => {
-        return getEnumValues(Rarity).filter(x => x >= currentRarity);
+        return RARITIES.slice(RARITIES.indexOf(currentRarity));
     }, [currentRarity]);
 
     const starsEntries = useMemo(() => {
@@ -62,7 +62,7 @@ export const SetAscendGoal: React.FC<Props> = ({
                     value={targetRarity}
                     valueChanges={value => {
                         onChange('targetRarity', value);
-                        onChange('targetStars', rarityToStars[value as Rarity]);
+                        onChange('targetStars', rarityToStars[value]);
                     }}
                 />
 
@@ -84,7 +84,7 @@ export const SetAscendGoal: React.FC<Props> = ({
                 ))}
             </div>
 
-            {(currentRarity < Rarity.Legendary || currentStars < RarityStars.OneBlueStar) && (
+            {(['Legendary', 'Mythic'].includes(currentRarity) || currentStars < RarityStars.OneBlueStar) && (
                 <>
                     {possibleLocations.length !== 0 && (
                         <>
@@ -120,7 +120,7 @@ export const SetAscendGoal: React.FC<Props> = ({
                 </>
             )}
 
-            {targetRarity >= Rarity.Mythic && (
+            {targetRarity === 'Mythic' && (
                 <>
                     {!!possibleMythicLocations.length && (
                         <div className="flex gap-3 items-center">

@@ -2,7 +2,6 @@
 import { AgGridReact } from 'ag-grid-react';
 import React, { useState } from 'react';
 
-import { Rarity, RarityMapper } from '@/fsd/5-shared/model';
 import { RarityIcon } from '@/fsd/5-shared/ui/icons';
 
 import { CampaignLocation } from '@/fsd/4-entities/campaign';
@@ -30,13 +29,7 @@ export const MowUpgradesTable: React.FC<Props> = ({ rows }) => {
             cellRenderer: (params: ICellRendererParams<IMowUpgrade>) => {
                 const { data } = params;
                 if (data) {
-                    return (
-                        <UpgradeImage
-                            material={data.label}
-                            iconPath={data.iconPath}
-                            rarity={RarityMapper.rarityToRarityString(data.rarity)}
-                        />
-                    );
+                    return <UpgradeImage material={data.label} iconPath={data.iconPath} rarity={data.rarity} />;
                 }
             },
             sortable: false,
@@ -56,7 +49,7 @@ export const MowUpgradesTable: React.FC<Props> = ({ rows }) => {
                     return <RarityIcon rarity={data.rarity} />;
                 }
             },
-            cellClass: params => Rarity[params.data?.rarity ?? 0].toLowerCase(),
+            cellClass: params => params.data?.rarity?.toLowerCase() ?? 'common',
         },
         {
             headerName: 'Locations',

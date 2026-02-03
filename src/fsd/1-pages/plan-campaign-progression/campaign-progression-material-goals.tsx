@@ -5,7 +5,6 @@ import { AgGridReact } from 'ag-grid-react';
 import React, { useMemo } from 'react';
 import { isMobile } from 'react-device-detect';
 
-import { RarityMapper } from '@/fsd/5-shared/model';
 import { MiscIcon, UnitShardIcon } from '@/fsd/5-shared/ui/icons';
 
 import { CampaignLocation, ICampaignBattleComposed } from '@/fsd/4-entities/campaign';
@@ -124,7 +123,7 @@ export const CampaignProgressionMaterialGoals: React.FC<Props> = ({ campaignData
                             <UpgradeImage
                                 material={CampaignsProgressionService.getReward(savings.battle)}
                                 iconPath={reward?.icon ?? ''}
-                                rarity={RarityMapper.stringToRarityString(reward.rarity)}
+                                rarity={reward.rarity}
                                 size={30}
                             />
                         );
@@ -264,7 +263,7 @@ export const CampaignProgressionMaterialGoals: React.FC<Props> = ({ campaignData
                             <UpgradeImage
                                 material={CampaignsProgressionService.getReward(savings.battle)}
                                 iconPath={reward?.icon ?? ''}
-                                rarity={RarityMapper.stringToRarityString(reward.rarity)}
+                                rarity={reward.rarity}
                                 size={30}
                             />
                         );

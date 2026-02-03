@@ -531,7 +531,6 @@ export const LearnCharacters = () => {
                 <div style={{ width: 200 }}>
                     <RaritySelect
                         label={'Target Rarity'}
-                        rarityValues={getEnumValues(Rarity)}
                         value={targetRarity}
                         valueChanges={value => onTargetRarityChanged(value)}
                     />

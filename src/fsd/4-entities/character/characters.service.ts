@@ -1,15 +1,6 @@
 import { uniq } from 'lodash';
 
-import {
-    UnitType,
-    RarityMapper,
-    RarityString,
-    Alliance,
-    Equipment,
-    Trait,
-    DamageType,
-    Rarity,
-} from '@/fsd/5-shared/model';
+import { UnitType, RarityMapper, Alliance, Equipment, Trait, DamageType, RarityKey } from '@/fsd/5-shared/model';
 
 // eslint-disable-next-line boundaries/element-types
 import { ILegendaryEventStatic, LegendaryEventEnum, LegendaryEventService } from '@/fsd/4-entities/lre';
@@ -40,7 +31,7 @@ export class CharactersService {
     static readonly activeLres = this.lreCharacters.filter(x => !x.lre?.finished);
     static readonly inactiveLres = this.lreCharacters.filter(x => !!x.lre?.finished);
 
-    public static getInitialRarity(snowprintId: string): Rarity | undefined {
+    public static getInitialRarity(snowprintId: string): RarityKey | undefined {
         const character = this.charactersData.find(unit => unit.snowprintId === snowprintId);
         return character?.initialRarity;
     }
@@ -96,8 +87,9 @@ export class CharactersService {
             health: rawData.Health,
             damage: rawData.Damage,
             armour: rawData.Armour,
-            initialRarity: RarityMapper.stringToNumber[rawData['Initial rarity'] as RarityString],
-            rarityStars: RarityMapper.toStars[RarityMapper.stringToNumber[rawData['Initial rarity'] as RarityString]],
+            // TODO: remove this type assertion once the data is type-safe
+            initialRarity: rawData['Initial rarity'] as RarityKey,
+            rarityStars: RarityMapper.toStars[rawData['Initial rarity'] as RarityKey],
             equipment1: rawData.Equipment1,
             equipment2: rawData.Equipment2,
             equipment3: rawData.Equipment3,

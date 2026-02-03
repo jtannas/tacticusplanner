@@ -1,6 +1,6 @@
 ﻿import { clamp } from 'lodash';
 
-import { Rarity } from '@/fsd/5-shared/model';
+import { RarityKey } from '@/fsd/5-shared/model';
 
 import { GuildWarTeamType } from '@/fsd/3-features/guild-war/guild-war.models';
 
@@ -12,12 +12,12 @@ export type GuildWarAction =
           type: 'UpdateTeam';
           teamId: string;
           lineup: string[];
-          rarityCap: Rarity;
+          rarityCap: RarityKey;
           teamName?: string;
       }
     | {
           type: 'UpdateDefenseRarityCaps';
-          rarityCaps: Rarity[];
+          rarityCaps: RarityKey[];
       }
     | {
           type: 'ClearTeamLineup';
@@ -108,7 +108,7 @@ export const guildWarReducer = (state: IGuildWar, action: GuildWarAction): IGuil
             const defenseTeams = state.teams.filter(x => x.type === GuildWarTeamType.Defense);
 
             defenseTeams.forEach((team, index) => {
-                team.rarityCap = rarityCaps[index] ?? Rarity.Legendary;
+                team.rarityCap = rarityCaps[index] ?? 'Legendary';
             });
 
             return { ...state, teams: [...state.teams] };

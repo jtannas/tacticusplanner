@@ -8,7 +8,7 @@ import React, { useMemo } from 'react';
 import factionsData from 'src/data/factions.json';
 
 import { factionLookup } from '@/fsd/5-shared/lib';
-import { Alliance, FactionId, FactionName, Rarity, RarityMapper, RarityString } from '@/fsd/5-shared/model';
+import { Alliance, FactionId, FactionName, RARITIES } from '@/fsd/5-shared/model';
 import { MultipleSelectCheckmarks } from '@/fsd/5-shared/ui';
 
 import { CampaignsService, CampaignType, ICampaignsFilters } from '@/fsd/4-entities/campaign';
@@ -230,12 +230,12 @@ export const LocationsFilter: React.FC<Props> = ({ filter, filtersChange }) => {
                     <MultipleSelectCheckmarks
                         size="small"
                         placeholder="Rarity"
-                        selectedValues={currFilter.upgradesRarity.map(x => RarityMapper.rarityToRarityString(x))}
-                        values={Object.values(RarityString)}
+                        selectedValues={currFilter.upgradesRarity}
+                        values={RARITIES}
                         selectionChanges={values => {
                             setCurrFilter({
                                 ...currFilter,
-                                upgradesRarity: values.map(x => +Rarity[x as unknown as number]),
+                                upgradesRarity: values,
                             });
                         }}
                         disableCloseOnSelect={false}

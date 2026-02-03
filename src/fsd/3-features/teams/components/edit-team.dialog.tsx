@@ -163,12 +163,7 @@ export const EditTeamDialog: React.FC<Props> = ({ onClose, characters, mows, tea
 
                 {(team.primaryGameMode === GameMode.tournamentArena || team.primaryGameMode === GameMode.guildWar) && (
                     <>
-                        <RaritySelect
-                            label={'Rarity Cap'}
-                            rarityValues={getEnumValues(Rarity)}
-                            value={rarityCap}
-                            valueChanges={setRarityCap}
-                        />
+                        <RaritySelect label={'Rarity Cap'} value={rarityCap} valueChanges={setRarityCap} />
 
                         <br />
                         <br />

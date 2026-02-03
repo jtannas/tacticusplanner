@@ -60,7 +60,7 @@ export class RankLookupService {
 
                     return {
                         snowprintId: '',
-                        rarity: 0,
+                        rarity: 'Common',
                         craftable: false,
                         iconPath: upgrade,
                         stat: 'Unknown',

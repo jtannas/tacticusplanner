@@ -383,7 +383,7 @@ const PointsTable = (props: { legendaryEvent: ILegendaryEvent }) => {
                                 columnKeys: ['name', 'rarity', 'rank', 'totalPoints'],
                                 processCellCallback: params => {
                                     if (params.column.getColId() === 'rarity') {
-                                        return RarityMapper.rarityToRarityString(params.value) ?? 'Common';
+                                        return params.value ?? 'Common';
                                     }
                                     if (params.column.getColId() === 'rank') {
                                         return rankToString(params.value) ?? 'Locked';

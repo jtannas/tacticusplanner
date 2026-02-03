@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { ICharacter2 } from '@/models/interfaces';
 
-import { FactionId, Rank, Rarity } from '@/fsd/5-shared/model';
+import { FactionId, Rank, RARITIES, RarityKey } from '@/fsd/5-shared/model';
 import { AccessibleTooltip } from '@/fsd/5-shared/ui';
 
 import { IMow2 } from '@/fsd/4-entities/mow';
@@ -20,16 +20,16 @@ interface Props {
     selectedChars: string[];
     selectedMows: string[];
     searchText: string;
-    minRarity: Rarity;
-    maxRarity: Rarity;
+    minRarity: RarityKey;
+    maxRarity: RarityKey;
     minRank: Rank;
     maxRank: Rank;
     factions: FactionId[];
     onSelectedCharsChange: (ids: string[]) => void;
     onSelectedMowsChange: (ids: string[]) => void;
     onSearchTextChange: (text: string) => void;
-    onMinRarityChange: (rarity: Rarity) => void;
-    onMaxRarityChange: (rarity: Rarity) => void;
+    onMinRarityChange: (rarity: RarityKey) => void;
+    onMaxRarityChange: (rarity: RarityKey) => void;
     onMinRankChange: (rank: Rank) => void;
     onMaxRankChange: (rank: Rank) => void;
     onFactionsChange: (factions: FactionId[]) => void;
@@ -151,7 +151,7 @@ export const AddTeamDialog: React.FC<Props> = ({
             const powerA = Math.pow(a.activeAbilityLevel ?? 0, 2) + Math.pow(a.passiveAbilityLevel ?? 0, 2);
             const powerB = Math.pow(b.activeAbilityLevel ?? 0, 2) + Math.pow(b.passiveAbilityLevel ?? 0, 2);
             if (powerB !== powerA) return powerB - powerA;
-            return b.rarity - a.rarity;
+            return RARITIES.indexOf(b.rarity) - RARITIES.indexOf(a.rarity);
         });
 
     const filteredMows = mows
@@ -161,7 +161,7 @@ export const AddTeamDialog: React.FC<Props> = ({
             const powerA = Math.pow(a.primaryAbilityLevel ?? 0, 2) + Math.pow(a.secondaryAbilityLevel ?? 0, 2);
             const powerB = Math.pow(b.primaryAbilityLevel ?? 0, 2) + Math.pow(b.secondaryAbilityLevel ?? 0, 2);
             if (powerB !== powerA) return powerB - powerA;
-            return b.rarity - a.rarity;
+            return RARITIES.indexOf(b.rarity) - RARITIES.indexOf(a.rarity);
         });
 
     const handleBattleFieldLevelsChange = (level: number) => {

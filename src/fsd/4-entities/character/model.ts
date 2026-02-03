@@ -7,7 +7,7 @@ import {
     DynamicProps,
     FactionId,
     Rank,
-    Rarity,
+    RarityKey,
     RarityStars,
     Trait,
     UnitType,
@@ -21,7 +21,7 @@ import { CharacterReleaseRarity } from './character-release-rarity.enum';
 interface IPersonalCharacterData2 {
     name: string;
     rank: Rank;
-    rarity: Rarity;
+    rarity: RarityKey;
     stars: RarityStars;
     level: number;
     xp: number;
@@ -127,7 +127,7 @@ export interface ICharacterData {
     health: number;
     damage: number;
     armour: number;
-    initialRarity: Rarity;
+    initialRarity: RarityKey;
     rarityStars: RarityStars;
     damageTypes: IDamageTypes;
     traits: Trait[];
@@ -193,5 +193,5 @@ export interface IRankLookup {
     appliedUpgrades: string[];
     rankStartPoint5: boolean;
     rankPoint5: boolean;
-    upgradesRarity: Rarity[];
+    upgradesRarity: RarityKey[];
 }

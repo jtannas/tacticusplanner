@@ -4,7 +4,7 @@ import { isMobile } from 'react-device-detect';
 
 import { DispatchContext, StoreContext } from '@/reducers/store.provider';
 
-import { Alliance, Rarity, RarityMapper, useAuth } from '@/fsd/5-shared/model';
+import { Alliance, RARITIES, RarityKey, useAuth } from '@/fsd/5-shared/model';
 import { BadgeImage } from '@/fsd/5-shared/ui/icons/badge-image';
 import { OrbIcon } from '@/fsd/5-shared/ui/icons/iconList';
 import { MiscIcon } from '@/fsd/5-shared/ui/icons/misc.icon';
@@ -33,9 +33,9 @@ export const Resources = () => {
         xpUse.useMythic,
     ];
 
-    const getRarityIndex = (rarity: Rarity): number => rarities.indexOf(rarity);
+    const getRarityIndex = (rarity: RarityKey): number => RARITIES.indexOf(rarity);
 
-    const newState = (rarity: Rarity): XpUseState => {
+    const newState = (rarity: RarityKey): XpUseState => {
         const index = getRarityIndex(rarity);
         const updatedEnabled = [...enabled];
         updatedEnabled[index] = !updatedEnabled[index];
@@ -50,16 +50,7 @@ export const Resources = () => {
         };
     };
 
-    const toggleState = (rarity: Rarity) => dispatchUpdate(newState(rarity));
-
-    const rarities: Rarity[] = [
-        Rarity.Common,
-        Rarity.Uncommon,
-        Rarity.Rare,
-        Rarity.Epic,
-        Rarity.Legendary,
-        Rarity.Mythic,
-    ];
+    const toggleState = (rarity: RarityKey) => dispatchUpdate(newState(rarity));
 
     const hasSync = !!userInfo.tacticusApiKey;
 
@@ -99,8 +90,8 @@ export const Resources = () => {
                         XP Books
                     </h4>
                     <div className="flex flex-wrap justify-start gap-x-1">
-                        {rarities.map(rarity => {
-                            const icon = RarityMapper.rarityToRarityString(rarity).toLowerCase() + 'Book';
+                        {RARITIES.map(rarity => {
+                            const icon = rarity.toLowerCase() + 'Book';
                             const index = getRarityIndex(rarity);
                             const isEnabled = enabled[index];
 
@@ -121,9 +112,9 @@ export const Resources = () => {
                         Forge Badges
                     </h4>
                     <div className="flex flex-wrap justify-start gap-x-1">
-                        {rarities.map(rarity => {
+                        {RARITIES.map(rarity => {
                             const quantity = inventory.forgeBadges[rarity] || 0;
-                            const icon = RarityMapper.rarityToRarityString(rarity).toLowerCase() + 'ForgeBadge';
+                            const icon = rarity.toLowerCase() + 'ForgeBadge';
                             return renderResourceItem(
                                 'forge-' + rarity,
                                 <MiscIcon icon={icon} width={45} height={45} />,
@@ -160,8 +151,8 @@ export const Resources = () => {
 
                             <div className="grid grid-cols-2 gap-x-4">
                                 <div className="flex flex-wrap justify-start">
-                                    {rarities.map(rarity => {
-                                        const quantity = inventory.abilityBadges[alliance][rarity as number as Rarity];
+                                    {RARITIES.map(rarity => {
+                                        const quantity = inventory.abilityBadges[alliance][rarity];
                                         return renderResourceItem(
                                             alliance + '-badge-' + rarity,
                                             <BadgeImage alliance={alliance} rarity={rarity} />,
@@ -171,9 +162,9 @@ export const Resources = () => {
                                 </div>
 
                                 <div className="flex flex-wrap justify-start">
-                                    {rarities.map(rarity => {
-                                        if (rarity === Rarity.Common) return null; // Skip Common Orbs
-                                        const quantity = inventory.orbs[alliance][rarity as number as Rarity];
+                                    {RARITIES.map(rarity => {
+                                        if (rarity === 'Common') return null; // Skip Common Orbs
+                                        const quantity = inventory.orbs[alliance][rarity];
                                         return renderResourceItem(
                                             alliance + '-orb-' + rarity,
                                             <OrbIcon alliance={alliance} rarity={rarity} size={45} />,

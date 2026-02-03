@@ -12,7 +12,6 @@ import { isMobile } from 'react-device-detect';
 import { DispatchContext, StoreContext } from '@/reducers/store.provider';
 
 import { factionLookup, useQueryState } from '@/fsd/5-shared/lib';
-import { RarityMapper } from '@/fsd/5-shared/model';
 import { RarityIcon, UnitShardIcon } from '@/fsd/5-shared/ui/icons';
 
 import { Campaign, ICampaignBattleComposed, CampaignLocation, CampaignsService } from '@/fsd/4-entities/campaign';
@@ -98,16 +97,14 @@ export const Campaigns = () => {
             maxWidth: 120,
         },
         {
-            field: 'rarityEnum',
+            field: 'rarity',
             headerName: 'Rarity',
             maxWidth: 80,
             cellRenderer: (params: ICellRendererParams<ICampaignBattleComposed>) => {
-                const { rarityEnum, dropRate } = params.data ?? {};
-                if (typeof rarityEnum === 'number' && rarityEnum >= 0) {
-                    return <RarityIcon rarity={rarityEnum} />;
-                } else if (dropRate) {
-                    return 'Shard';
-                }
+                const { rarity } = params.data ?? {};
+                if (!rarity) return undefined;
+                if (rarity === 'Shard') return 'Shard';
+                return <RarityIcon rarity={rarity} />;
             },
         },
         {
@@ -133,13 +130,7 @@ export const Campaigns = () => {
                     return reward;
                 }
 
-                return (
-                    <UpgradeImage
-                        material={upgrade.label}
-                        iconPath={upgrade.iconPath}
-                        rarity={RarityMapper.rarityToRarityString(upgrade.rarity)}
-                    />
-                );
+                return <UpgradeImage material={upgrade.label} iconPath={upgrade.iconPath} rarity={upgrade.rarity} />;
             },
         },
         {

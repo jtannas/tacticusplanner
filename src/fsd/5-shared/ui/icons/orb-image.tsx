@@ -1,18 +1,18 @@
 import React from 'react';
 
-import { Alliance, Rarity } from '@/fsd/5-shared/model';
+import { Alliance, RarityKey } from '@/fsd/5-shared/model';
 
 import { tacticusIcons } from './iconList';
 
 interface OrbIconProps {
     alliance: Alliance;
-    rarity: Rarity;
+    rarity: RarityKey;
     size: number; // Size in pixels (e.g., 60 for 60px)
 }
 
 // Maps Rarity enum to the required 'rareOrb', 'uncommonOrb', etc. key.
-const mapRarityToKey = (rarity: Rarity): string => {
-    return `${Rarity[rarity].toLowerCase()}Orb`;
+const mapRarityToKey = (rarity: RarityKey): string => {
+    return `${rarity.toLowerCase()}Orb`;
 };
 
 // Maps Alliance enum to the required 'imperialOrb', 'xenosOrb', etc. key.
@@ -30,7 +30,7 @@ export const OrbIcon: React.FC<OrbIconProps> = ({ alliance, rarity, size }) => {
     // 2. Conditional Vertical Positioning
     let translateYStyle: React.CSSProperties = { transform: 'translateY(0%)' }; // Default: perfect center (-translate-y-1/2)
 
-    if (rarity === Rarity.Mythic) {
+    if (rarity === 'Mythic') {
         // We want the image to move down by 5% of the *parent's* height.
         // The base position is -50%. To move down 5% more, the new position is -50% + 5% of the parent's height.
         // Since the image is absolutely positioned, we can use a CSS calc function or adjust the translateY.

@@ -444,7 +444,7 @@ export const SetGoalDialog = ({ onClose }: { onClose?: (goal?: IPersonalGoal) =>
                                 disabled={!unlockedLocations.length}
                                 value={form.campaignsUsage ?? CampaignsLocationsUsage.LeastEnergy}
                                 valueChange={value => setForm(curr => ({ ...curr, campaignsUsage: value }))}
-                                mythic={form.targetRarity! >= Rarity.Mythic}
+                                mythic={form.targetRarity === 'Mythic'}
                             />
                         </Conditional>
 

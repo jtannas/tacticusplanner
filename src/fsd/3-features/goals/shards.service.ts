@@ -288,7 +288,6 @@ export class ShardsService {
             dropRate: itemsPerDay,
             dailyBattleCount: onslaughtTokensPerDay / onslaughtMaxTokens,
             rarity: 'Shard',
-            rarityEnum: Rarity.Legendary,
             rewards: {
                 guaranteed: [
                     {

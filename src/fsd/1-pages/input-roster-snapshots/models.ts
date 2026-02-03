@@ -1,9 +1,9 @@
-import { Rank, Rarity, RarityStars } from '@/fsd/5-shared/model';
+import { Rank, RarityKey, RarityStars } from '@/fsd/5-shared/model';
 
 export interface ISnapshotCharacter {
     id: string;
     rank: Rank;
-    rarity: Rarity;
+    rarity: RarityKey;
     stars: RarityStars;
     shards: number;
     mythicShards: number;
@@ -14,7 +14,7 @@ export interface ISnapshotCharacter {
 
 export interface ISnapshotMachineOfWar {
     id: string;
-    rarity: Rarity;
+    rarity: RarityKey;
     stars: RarityStars;
     primaryAbilityLevel: number;
     secondaryAbilityLevel: number;
@@ -26,7 +26,7 @@ export interface ISnapshotMachineOfWar {
 export interface ISnapshotUnitDiff {
     id: string;
     rank?: Rank;
-    rarity?: Rarity;
+    rarity?: RarityKey;
     stars?: RarityStars;
     shards?: number;
     mythicShards?: number;

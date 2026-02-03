@@ -79,8 +79,7 @@ export const EquipmentIcon = ({
     const [frameError, setFrameError] = useState<Error | null>(null);
     const [relicError, setRelicError] = useState<Error | null>(null);
 
-    const frameKey = (RarityMapper.rarityToRarityString(equipment.rarity).toLocaleLowerCase() +
-        'EquipmentFrame') as keyof typeof tacticusIcons;
+    const frameKey = (equipment.rarity.toLocaleLowerCase() + 'EquipmentFrame') as keyof typeof tacticusIcons;
     const frameDetails = tacticusIcons[frameKey] ?? { file: '', label: frameKey };
     const relicDetails = tacticusIcons['relicEquipmentFrame'] ?? { file: '', label: 'relicEquipmentFrame' };
 

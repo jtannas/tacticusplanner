@@ -245,11 +245,7 @@ export const CharacterUpgrades: React.FC<Props> = ({ upgradesChanges, upgrades, 
                     <ul className="p-0">
                         {inventoryUpgrades.map((x, index) => (
                             <li key={x.id + index} className="flex items-center gap-2.5 pb-2.5 list-none">
-                                <UpgradeImage
-                                    material={x.label}
-                                    iconPath={x.iconPath}
-                                    rarity={RarityMapper.rarityToRarityString(x.rarity)}
-                                />{' '}
+                                <UpgradeImage material={x.label} iconPath={x.iconPath} rarity={x.rarity} />{' '}
                                 {inventory.upgrades[x.snowprintId] ?? 0} - {inventoryUpdate[x.snowprintId]} ={' '}
                                 {(inventory.upgrades[x.snowprintId] ?? 0) - inventoryUpdate[x.snowprintId] < 0
                                     ? 0

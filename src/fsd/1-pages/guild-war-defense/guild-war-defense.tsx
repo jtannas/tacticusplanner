@@ -13,7 +13,7 @@ import { DispatchContext, StoreContext } from 'src/reducers/store.provider';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { getCompletionRateColor } from 'src/shared-logic/functions';
 
-import { Rarity, Rank } from '@/fsd/5-shared/model';
+import { Rank, RarityKey } from '@/fsd/5-shared/model';
 import { AccessibleTooltip, FlexBox, Conditional } from '@/fsd/5-shared/ui';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { RarityIcon } from '@/fsd/5-shared/ui/icons/rarity.icon';
@@ -150,7 +150,7 @@ export const GuildWarDefense = () => {
         [teamsWithCharacters, teamsPotential]
     );
 
-    const getCharactersWithPotential = (rarityCap: Rarity) => {
+    const getCharactersWithPotential = (rarityCap: RarityKey) => {
         return orderBy(
             characters
                 .filter(x => x.rank > Rank.Locked)
@@ -258,7 +258,7 @@ const TeamCard: React.FC<{
                         </FlexBox>
                     </FlexBox>
                 }
-                subheader={Rarity[team.rarityCap]}
+                subheader={team.rarityCap}
             />
             <CardContent className="py-0">
                 <Team

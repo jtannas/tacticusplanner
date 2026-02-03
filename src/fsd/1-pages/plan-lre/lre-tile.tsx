@@ -4,7 +4,7 @@ import React, { useContext, useMemo } from 'react';
 // eslint-disable-next-line import-x/no-internal-modules
 import { StoreContext } from '@/reducers/store.provider';
 
-import { Trait, Rank, Rarity } from '@/fsd/5-shared/model';
+import { Trait, Rank, RARITIES } from '@/fsd/5-shared/model';
 import { TraitImage, pooEmoji, RarityIcon, starEmoji, UnitShardIcon } from '@/fsd/5-shared/ui/icons';
 
 import { CharacterBias, CharactersService, ICharacter2, RankIcon } from '@/fsd/4-entities/character';
@@ -46,15 +46,15 @@ export const LreTile: React.FC<Props> = ({ character, settings, upgradeRankOrMow
             // Go through each upgrade-material rarity in the goal and update
             // max ranks accordingly.
             goal.upgradesRarity.forEach(upgrade => {
-                if (upgrade === Rarity.Common) {
+                if (upgrade === 'Common') {
                     maxCommonRank = Math.max(maxCommonRank, goal.rankEnd);
-                } else if (upgrade === Rarity.Uncommon) {
+                } else if (upgrade === 'Uncommon') {
                     maxUncommonRank = Math.max(maxUncommonRank, goal.rankEnd);
-                } else if (upgrade === Rarity.Rare) {
+                } else if (upgrade === 'Rare') {
                     maxRareRank = Math.max(maxRareRank, goal.rankEnd);
-                } else if (upgrade === Rarity.Epic) {
+                } else if (upgrade === 'Epic') {
                     maxEpicRank = Math.max(maxEpicRank, goal.rankEnd);
-                } else if (upgrade === Rarity.Legendary) {
+                } else if (upgrade === 'Legendary') {
                     maxLegendaryRank = Math.max(maxLegendaryRank, goal.rankEnd);
                 }
             });
@@ -82,16 +82,16 @@ export const LreTile: React.FC<Props> = ({ character, settings, upgradeRankOrMow
     // Determine the rarity icon to display based on the goal rank and current
     // character rank.
     const rarityFromRank = useMemo(() => {
-        if (rank <= Rank.Iron1) return Rarity.Common;
-        if (rank <= Rank.Bronze1) return Rarity.Uncommon;
-        if (rank <= Rank.Silver1) return Rarity.Rare;
-        if (rank <= Rank.Gold1) return Rarity.Epic;
-        if (rank <= Rank.Diamond3) return Rarity.Legendary;
-        return Rarity.Mythic;
+        if (rank <= Rank.Iron1) return 'Common';
+        if (rank <= Rank.Bronze1) return 'Uncommon';
+        if (rank <= Rank.Silver1) return 'Rare';
+        if (rank <= Rank.Gold1) return 'Epic';
+        if (rank <= Rank.Diamond3) return 'Legendary';
+        return 'Mythic';
     }, [rank]);
 
     const rarity = useMemo(() => {
-        return Math.max(character.rarity, rarityFromRank);
+        return RARITIES[Math.max(RARITIES.indexOf(character.rarity), RARITIES.indexOf(rarityFromRank))];
     }, [character, rarityFromRank]);
 
     const emoji =
