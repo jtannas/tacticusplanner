@@ -1,5 +1,6 @@
-﻿import { TacticusShard, TacticusUnit } from '@/fsd/5-shared/lib/tacticus-api/tacticus-api.models';
-import { Rarity, Rank, RarityStars } from '@/fsd/5-shared/model';
+﻿import { maxRarity } from '@/fsd/5-shared/lib';
+import { TacticusShard, TacticusUnit } from '@/fsd/5-shared/lib/tacticus-api/tacticus-api.models';
+import { Rank, RarityStars, RarityKey } from '@/fsd/5-shared/model';
 
 import { CharacterBias, CharactersService } from '@/fsd/4-entities/character';
 import { EquipmentService } from '@/fsd/4-entities/equipment';
@@ -23,7 +24,7 @@ export type CharactersAction =
     | {
           type: 'UpdateRarity';
           character: string;
-          value: Rarity;
+          value: RarityKey;
       }
     | {
           type: 'UpdateUpgrades';
@@ -81,7 +82,7 @@ export const charactersReducer = (state: ICharacter2[], action: CharactersAction
                 const updatedCharacterData = {
                     ...existingChar,
                     rank: updatedCharacter.rank,
-                    rarity: updatedCharacter.rarity <= rankRarity ? rankRarity : updatedCharacter.rarity,
+                    rarity: maxRarity(updatedCharacter.rarity, rankRarity),
                     bias: updatedCharacter.bias,
                     upgrades: updatedCharacter.upgrades,
                     stars: updatedCharacter.stars <= rarityStars ? rarityStars : updatedCharacter.stars,

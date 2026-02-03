@@ -1,4 +1,4 @@
-import { RarityStars, Rarity, Rank } from '@/fsd/5-shared/model';
+import { RarityStars, Rank, RarityKey } from '@/fsd/5-shared/model';
 
 import { IUnit } from './model';
 import { isCharacter, isMow, isUnlocked } from './units.functions';
@@ -80,37 +80,37 @@ export class CharactersPowerService {
         }
     }
 
-    public static getRarityCoeff(unit: IUnit, rarity: Rarity): number {
+    public static getRarityCoeff(unit: IUnit, rarity: RarityKey): number {
         if (isCharacter(unit)) {
             switch (rarity) {
-                case Rarity.Common:
+                case 'Common':
                 default:
                     return 1.0;
-                case Rarity.Uncommon:
+                case 'Uncommon':
                     return 1.2;
-                case Rarity.Rare:
+                case 'Rare':
                     return 1.4;
-                case Rarity.Epic:
+                case 'Epic':
                     return 1.6;
-                case Rarity.Legendary:
+                case 'Legendary':
                     return 1.8;
-                case Rarity.Mythic:
+                case 'Mythic':
                     return 2.0;
             }
         } else if (isMow(unit)) {
             switch (rarity) {
-                case Rarity.Common:
+                case 'Common':
                 default:
                     return 0.0;
-                case Rarity.Uncommon:
+                case 'Uncommon':
                     return 0.05;
-                case Rarity.Rare:
+                case 'Rare':
                     return 0.1;
-                case Rarity.Epic:
+                case 'Epic':
                     return 0.15;
-                case Rarity.Legendary:
+                case 'Legendary':
                     return 0.2;
-                case Rarity.Mythic:
+                case 'Mythic':
                     return 0.25;
             }
         } else {

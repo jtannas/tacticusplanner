@@ -1,4 +1,4 @@
-import { Alliance, DynamicProps, Rarity, RarityMapper, RarityStars, UnitType } from '@/fsd/5-shared/model';
+import { Alliance, DynamicProps, RarityMapper, RarityStars, UnitType } from '@/fsd/5-shared/model';
 
 import { UpgradesService } from '@/fsd/4-entities/upgrade/@x/mow';
 
@@ -98,7 +98,7 @@ export class MowsService {
                     primaryAbilityLevel: 1,
                     secondaryAbilityLevel: 1,
                     level: 1,
-                    rarity: Rarity.Common,
+                    rarity: 'Common',
                     stars: RarityStars.None,
                     shards: 0,
                     mythicShards: 0,

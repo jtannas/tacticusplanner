@@ -1,6 +1,5 @@
 // eslint-disable-next-line import-x/no-internal-modules
 import { TacticusEquipment } from '@/fsd/5-shared/lib/tacticus-api/tacticus-api.models';
-import { RarityString, Rarity, RarityMapper } from '@/fsd/5-shared/model';
 
 // eslint-disable-next-line boundaries/element-types
 import { CharactersService } from '../character';
@@ -29,7 +28,7 @@ export class EquipmentService {
             return {
                 id: id,
                 name: data.name,
-                rarity: this.parseEquipmentRarity(data.rarity),
+                rarity: data.rarity,
                 type: data.type,
                 abilityId: data.abilityId,
                 isRelic: data.isRelic,
@@ -63,15 +62,6 @@ export class EquipmentService {
                 )
             )
             .map(char => char.snowprintId!);
-    }
-
-    private static parseEquipmentRarity(rarity: string): Rarity {
-        const parsed = RarityMapper.stringToNumber[rarity as RarityString];
-        if (parsed == undefined) {
-            console.error("Couldn't parse equipment rarity: " + rarity);
-            return Rarity.Common;
-        }
-        return parsed;
     }
 
     private static getEquipmentIconPathFromId(id: string): string {

@@ -11,7 +11,7 @@ import { IMenuOption } from '@/models/menu-option';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { ICharacter2 } from 'src/models/interfaces';
 
-import { Rarity, Alliance } from '@/fsd/5-shared/model';
+import { Alliance, RarityKey } from '@/fsd/5-shared/model';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { MultipleSelect } from '@/fsd/5-shared/ui/input/multiple-select';
 
@@ -31,7 +31,7 @@ type Props = {
     units: IUnit[];
     team: ICharacter2[];
     activeMow: IMow2 | null;
-    rarityCap: Rarity;
+    rarityCap: RarityKey;
     onClose: (team: ICharacter2[], mow: IMow2 | null) => void;
 };
 

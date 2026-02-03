@@ -1,7 +1,7 @@
 ﻿import { cloneDeep } from 'lodash';
 import { v4 } from 'uuid';
 
-import { Rank, Rarity, RarityStars, RarityMapper, Alliance } from '@/fsd/5-shared/model';
+import { Rank, RarityStars, RarityMapper, Alliance, RarityKey } from '@/fsd/5-shared/model';
 
 import { ICampaignsProgress, Campaign } from '@/fsd/4-entities/campaign';
 import { CharactersFilterBy, CharactersOrderBy } from '@/fsd/4-entities/character';
@@ -46,60 +46,60 @@ export const rankToLevel: Record<Rank, number> = {
     [Rank.Adamantine3]: 65,
 };
 
-export const rankToRarity: Record<Rank, Rarity> = {
-    [Rank.Locked]: 0,
-    [Rank.Stone1]: Rarity.Common,
-    [Rank.Stone2]: Rarity.Common,
-    [Rank.Stone3]: Rarity.Common,
-    [Rank.Iron1]: Rarity.Common,
-    [Rank.Iron2]: Rarity.Uncommon,
-    [Rank.Iron3]: Rarity.Uncommon,
-    [Rank.Bronze1]: Rarity.Uncommon,
-    [Rank.Bronze2]: Rarity.Rare,
-    [Rank.Bronze3]: Rarity.Rare,
-    [Rank.Silver1]: Rarity.Rare,
-    [Rank.Silver2]: Rarity.Epic,
-    [Rank.Silver3]: Rarity.Epic,
-    [Rank.Gold1]: Rarity.Epic,
-    [Rank.Gold2]: Rarity.Legendary,
-    [Rank.Gold3]: Rarity.Legendary,
-    [Rank.Diamond1]: Rarity.Legendary,
-    [Rank.Diamond2]: Rarity.Legendary,
-    [Rank.Diamond3]: Rarity.Legendary,
-    [Rank.Adamantine1]: Rarity.Mythic,
-    [Rank.Adamantine2]: Rarity.Mythic,
-    [Rank.Adamantine3]: Rarity.Mythic,
+export const rankToRarity: Record<Rank, RarityKey> = {
+    [Rank.Locked]: 'Common',
+    [Rank.Stone1]: 'Common',
+    [Rank.Stone2]: 'Common',
+    [Rank.Stone3]: 'Common',
+    [Rank.Iron1]: 'Common',
+    [Rank.Iron2]: 'Uncommon',
+    [Rank.Iron3]: 'Uncommon',
+    [Rank.Bronze1]: 'Uncommon',
+    [Rank.Bronze2]: 'Rare',
+    [Rank.Bronze3]: 'Rare',
+    [Rank.Silver1]: 'Rare',
+    [Rank.Silver2]: 'Epic',
+    [Rank.Silver3]: 'Epic',
+    [Rank.Gold1]: 'Epic',
+    [Rank.Gold2]: 'Legendary',
+    [Rank.Gold3]: 'Legendary',
+    [Rank.Diamond1]: 'Legendary',
+    [Rank.Diamond2]: 'Legendary',
+    [Rank.Diamond3]: 'Legendary',
+    [Rank.Adamantine1]: 'Mythic',
+    [Rank.Adamantine2]: 'Mythic',
+    [Rank.Adamantine3]: 'Mythic',
 };
 
-export const charsProgression: Record<number, ICharProgression> = {
+export const charsProgression = {
     //Originally it was this, i changed for coherency but kept the comment for safety (Redwyne)
     //0: { shards: 0 },
-    [Rarity.Common + RarityStars.None]: { shards: 0 },
-    [Rarity.Common + RarityStars.OneStar]: { shards: 10 },
-    [Rarity.Common + RarityStars.TwoStars]: { shards: 15 },
-    [Rarity.Uncommon + RarityStars.TwoStars]: { shards: 15, orbs: 10, rarity: Rarity.Uncommon },
+    ['Common' + RarityStars.None]: { shards: 0 },
+    ['Common' + RarityStars.OneStar]: { shards: 10 },
+    ['Common' + RarityStars.TwoStars]: { shards: 15 },
+    ['Uncommon' + RarityStars.TwoStars]: { shards: 15, orbs: 10, rarity: 'Uncommon' },
 
-    [Rarity.Uncommon + RarityStars.ThreeStars]: { shards: 15 },
-    [Rarity.Uncommon + RarityStars.FourStars]: { shards: 15 },
-    [Rarity.Rare + RarityStars.FourStars]: { shards: 20, orbs: 10, rarity: Rarity.Rare },
+    ['Uncommon' + RarityStars.ThreeStars]: { shards: 15 },
+    ['Uncommon' + RarityStars.FourStars]: { shards: 15 },
+    ['Rare' + RarityStars.FourStars]: { shards: 20, orbs: 10, rarity: 'Rare' },
 
-    [Rarity.Rare + RarityStars.FiveStars]: { shards: 30 },
-    [Rarity.Rare + RarityStars.RedOneStar]: { shards: 40 },
-    [Rarity.Epic + RarityStars.RedOneStar]: { shards: 50, orbs: 10, rarity: Rarity.Epic },
+    ['Rare' + RarityStars.FiveStars]: { shards: 30 },
+    ['Rare' + RarityStars.RedOneStar]: { shards: 40 },
+    ['Epic' + RarityStars.RedOneStar]: { shards: 50, orbs: 10, rarity: 'Epic' },
 
-    [Rarity.Epic + RarityStars.RedTwoStars]: { shards: 65 },
-    [Rarity.Epic + RarityStars.RedThreeStars]: { shards: 85 },
-    [Rarity.Legendary + RarityStars.RedThreeStars]: { shards: 100, orbs: 10, rarity: Rarity.Legendary },
+    ['Epic' + RarityStars.RedTwoStars]: { shards: 65 },
+    ['Epic' + RarityStars.RedThreeStars]: { shards: 85 },
+    ['Legendary' + RarityStars.RedThreeStars]: { shards: 100, orbs: 10, rarity: 'Legendary' },
 
-    [Rarity.Legendary + RarityStars.RedFourStars]: { shards: 150, orbs: 10, rarity: Rarity.Legendary },
-    [Rarity.Legendary + RarityStars.RedFiveStars]: { shards: 250, orbs: 15, rarity: Rarity.Legendary },
-    [Rarity.Legendary + RarityStars.OneBlueStar]: { shards: 500, orbs: 20, rarity: Rarity.Legendary },
-    [Rarity.Mythic + RarityStars.OneBlueStar]: { mythicShards: 20, orbs: 10, rarity: Rarity.Mythic },
+    ['Legendary' + RarityStars.RedFourStars]: { shards: 150, orbs: 10, rarity: 'Legendary' },
+    ['Legendary' + RarityStars.RedFiveStars]: { shards: 250, orbs: 15, rarity: 'Legendary' },
+    ['Legendary' + RarityStars.OneBlueStar]: { shards: 500, orbs: 20, rarity: 'Legendary' },
+    ['Mythic' + RarityStars.OneBlueStar]: { mythicShards: 20, orbs: 10, rarity: 'Mythic' },
 
-    [Rarity.Mythic + RarityStars.TwoBlueStars]: { mythicShards: 30, orbs: 10, rarity: Rarity.Mythic },
-    [Rarity.Mythic + RarityStars.ThreeBlueStars]: { mythicShards: 50, orbs: 15, rarity: Rarity.Mythic },
-    [Rarity.Mythic + RarityStars.MythicWings]: { mythicShards: 100, orbs: 20, rarity: Rarity.Mythic },
-};
+    ['Mythic' + RarityStars.TwoBlueStars]: { mythicShards: 30, orbs: 10, rarity: 'Mythic' },
+    ['Mythic' + RarityStars.ThreeBlueStars]: { mythicShards: 50, orbs: 15, rarity: 'Mythic' },
+    ['Mythic' + RarityStars.MythicWings]: { mythicShards: 100, orbs: 20, rarity: 'Mythic' },
+} as const satisfies Record<`${RarityKey}${number}`, ICharProgression>;
 
 const defaultCampaignsProgress: ICampaignsProgress = {
     Indomitus: 75,
@@ -164,14 +164,14 @@ const defaultGWLayout: IGWLayoutZone[] = [
     { id: 'frontline', players: [] },
 ];
 
-function createRarityRecord<T>(initialValue: T): Record<Rarity, T> {
+function createRarityRecord<T>(initialValue: T): Record<RarityKey, T> {
     return {
-        [Rarity.Common]: cloneDeep(initialValue),
-        [Rarity.Uncommon]: cloneDeep(initialValue),
-        [Rarity.Rare]: cloneDeep(initialValue),
-        [Rarity.Epic]: cloneDeep(initialValue),
-        [Rarity.Legendary]: cloneDeep(initialValue),
-        [Rarity.Mythic]: cloneDeep(initialValue),
+        Common: cloneDeep(initialValue),
+        Uncommon: cloneDeep(initialValue),
+        Rare: cloneDeep(initialValue),
+        Epic: cloneDeep(initialValue),
+        Legendary: cloneDeep(initialValue),
+        Mythic: cloneDeep(initialValue),
     };
 }
 
@@ -288,7 +288,7 @@ export const defaultData: IPersonalData2 = {
             id: v4(),
             character: 'Bellator',
             type: PersonalGoalType.Ascend,
-            targetRarity: Rarity.Legendary,
+            targetRarity: 'Legendary',
             priority: 1,
             dailyRaids: true,
         },
@@ -374,14 +374,14 @@ export const defaultData: IPersonalData2 = {
                 id: v4(),
                 name: `Team ${i + 1}`,
                 type: GuildWarTeamType.Defense,
-                rarityCap: Rarity.Legendary,
+                rarityCap: 'Legendary' as const,
                 lineup: [],
             })),
             ...Array.from({ length: 10 }, (_, i) => ({
                 id: v4(),
                 name: `Team ${i + 1}`,
                 type: GuildWarTeamType.Offense,
-                rarityCap: Rarity.Legendary,
+                rarityCap: 'Legendary' as const,
                 lineup: [],
             })),
         ],
@@ -398,7 +398,7 @@ export const defaultData: IPersonalData2 = {
 
         // Guild Raid
         loopsRaids: 'no',
-        clearRarity: Rarity.Epic,
+        clearRarity: 'Epic',
         additionalBosses: 0,
         raidLoops: 1,
         extraBossesAfterLoop: 0,

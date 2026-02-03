@@ -3,7 +3,8 @@ import React, { useMemo, useContext, useCallback } from 'react';
 // eslint-disable-next-line import-x/no-internal-modules
 import { DispatchContext, StoreContext } from '@/reducers/store.provider';
 
-import { Rarity, RarityStars } from '@/fsd/5-shared/model';
+import { raritiesBetween } from '@/fsd/5-shared/lib';
+import { RarityKey, RarityStars } from '@/fsd/5-shared/model';
 import { UnitShardIcon } from '@/fsd/5-shared/ui/icons';
 
 import { CharactersService } from '@/fsd/4-entities/character';
@@ -218,11 +219,11 @@ export const XpIncome: React.FC = () => {
                             <p className="mb-2">Highest Rarity Fully Cleared:</p>
                             <select
                                 value={clearRarity}
-                                onChange={e => dispatchUpdate('clearRarity', parseInt(e.target.value, 10) as Rarity)}
+                                onChange={e => dispatchUpdate('clearRarity', e.target.value as RarityKey)}
                                 className="p-2 rounded-md border border-gray-300 bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                                {[Rarity.Common, Rarity.Uncommon, Rarity.Rare, Rarity.Epic].map(rarity => (
+                                {raritiesBetween('Common', 'Epic').map(rarity => (
                                     <option key={rarity} value={rarity}>
-                                        {Rarity[rarity]}
+                                        {rarity}
                                     </option>
                                 ))}
                             </select>

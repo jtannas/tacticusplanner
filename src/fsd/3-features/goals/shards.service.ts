@@ -7,7 +7,7 @@ import { CampaignsLocationsUsage, PersonalGoalType } from 'src/models/enums';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { StaticDataService } from 'src/services';
 
-import { Alliance, Rarity, RarityMapper } from '@/fsd/5-shared/model';
+import { Alliance, RarityMapper } from '@/fsd/5-shared/model';
 
 import {
     CampaignsService,

@@ -27,7 +27,6 @@ import { isMobile } from 'react-device-detect';
 import { DailyRaidsStrategy } from 'src/models/enums';
 import { DailyRaidsCustomLocations } from 'src/shared-components/daily-raids-custom-locations';
 
-import { Rarity } from '@/fsd/5-shared/model';
 import { AccessibleTooltip } from '@/fsd/5-shared/ui';
 import { MiscIcon } from '@/fsd/5-shared/ui/icons';
 
@@ -44,18 +43,18 @@ import {
 import { DispatchContext, StoreContext } from '../reducers/store.provider';
 
 const defaultCustomSettings: ICustomDailyRaidsSettings = {
-    [Rarity.Mythic]: [CampaignType.Extremis],
-    [Rarity.Legendary]: [CampaignType.Elite, CampaignType.Extremis, CampaignType.Mirror, CampaignType.Standard],
-    [Rarity.Epic]: [CampaignType.Elite, CampaignType.Extremis, CampaignType.Mirror, CampaignType.Standard],
-    [Rarity.Rare]: [CampaignType.Elite, CampaignType.Extremis, CampaignType.Mirror, CampaignType.Standard],
-    [Rarity.Uncommon]: [
+    Mythic: [CampaignType.Extremis],
+    Legendary: [CampaignType.Elite, CampaignType.Extremis, CampaignType.Mirror, CampaignType.Standard],
+    Epic: [CampaignType.Elite, CampaignType.Extremis, CampaignType.Mirror, CampaignType.Standard],
+    Rare: [CampaignType.Elite, CampaignType.Extremis, CampaignType.Mirror, CampaignType.Standard],
+    Uncommon: [
         CampaignType.Elite,
         CampaignType.Extremis,
         CampaignType.Early,
         CampaignType.Mirror,
         CampaignType.Standard,
     ],
-    [Rarity.Common]: [CampaignType.Elite, CampaignType.Extremis, CampaignType.Mirror, CampaignType.Standard],
+    Common: [CampaignType.Elite, CampaignType.Extremis, CampaignType.Mirror, CampaignType.Standard],
 };
 
 const energyMarks = [

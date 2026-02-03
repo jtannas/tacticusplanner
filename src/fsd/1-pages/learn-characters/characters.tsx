@@ -22,8 +22,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 // eslint-disable-next-line import-x/no-internal-modules
 import { StoreContext } from 'src/reducers/store.provider';
 
-import { getEnumValues } from '@/fsd/5-shared/lib';
-import { Rarity, Alliance, DamageType, Trait, Rank, getTraitStringFromLabel } from '@/fsd/5-shared/model';
+import { Alliance, DamageType, Trait, Rank, getTraitStringFromLabel } from '@/fsd/5-shared/model';
 import { MultipleSelectCheckmarks, RaritySelect, StarsSelect } from '@/fsd/5-shared/ui';
 
 import { CharactersService, ICharacter2, RankSelect } from '@/fsd/4-entities/character';

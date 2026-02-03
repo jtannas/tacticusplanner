@@ -10,7 +10,7 @@ import { rarityToMaxStars, rarityToStars } from 'src/models/constants';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { getEnumValues } from 'src/shared-logic/functions';
 
-import { RarityStars, Alliance, RARITIES } from '@/fsd/5-shared/model';
+import { RarityStars, Alliance } from '@/fsd/5-shared/model';
 import { StarsSelect, RaritySelect } from '@/fsd/5-shared/ui';
 import { MiscIcon, UnitShardIcon } from '@/fsd/5-shared/ui/icons';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure

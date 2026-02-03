@@ -13,6 +13,7 @@ import { DispatchContext, StoreContext } from 'src/reducers/store.provider';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { getCompletionRateColor } from 'src/shared-logic/functions';
 
+import { raritiesBetween } from '@/fsd/5-shared/lib';
 import { Rarity, Rank, RarityKey } from '@/fsd/5-shared/model';
 import { AccessibleTooltip, Conditional, FlexBox } from '@/fsd/5-shared/ui';
 import { MiscIcon } from '@/fsd/5-shared/ui/icons';
@@ -253,16 +254,18 @@ export const GuildWarOffense = () => {
             return 'Empty. Add some characters to the teams below';
         }
 
-        return (['Legendary', 'Epic', 'Rare', 'Uncommon'] as const).map(rarity => {
-            const slotsCount = slots[rarity];
-            if (slotsCount) {
-                return (
-                    <div key={rarity} className="flex-box gap-[3px]">
-                        <RarityIcon rarity={rarity} /> x{slotsCount}
-                    </div>
-                );
-            }
-        });
+        return raritiesBetween('Uncommon', 'Legendary')
+            .reverse()
+            .map(rarity => {
+                const slotsCount = slots[rarity];
+                if (slotsCount) {
+                    return (
+                        <div key={rarity} className="flex-box gap-[3px]">
+                            <RarityIcon rarity={rarity} /> x{slotsCount}
+                        </div>
+                    );
+                }
+            });
     }, [guildWar.teams, guildWar.deployedCharacters]);
 
     const availableCharacters = useMemo(() => {
@@ -274,16 +277,18 @@ export const GuildWarOffense = () => {
     const groupByRarityPools = () => {
         const slots = CharactersService.groupByRarityPools(availableCharacters);
 
-        return (['Legendary', 'Epic', 'Rare', 'Uncommon'] as const).map(rarity => {
-            const slotsCount = slots[rarity];
-            if (slotsCount) {
-                return (
-                    <div key={rarity} className="flex-box gap-[3px]">
-                        <RarityIcon rarity={rarity} /> x{slotsCount}
-                    </div>
-                );
-            }
-        });
+        return raritiesBetween('Uncommon', 'Legendary')
+            .reverse()
+            .map(rarity => {
+                const slotsCount = slots[rarity];
+                if (slotsCount) {
+                    return (
+                        <div key={rarity} className="flex-box gap-[3px]">
+                            <RarityIcon rarity={rarity} /> x{slotsCount}
+                        </div>
+                    );
+                }
+            });
     };
 
     const deployCharacter = (character: string) => {

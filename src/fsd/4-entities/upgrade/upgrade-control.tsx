@@ -1,8 +1,6 @@
 ﻿import { Checkbox, FormControlLabel } from '@mui/material';
 import React from 'react';
 
-import { RarityMapper } from '@/fsd/5-shared/model';
-
 import { IBaseUpgrade, ICraftedUpgrade } from './model';
 import { UpgradeImage } from './upgrade-image';
 

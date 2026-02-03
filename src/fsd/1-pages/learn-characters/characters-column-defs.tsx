@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
 import { getEnumValues } from '@/fsd/5-shared/lib';
+import { nextRarity } from '@/fsd/5-shared/lib';
 import {
     RarityStars,
     DamageType,
@@ -11,7 +12,6 @@ import {
     RarityMapper,
     getLabelFromTraitString,
     RarityKey,
-    RARITIES,
 } from '@/fsd/5-shared/model';
 import { RarityIcon } from '@/fsd/5-shared/ui/icons';
 
@@ -60,14 +60,8 @@ export const useCharacters = () => {
         return RarityMapper.toMaxRank[targetRarity];
     }, [targetRarity]);
 
-    const minStars = useMemo(() => {
-        return minStarsMap[targetRarity] ?? RarityStars.None;
-    }, [targetRarity]);
-
-    const maxStars = useMemo(() => {
-        const nextRarity = RARITIES[Math.min(RARITIES.indexOf(targetRarity) + 1, RARITIES.length - 1)];
-        return minStarsMap[nextRarity];
-    }, [targetRarity]);
+    const minStars = minStarsMap[targetRarity];
+    const maxStars = minStarsMap[nextRarity(targetRarity)];
 
     const rankValues = useMemo(() => {
         return getEnumValues(Rank).filter(x => x >= minRank && x <= maxRank);
@@ -81,8 +75,7 @@ export const useCharacters = () => {
         if (rarity < targetRarity) {
             const maxRank = RarityMapper.toMaxRank[rarity];
             setTargetRarity(rarity);
-            const nextRarity = RARITIES[Math.min(RARITIES.indexOf(rarity) + 1, RARITIES.length - 1)];
-            setTargetStars(minStarsMap[nextRarity]);
+            setTargetStars(minStarsMap[nextRarity(rarity)]);
             if (targetRank > maxRank) {
                 setTargetRank(maxRank);
             }

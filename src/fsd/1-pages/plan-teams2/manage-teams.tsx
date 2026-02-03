@@ -17,9 +17,8 @@ import { useContext, useEffect, useState } from 'react';
 import { ICharacter2 } from '@/models/interfaces';
 import { DispatchContext, StoreContext } from '@/reducers/store.provider';
 
-import { FactionId } from '@/fsd/5-shared/model';
+import { FactionId, RARITIES, RarityKey } from '@/fsd/5-shared/model';
 import { Rank } from '@/fsd/5-shared/model/enums/rank.enum';
-import { Rarity } from '@/fsd/5-shared/model/enums/rarity.enum';
 
 import { CharactersService } from '@/fsd/4-entities/character/@x/unit';
 import { IMow2, MowsService } from '@/fsd/4-entities/mow';
@@ -52,8 +51,8 @@ export const ManageTeams = () => {
     const dispatch = useContext(DispatchContext);
     const [minRank, setMinRank] = useState<Rank>(Rank.Stone1);
     const [maxRank, setMaxRank] = useState<Rank>(Rank.Adamantine3);
-    const [minRarity, setMinRarity] = useState<Rarity>(Rarity.Common);
-    const [maxRarity, setMaxRarity] = useState<Rarity>(Rarity.Mythic);
+    const [minRarity, setMinRarity] = useState<RarityKey>(RARITIES[0]);
+    const [maxRarity, setMaxRarity] = useState<RarityKey>(RARITIES[RARITIES.length - 1]);
     const [factions, onFactionsChange] = useState<FactionId[]>([]);
     const [searchText, setSearchText] = useState<string>('');
     const [selectedChars, onSelectedCharsChange] = useState<string[]>([]);

@@ -3,7 +3,8 @@ import { cloneDeep } from 'lodash';
 // eslint-disable-next-line import-x/no-internal-modules
 import { ICharacter2 } from '@/models/interfaces';
 
-import { Rarity, RarityKey, RarityStars } from '@/fsd/5-shared/model';
+import { maxRarity } from '@/fsd/5-shared/lib';
+import { RarityKey, RarityStars } from '@/fsd/5-shared/model';
 
 import { CharactersService } from '@/fsd/4-entities/character';
 import { IMow2 } from '@/fsd/4-entities/mow';
@@ -137,13 +138,13 @@ export class RosterSnapshotsService {
             char.activeAbilityLevel = Math.max(1, char.activeAbilityLevel);
             char.passiveAbilityLevel = Math.max(1, char.passiveAbilityLevel);
             char.xpLevel = Math.max(1, char.xpLevel);
-            char.rarity = Math.max(char.rarity, CharactersService.getInitialRarity(char.id) ?? 'Common');
+            char.rarity = maxRarity(char.rarity, CharactersService.getInitialRarity(char.id) ?? 'Common');
             char.stars = Math.max(char.stars, this.getMinimumStarsForRarity(char.rarity));
         }
         for (const mow of ret.mows) {
             mow.primaryAbilityLevel = Math.max(1, mow.primaryAbilityLevel);
             mow.secondaryAbilityLevel = Math.max(1, mow.secondaryAbilityLevel);
-            mow.rarity = Math.max(mow.rarity, CharactersService.getInitialRarity(mow.id) ?? Rarity.Common);
+            mow.rarity = maxRarity(mow.rarity, CharactersService.getInitialRarity(mow.id) ?? 'Common');
             mow.stars = Math.max(mow.stars, this.getMinimumStarsForRarity(mow.rarity));
         }
         return ret;

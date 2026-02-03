@@ -28,7 +28,8 @@ import { SetAscendGoal } from 'src/shared-components/goals/set-ascend-goal';
 import { UpgradesRaritySelect } from 'src/shared-components/goals/upgrades-rarity-select';
 import { getEnumValues } from 'src/shared-logic/functions';
 
-import { Rarity, RarityStars, Rank } from '@/fsd/5-shared/model';
+import { isRarityAtLeast } from '@/fsd/5-shared/lib';
+import { RarityStars, Rank } from '@/fsd/5-shared/model';
 import { AccessibleTooltip, Conditional } from '@/fsd/5-shared/ui';
 import { NumberInput } from '@/fsd/5-shared/ui/input/number-input';
 
@@ -49,7 +50,7 @@ const getDefaultForm = (priority: number): IPersonalGoal => ({
     type: PersonalGoalType.UpgradeRank,
     startingRank: Rank.Stone1,
     startingRankPoint5: false,
-    targetRarity: Rarity.Common,
+    targetRarity: 'Common',
     targetRank: Rank.Stone1,
     targetStars: RarityStars.None,
     shardsPerToken: 0,
@@ -95,12 +96,12 @@ export const SetGoalDialog = ({ onClose }: { onClose?: (goal?: IPersonalGoal) =>
         }
     };
 
-    const handleAscendGoalChanges = (key: keyof IPersonalGoal, value: number) => {
+    const handleAscendGoalChanges = <K extends keyof IPersonalGoal>(key: K, value: IPersonalGoal[K]) => {
         setForm(curr => ({ ...curr, [key]: value }));
     };
 
     const maxRank = useMemo(() => {
-        return ignoreRankRarity ? Rank.Adamantine1 : rarityToMaxRank[unit?.rarity ?? 0];
+        return ignoreRankRarity ? Rank.Adamantine1 : rarityToMaxRank[unit?.rarity ?? 'Common'];
     }, [unit?.rarity, ignoreRankRarity]);
 
     const rankValues = useMemo(() => {
@@ -212,7 +213,7 @@ export const SetGoalDialog = ({ onClose }: { onClose?: (goal?: IPersonalGoal) =>
     };
     const hasMythicAscension = () => {
         if (form.type !== PersonalGoalType.Ascend) return false;
-        return (form.targetRarity ?? Rarity.Common) >= Rarity.Mythic;
+        return isRarityAtLeast(form.targetRarity ?? 'Common', 'Mythic');
     };
 
     const isDisabled = () => {

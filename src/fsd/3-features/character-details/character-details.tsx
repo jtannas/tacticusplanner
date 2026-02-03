@@ -3,7 +3,7 @@ import InputLabel from '@mui/material/InputLabel';
 import React, { useMemo, useState } from 'react';
 
 import { getEnumValues } from '@/fsd/5-shared/lib';
-import { RarityStars, Rarity, RarityMapper, Rank, rankToString } from '@/fsd/5-shared/model';
+import { RarityStars, RarityMapper, Rank, rankToString, RARITIES } from '@/fsd/5-shared/model';
 import { RarityIcon, StarsIcon } from '@/fsd/5-shared/ui/icons';
 
 import { ICharacter2, RankIcon } from '@/fsd/4-entities/character';
@@ -66,16 +66,15 @@ export const CharacterDetails = ({
         return getEnumValues(RarityStars).filter(x => x >= minStars && x <= maxStars);
     }, [minStars, maxStars]);
 
-    const rarityEntries: number[] = getEnumValues(Rarity);
     const rankEntries: number[] = getEnumValues(Rank).filter(x => x === formData.rank || x <= maxRank);
 
-    const getNativeSelectControl = (
-        value: number,
+    const getNativeSelectControl = <T extends number | string>(
+        value: NoInfer<T>,
         label: string,
         name: keyof ICharacter2,
-        entries: Array<number>,
-        getName: (value: number) => string,
-        icon?: (value: number) => React.JSX.Element
+        entries: T[] | readonly T[],
+        getName: (value: NoInfer<T>) => string,
+        icon?: (value: NoInfer<T>) => React.JSX.Element
     ) => (
         <FormControl fullWidth>
             <InputLabel>{label}</InputLabel>
@@ -100,8 +99,8 @@ export const CharacterDetails = ({
                         formData.rarity,
                         'Rarity',
                         'rarity',
-                        rarityEntries,
-                        value => Rarity[value],
+                        RARITIES,
+                        value => value,
                         value => (
                             <RarityIcon rarity={value} />
                         )

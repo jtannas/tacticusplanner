@@ -1,7 +1,7 @@
 import { cloneDeep, sum } from 'lodash';
 
 import { getEnumValues } from '@/fsd/5-shared/lib';
-import { RarityStars, Rarity, Rank, rankToString } from '@/fsd/5-shared/model';
+import { RarityStars, Rank, rankToString, RarityKey } from '@/fsd/5-shared/model';
 
 import { ICharacterRankRange, rankUpData } from '@/fsd/4-entities/character/@x/unit';
 import { IMaterialFull, IMaterialRecipeIngredientFull, UpgradesService } from '@/fsd/4-entities/upgrade/@x/unit';
@@ -58,7 +58,7 @@ export class CharactersValueService {
                 if (!recipe) {
                     return {
                         snowprintId: '',
-                        rarity: 0,
+                        rarity: 'Common',
                         craftable: false,
                         iconPath: upgrade,
                         stat: 'Unknown',
@@ -113,7 +113,7 @@ export class CharactersValueService {
         );
     }
 
-    public static getUnlockValue(initialRarity: number, name: string): number {
+    public static getUnlockValue(initialRarity: RarityKey, name: string): number {
         const defaultCharacters: string[] = ['Varro Tigurius', 'Certus', 'Bellator', 'Incisus', 'Vindicta'];
         if (defaultCharacters.includes(name)) {
             return 0;
@@ -121,15 +121,15 @@ export class CharactersValueService {
         const ShardBS = 35;
 
         switch (initialRarity) {
-            case Rarity.Common:
+            case 'Common':
                 return ShardBS * 40;
-            case Rarity.Uncommon:
+            case 'Uncommon':
                 return ShardBS * 80;
-            case Rarity.Rare:
+            case 'Rare':
                 return ShardBS * 130;
-            case Rarity.Epic:
+            case 'Epic':
                 return ShardBS * 250;
-            case Rarity.Legendary:
+            case 'Legendary':
                 return ShardBS * 500;
         }
 
@@ -445,19 +445,19 @@ export class CharactersValueService {
         }
     }
 
-    public static getInitialStarsValue(rarity: Rarity): number {
+    public static getInitialStarsValue(rarity: RarityKey): number {
         const ShardBS = 35;
 
         switch (rarity) {
-            case Rarity.Common:
+            case 'Common':
                 return 0;
-            case Rarity.Uncommon:
+            case 'Uncommon':
                 return ShardBS * 25;
-            case Rarity.Rare:
+            case 'Rare':
                 return ShardBS * 55;
-            case Rarity.Epic:
+            case 'Epic':
                 return ShardBS * 125;
-            case Rarity.Legendary:
+            case 'Legendary':
                 return ShardBS * 275;
             default: {
                 console.warn('Rarity value unknown');
@@ -466,7 +466,7 @@ export class CharactersValueService {
         }
     }
 
-    public static getRarityValue(rarity: Rarity): number {
+    public static getRarityValue(rarity: RarityKey): number {
         const ShardBS = 35;
         const UncommonOrbBS = 210 / 3;
         const RareOrbBS = 490 / 3;
@@ -476,17 +476,17 @@ export class CharactersValueService {
         const MythicOrbBS = 6720 / 3;
 
         switch (rarity) {
-            case Rarity.Common:
+            case 'Common':
                 return 0;
-            case Rarity.Uncommon:
+            case 'Uncommon':
                 return ShardBS * 15 + UncommonOrbBS * 10;
-            case Rarity.Rare:
+            case 'Rare':
                 return ShardBS * 20 + RareOrbBS * 10;
-            case Rarity.Epic:
+            case 'Epic':
                 return ShardBS * 50 + EpicOrbBS * 10;
-            case Rarity.Legendary:
+            case 'Legendary':
                 return ShardBS * 100 + LegendaryOrbBS * 10;
-            case Rarity.Mythic:
+            case 'Mythic':
                 // Mythic values were invented to get a rough idea. I have no idea where the pre-Mythic
                 // value calcs come from, so unable to replicate the same logic here.
                 return ShardBS * 200 + MythicOrbBS * 10;

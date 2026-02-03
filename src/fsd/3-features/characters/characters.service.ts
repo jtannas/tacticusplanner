@@ -7,7 +7,8 @@ import { charsUnlockShards, charsProgression } from 'src/models/constants';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { IPersonalCharacterData2, ICharProgression } from 'src/models/interfaces';
 
-import { Rank, Rarity, UnitType, RarityStars, RarityKey, RARITIES } from '@/fsd/5-shared/model';
+import { minRarity, rarityCompareFn } from '@/fsd/5-shared/lib';
+import { Rank, UnitType, RarityStars, RarityKey, RARITIES } from '@/fsd/5-shared/model';
 
 import { ICharacter2 } from '@/fsd/4-entities/character';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
@@ -199,7 +200,7 @@ export class CharactersService {
         const capped = rarityCaps[rarity];
         return {
             ...character,
-            rarity: RARITIES[Math.min(RARITIES.indexOf(character.rarity), RARITIES.indexOf(capped.rarity))],
+            rarity: minRarity(character.rarity, capped.rarity),
             rank: Math.min(character.rank, capped.rank),
             stars: Math.min(character.stars, capped.stars),
             level: Math.min(character.level, capped.abilitiesLevel),
@@ -384,19 +385,12 @@ export class CharactersService {
      * current rarity. If the current rarity is the highest, the method will return undefined.
      */
     public static getNextRarity(current: RarityKey): RarityKey {
-        const rarities = new Set<RarityKey>();
-
-        for (const value of Object.values(charsProgression)) {
-            if (value.rarity !== undefined) {
-                rarities.add(value.rarity);
-            }
-        }
-
-        const sorted = Array.from(rarities).sort((a, b) => RARITIES.indexOf(a) - RARITIES.indexOf(b));
-
-        const index = sorted.indexOf(current);
-
-        return sorted[index + 1];
+        const rarities = Object.values(charsProgression)
+            .map(x => x.rarity)
+            .filter(r => !!r)
+            .sort(rarityCompareFn) as RarityKey[];
+        const index = rarities.indexOf(current);
+        return rarities[index + 1];
     }
 
     /**

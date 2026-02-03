@@ -4,7 +4,7 @@ import xpData from 'src/data/xp.json';
 import { mutableCopy } from '@/fsd/5-shared/lib';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { TacticusUpgrade } from '@/fsd/5-shared/lib/tacticus-api';
-import { RarityStars, Rarity, Rank, Alliance } from '@/fsd/5-shared/model';
+import { RarityStars, Rarity, Rank, Alliance, RarityKey } from '@/fsd/5-shared/model';
 
 import { CharacterUpgradesService } from '@/fsd/4-entities/character';
 
@@ -15,12 +15,12 @@ import { IXpLevel } from '@/fsd/3-features/characters/characters.models';
 const MAX_PROGRESSION_INDEX = 19;
 
 export class TacticusIntegrationService {
-    static convertProgressionIndex(progressionIndex: number): [Rarity, RarityStars] {
+    static convertProgressionIndex(progressionIndex: number): [RarityKey, RarityStars] {
         // Clamp negative indices to 0 (Common No Stars) and out-of-range positive indices to
         // highest supported level.
         const clampedIndex = Math.min(Math.max(progressionIndex, 0), MAX_PROGRESSION_INDEX);
         const rarityThresholds = [0, 3, 6, 9, 12, 16];
-        let rarity: Rarity = Rarity.Common;
+        let rarity: RarityKey = 'Common';
 
         // We count down from rarest to most-common, so any progressionIndex values higher than maxSupportedIndex
         // will be clamped to the rarest we currently support. This is relevant to the 2025 staged rollout of Mythic

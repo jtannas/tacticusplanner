@@ -16,7 +16,6 @@ import {
 import { LegendaryEventEnum } from '@/fsd/4-entities/lre/@x/character';
 
 import { CharacterBias } from './bias.enum';
-import { CharacterReleaseRarity } from './character-release-rarity.enum';
 
 interface IPersonalCharacterData2 {
     name: string;
@@ -78,7 +77,7 @@ export interface UnitDataRaw {
     'Extra Short Name': string;
     'Short Name': string;
     'Full Name': string;
-    'Initial rarity': string;
+    'Initial rarity': RarityKey;
     'Melee Damage': string;
     'Melee Hits': number;
     'Ranged Damage'?: string;
@@ -109,7 +108,7 @@ export interface UnitDataRaw {
     CampaignsRequiredIn?: string[];
     Icon: string;
     RoundIcon: string;
-    ReleaseRarity?: number;
+    ReleaseRarity?: RarityKey;
     releaseDate?: string;
     lre?: ILreCharacterStaticData;
 }
@@ -145,7 +144,7 @@ export interface ICharacterData {
     roundIcon: string;
     legendaryEvents: ICharLegendaryEvents;
     lre?: ILreCharacterStaticData;
-    releaseRarity?: CharacterReleaseRarity;
+    releaseRarity?: RarityKey;
     releaseDate?: string;
 }
 

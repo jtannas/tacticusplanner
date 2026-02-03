@@ -1,7 +1,7 @@
 ﻿import { Badge } from '@mui/material';
 import React from 'react';
 
-import { Alliance, RarityMapper } from '@/fsd/5-shared/model';
+import { Alliance } from '@/fsd/5-shared/model';
 import { BadgeImage, ComponentImage, ForgeBadgeImage } from '@/fsd/5-shared/ui/icons';
 
 import { IBaseUpgrade, ICraftedUpgrade, UpgradeImage } from '@/fsd/4-entities/upgrade/@x/mow';

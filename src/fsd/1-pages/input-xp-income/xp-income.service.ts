@@ -1,4 +1,4 @@
-import { Rarity } from '@/fsd/5-shared/model';
+import { RarityKey } from '@/fsd/5-shared/model';
 
 import { ArenaLeague, BlueStarCharacter } from './models';
 
@@ -12,10 +12,10 @@ const kShardsPerL10Incursion = 203;
 const kShardsPerL12Incursion = 231;
 const kShardsPerMythicIncursion = 210;
 
-const kArenaBooksPerWeek: Record<ArenaLeague, Partial<Record<Rarity, number>>> = {
-    [ArenaLeague.kHonorGuard]: { [Rarity.Epic]: 18, [Rarity.Legendary]: 7 },
-    [ArenaLeague.kCaptain]: { [Rarity.Epic]: 20, [Rarity.Legendary]: 4, [Rarity.Mythic]: 1 },
-    [ArenaLeague.kChapterMaster]: { [Rarity.Epic]: 22, [Rarity.Legendary]: 5, [Rarity.Mythic]: 1 },
+const kArenaBooksPerWeek: Record<ArenaLeague, Partial<Record<RarityKey, number>>> = {
+    [ArenaLeague.kHonorGuard]: { Epic: 18, Legendary: 7 },
+    [ArenaLeague.kCaptain]: { Epic: 20, Legendary: 4, Mythic: 1 },
+    [ArenaLeague.kChapterMaster]: { Epic: 22, Legendary: 5, Mythic: 1 },
 };
 
 export const kBlueStarCharacters: BlueStarCharacter[] = [
@@ -34,7 +34,7 @@ export class XpIncomeService {
         loopsRaids: 'yes' | 'no',
         raidLoops: number,
         extraBossesAfterLoop: number,
-        clearRarity: Rarity,
+        clearRarity: RarityKey,
         additionalBosses: number,
         useAtForBooks: 'yes' | 'no',
         blueStarCharIds: string[],
@@ -48,9 +48,9 @@ export class XpIncomeService {
         let weeklyEstimate = 0;
 
         weeklyEstimate +=
-            (kArenaBooksPerWeek[arenaLeague][Rarity.Epic] ?? 0) / 5 +
-            (kArenaBooksPerWeek[arenaLeague][Rarity.Legendary] ?? 0) +
-            (kArenaBooksPerWeek[arenaLeague][Rarity.Mythic] ?? 0) * 5;
+            (kArenaBooksPerWeek[arenaLeague].Epic ?? 0) / 5 +
+            (kArenaBooksPerWeek[arenaLeague].Legendary ?? 0) +
+            (kArenaBooksPerWeek[arenaLeague].Mythic ?? 0) * 5;
 
         let totalGuildCreditsPerRaidSeason = 0;
         if (loopsRaids === 'yes') {
@@ -58,16 +58,16 @@ export class XpIncomeService {
         } else {
             totalGuildCreditsPerRaidSeason = additionalBosses * 1000; // Uses debounced variable
             switch (clearRarity) {
-                case Rarity.Common:
+                case 'Common':
                     totalGuildCreditsPerRaidSeason += 4000;
                     break;
-                case Rarity.Uncommon:
+                case 'Uncommon':
                     totalGuildCreditsPerRaidSeason += 8000;
                     break;
-                case Rarity.Rare:
+                case 'Rare':
                     totalGuildCreditsPerRaidSeason += 12000;
                     break;
-                case Rarity.Epic:
+                case 'Epic':
                     totalGuildCreditsPerRaidSeason += 17000;
                     break;
                 default:

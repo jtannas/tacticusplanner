@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { RarityMapper } from '@/fsd/5-shared/model/mappers/rarity.mapper';
 import { UnitShardIcon } from '@/fsd/5-shared/ui/icons';
 
 import { ICampaignBattleComposed } from '@/fsd/4-entities/campaign/@x/upgrade';

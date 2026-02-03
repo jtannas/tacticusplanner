@@ -12,7 +12,6 @@ import { SetGoalDialog } from '@/shared-components/goals/set-goal-dialog';
 
 import { Rank } from '@/fsd/5-shared/model';
 import { RarityStars } from '@/fsd/5-shared/model/enums/rarity-stars.enum';
-import { Rarity } from '@/fsd/5-shared/model/enums/rarity.enum';
 
 import { CharactersService } from '@/fsd/4-entities/character';
 import { MowsService } from '@/fsd/4-entities/mow';
@@ -61,7 +60,7 @@ export const Lre: React.FC = () => {
         if (character !== undefined && character.rank !== Rank.Locked) {
             return { rarity: character.rarity, stars: character.stars };
         }
-        return { rarity: Rarity.Legendary, stars: RarityStars.None };
+        return { rarity: 'Legendary' as const, stars: RarityStars.None };
     }, [resolvedCharacters, legendaryEvent.unitSnowprintId]);
 
     const tokens: TokenUse[] = TokenEstimationService.computeAllTokenUsage(

@@ -1,4 +1,4 @@
-﻿import { RarityStars, Rarity, Rank, UnitType, RarityKey } from '@/fsd/5-shared/model';
+﻿import { RarityStars, Rank, UnitType, RarityKey } from '@/fsd/5-shared/model';
 
 import { ICharacter2 } from '@/fsd/4-entities/character';
 
@@ -12,7 +12,7 @@ export const unsetCharacter: Partial<ICharacter2> = {
     rank: Rank.Stone1,
     upgrades: [],
     stars: RarityStars.None,
-    rarity: Rarity.Common,
+    rarity: 'Common',
     level: 1,
 };
 

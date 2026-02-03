@@ -7,7 +7,8 @@ import { AllCommunityModule, ColDef, ICellRendererParams, themeBalham } from 'ag
 import { AgGridReact } from 'ag-grid-react';
 import React, { useState } from 'react';
 
-import { RarityStars, Rarity, Rank } from '@/fsd/5-shared/model';
+import { raritiesBetween } from '@/fsd/5-shared/lib';
+import { RarityStars, Rank, RarityKey } from '@/fsd/5-shared/model';
 import { FlexBox } from '@/fsd/5-shared/ui';
 import { RarityIcon, StarsIcon } from '@/fsd/5-shared/ui/icons';
 
@@ -30,15 +31,13 @@ export const PotentialInfo: React.FC = () => {
         setOpen(false);
     };
 
-    const rarities = [Rarity.Legendary, Rarity.Epic, Rarity.Rare, Rarity.Uncommon, Rarity.Common];
-
     const rows = Object.values(rarityCaps);
 
     const [columnDefs] = useState<Array<ColDef<IRarityCap>>>([
         {
             field: 'rarity',
             width: 70,
-            cellRenderer: (params: ICellRendererParams<IRarityCap, Rarity>) => {
+            cellRenderer: (params: ICellRendererParams<IRarityCap, RarityKey>) => {
                 const { value } = params;
 
                 return <RarityIcon rarity={value!} />;
@@ -78,13 +77,15 @@ export const PotentialInfo: React.FC = () => {
                 <DialogContent>
                     <p>The potential(0-100) is calculated based on specific rarity cap:</p>
                     <ul className="ps-5 list-none">
-                        {rarities.map(rarity => (
-                            <li key={rarity}>
-                                <FlexBox gap={5}>
-                                    <RarityIcon rarity={rarity} /> {Rarity[rarity]}
-                                </FlexBox>
-                            </li>
-                        ))}
+                        {raritiesBetween('Common', 'Legendary')
+                            .reverse()
+                            .map(rarity => (
+                                <li key={rarity}>
+                                    <FlexBox gap={5}>
+                                        <RarityIcon rarity={rarity} /> {rarity}
+                                    </FlexBox>
+                                </li>
+                            ))}
                     </ul>
                     <p>and following characters stats:</p>
 

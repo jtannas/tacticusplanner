@@ -6,10 +6,7 @@ import { isMobile } from 'react-device-detect';
 
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { ICharacter2 } from 'src/models/interfaces';
-// eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
-import { getEnumValues } from 'src/shared-logic/functions';
 
-import { Rarity } from '@/fsd/5-shared/model';
 import { RaritySelect } from '@/fsd/5-shared/ui';
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { MultipleSelect } from '@/fsd/5-shared/ui/input/multiple-select';

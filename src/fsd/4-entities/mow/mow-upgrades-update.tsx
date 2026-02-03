@@ -3,7 +3,7 @@ import { Checkbox, FormControlLabel, Popover } from '@mui/material';
 import Button from '@mui/material/Button';
 import React, { useEffect, useMemo } from 'react';
 
-import { Alliance, RarityMapper } from '@/fsd/5-shared/model';
+import { Alliance } from '@/fsd/5-shared/model';
 
 import { UpgradesService, UpgradeImage } from '@/fsd/4-entities/upgrade/@x/mow';
 

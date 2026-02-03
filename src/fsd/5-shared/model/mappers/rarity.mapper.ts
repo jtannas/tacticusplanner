@@ -29,25 +29,11 @@ export class RarityMapper {
     };
 
     public static getRarityFromLevel(level: number): RarityKey {
-        if (level <= 8) {
-            return 'Common';
-        }
-
-        if (level <= 17) {
-            return 'Uncommon';
-        }
-
-        if (level <= 26) {
-            return 'Rare';
-        }
-
-        if (level <= 35) {
-            return 'Epic';
-        }
-        if (level <= 50) {
-            return 'Legendary';
-        }
-
+        if (level <= 8) return 'Common';
+        if (level <= 17) return 'Uncommon';
+        if (level <= 26) return 'Rare';
+        if (level <= 35) return 'Epic';
+        if (level <= 50) return 'Legendary';
         return 'Mythic';
     }
 }

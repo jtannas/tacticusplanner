@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 // eslint-disable-next-line import-x/no-internal-modules
 import { StoreContext } from '@/reducers/store.provider';
 
-import { Rank, Rarity, RarityStars } from '@/fsd/5-shared/model';
+import { Rank, RarityStars } from '@/fsd/5-shared/model';
 import { AccessibleTooltip } from '@/fsd/5-shared/ui';
 import { MiscIcon } from '@/fsd/5-shared/ui/icons';
 import { SupportSection } from '@/fsd/5-shared/ui/support-banner';
@@ -140,13 +140,13 @@ export const LeTokenomics: React.FC<Props> = ({
 
     const progress = TokenEstimationService.computeCurrentProgress(
         model,
-        rank === Rank.Locked ? Rarity.Legendary : (character?.rarity ?? Rarity.Legendary),
+        rank === Rank.Locked ? 'Legendary' : (character?.rarity ?? 'Legendary'),
         rank === Rank.Locked ? RarityStars.None : (character?.stars ?? RarityStars.None),
         /*p2p=*/ true
     );
 
     const char = characters.find(c => c.snowprintId! === legendaryEvent.unitSnowprintId);
-    const rarity = char?.rarity ?? Rarity.Legendary;
+    const rarity = char?.rarity ?? 'Legendary';
     const stars = char?.stars ?? RarityStars.None;
 
     const isDataStale = () => {

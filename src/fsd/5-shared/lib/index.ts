@@ -10,3 +10,11 @@ export { getCompletionRateColor } from './get-completion-color';
 export { constObjectKeys, createSafeGetter, mutableCopy } from './type-helpers';
 export type { Prettify } from './type-helpers';
 export * from './tacticus-api';
+export {
+    maxRarity,
+    minRarity,
+    nextRarity,
+    raritiesBetween,
+    isRarityAtLeast,
+    rarityCompareFn,
+} from './rarity-comparison';

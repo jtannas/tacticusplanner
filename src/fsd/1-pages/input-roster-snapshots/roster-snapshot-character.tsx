@@ -4,8 +4,8 @@ import React from 'react';
 
 import { getImageUrl } from 'src/shared-logic/functions';
 
+import { RarityKey } from '@/fsd/5-shared/model';
 import { Rank } from '@/fsd/5-shared/model/enums/rank.enum';
-import { Rarity } from '@/fsd/5-shared/model/enums/rarity.enum';
 import { starsIcons, tacticusIcons } from '@/fsd/5-shared/ui/icons/iconList';
 
 import { ICharacterData, RankIcon } from '@/fsd/4-entities/character';
@@ -15,41 +15,8 @@ import { RosterSnapshotShowVariableSettings } from '@/fsd/3-features/view-settin
 
 import { ISnapshotCharacter, ISnapshotMachineOfWar } from './models';
 
-function getFrame(isMow: boolean, rarity: number): keyof typeof tacticusIcons {
-    if (isMow) {
-        switch (rarity) {
-            case Rarity.Common:
-                return 'mowCommonFrame';
-            case Rarity.Uncommon:
-                return 'mowUncommonFrame';
-            case Rarity.Rare:
-                return 'mowRareFrame';
-            case Rarity.Epic:
-                return 'mowEpicFrame';
-            case Rarity.Legendary:
-                return 'mowLegendaryFrame';
-            case Rarity.Mythic:
-                return 'mowMythicFrame';
-            default:
-                return 'mowCommonFrame';
-        }
-    }
-    switch (rarity) {
-        case Rarity.Common:
-            return 'commonFrame';
-        case Rarity.Uncommon:
-            return 'uncommonFrame';
-        case Rarity.Rare:
-            return 'rareFrame';
-        case Rarity.Epic:
-            return 'epicFrame';
-        case Rarity.Legendary:
-            return 'legendaryFrame';
-        case Rarity.Mythic:
-            return 'mythicFrame';
-        default:
-            return 'commonFrame';
-    }
+function getFrame(isMow: boolean, rarity: RarityKey): keyof typeof tacticusIcons {
+    return isMow ? `mow${rarity}Frame` : `${rarity.toLowerCase()}Frame`;
 }
 
 function getStarIcon(stars: number): string {
@@ -128,7 +95,7 @@ function getCharTooltip(char: ISnapshotCharacter, charData: ICharacterData): Rea
         <>
             {charData.shortName}
             <br />
-            Rarity: {Rarity[char.rarity]}
+            Rarity: {char.rarity}
             <br />
             Stars: {getStars(char.stars)}
             <br />
@@ -152,7 +119,7 @@ function getMowTooltip(mow: ISnapshotMachineOfWar, mowData: IMowStatic2): React.
         <>
             {mowData.name}
             <br />
-            Rarity: {Rarity[mow.rarity]}
+            Rarity: {mow.rarity}
             <br />
             Stars: {getStars(mow.stars)}
             <br />
@@ -189,7 +156,7 @@ export const RosterSnapshotCharacter: React.FC<Props> = ({
     mowData,
 }) => {
     const charIcon = getImageUrl(charData?.icon ?? mowData?.icon ?? 'default-character-icon.png');
-    const frameIcon = tacticusIcons[getFrame(mow !== undefined, char?.rarity ?? mow?.rarity ?? 0)]?.file || '';
+    const frameIcon = tacticusIcons[getFrame(mow !== undefined, char?.rarity ?? mow?.rarity ?? 'Common')]?.file || '';
     const starIcon = getStarIcon(char?.stars ?? mow?.stars ?? 0);
     const starCount = getStarCount(char?.stars ?? mow?.stars ?? 0);
     const shardIcon = tacticusIcons.shard.file;

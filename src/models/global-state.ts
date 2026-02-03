@@ -1,4 +1,5 @@
-﻿import { Rank, Rarity, UnitType, RarityStars, RarityMapper } from '@/fsd/5-shared/model';
+﻿import { maxRarity } from '@/fsd/5-shared/lib';
+import { Rank, UnitType, RarityStars, RarityMapper } from '@/fsd/5-shared/model';
 
 import { ICampaignsProgress } from '@/fsd/4-entities/campaign';
 import { CharacterBias, CharactersService, ICharacter2 } from '@/fsd/4-entities/character';
@@ -105,7 +106,7 @@ export class GlobalState implements IGlobalState {
             const rank = personalCharData?.rank ?? Rank.Locked;
             const rankLevel = rankToLevel[rank as Rank];
             const rankRarity = rankToRarity[rank];
-            const rarity = Math.max(personalCharData?.rarity ?? staticData.initialRarity, rankRarity) as Rarity;
+            const rarity = maxRarity(personalCharData?.rarity ?? staticData.initialRarity, rankRarity);
             const stars = Math.max(personalCharData?.stars ?? 0, RarityMapper.toStars[rarity]);
             const activeLevel = Math.max(personalCharData?.activeAbilityLevel ?? 1, 1);
             const passiveLevel = Math.max(personalCharData?.passiveAbilityLevel ?? 1, 1);
@@ -151,8 +152,7 @@ export class GlobalState implements IGlobalState {
     static initMows(dbMows: Partial<IMowDb & IInsightsData>[], totalUsers?: number): Array<IMow | IMow2> {
         const ret = mowsData.map(staticData => {
             const dbMow = dbMows?.find(c => c.id === staticData.id);
-            const initialRarity = RarityMapper.stringToNumber[staticData.initialRarity];
-            const initialRarityStars = RarityMapper.toStars[RarityMapper.stringToNumber[staticData.initialRarity]];
+            const initialRarityStars = RarityMapper.toStars[staticData.initialRarity];
             const isReleased = staticData.releaseDate
                 ? this.isAtLeast3DaysBefore(new Date(staticData.releaseDate))
                 : true;
@@ -162,7 +162,7 @@ export class GlobalState implements IGlobalState {
                 unitType: UnitType.mow,
                 portraitIcon: isReleased ? `${staticData.id}.webp` : 'comingSoon.webp',
                 badgeIcon: isReleased ? `${staticData.id}.png` : 'unset.png',
-                rarity: dbMow?.rarity ?? initialRarity,
+                rarity: dbMow?.rarity ?? staticData.initialRarity,
                 stars: dbMow?.stars ?? initialRarityStars,
                 primaryAbilityLevel: dbMow?.primaryAbilityLevel ?? 1,
                 secondaryAbilityLevel: dbMow?.secondaryAbilityLevel ?? 1,
@@ -203,7 +203,7 @@ export class GlobalState implements IGlobalState {
                 id: staticMow.snowprintId,
                 unitType: UnitType.mow,
                 icon: staticMow.icon,
-                rarity: dbMow?.rarity ?? Rarity.Common,
+                rarity: dbMow?.rarity ?? 'Common',
                 stars: dbMow?.stars ?? RarityStars.None,
                 primaryAbilityLevel: dbMow?.primaryAbilityLevel ?? 1,
                 secondaryAbilityLevel: dbMow?.secondaryAbilityLevel ?? 1,

@@ -3,7 +3,6 @@ import { AgGridReact } from 'ag-grid-react';
 import React, { useMemo } from 'react';
 
 import { numberToThousandsString } from '@/fsd/5-shared/lib';
-import { RarityMapper } from '@/fsd/5-shared/model';
 import { BadgeImage, ComponentImage, ForgeBadgeImage } from '@/fsd/5-shared/ui/icons';
 
 import { IMowLevelMaterials } from '@/fsd/4-entities/mow';

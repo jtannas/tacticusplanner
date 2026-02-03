@@ -6,7 +6,6 @@ import { useMemo, useRef, useState } from 'react';
 // eslint-disable-next-line import-x/no-internal-modules
 import { ICampaignBattleComposed, IDailyRaidsHomeScreenEvent } from '@/models/interfaces';
 
-import { RarityMapper } from '@/fsd/5-shared/model';
 import { MiscIcon, UnitShardIcon } from '@/fsd/5-shared/ui/icons';
 
 import { Campaign, CampaignImage, CampaignLocation, CampaignsService, CampaignType } from '@/fsd/4-entities/campaign';
@@ -163,13 +162,7 @@ export const HomeScreenEvent = () => {
             return reward;
         }
 
-        return (
-            <UpgradeImage
-                material={upgrade.label}
-                iconPath={upgrade.iconPath}
-                rarity={upgrade.rarity}
-            />
-        );
+        return <UpgradeImage material={upgrade.label} iconPath={upgrade.iconPath} rarity={upgrade.rarity} />;
     };
 
     const [selectedEvent, setSelectedEvent] = useState<IDailyRaidsHomeScreenEvent>(

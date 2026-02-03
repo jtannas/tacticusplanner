@@ -1,7 +1,7 @@
 ﻿import { FormControl, MenuItem, Select } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 
-import { RARITIES, Rarity, RarityKey } from '@/fsd/5-shared/model';
+import { RARITIES, RarityKey } from '@/fsd/5-shared/model';
 
 import { FlexBox } from './flex-box';
 import { RarityIcon } from './icons';
@@ -27,7 +27,7 @@ export const RaritySelect = ({
                 {rarityValues.map(rarity => (
                     <MenuItem key={rarity} value={rarity}>
                         <FlexBox gap={5}>
-                            <RarityIcon rarity={rarity} /> {Rarity[rarity]}
+                            <RarityIcon rarity={rarity} /> {rarity}
                         </FlexBox>
                     </MenuItem>
                 ))}

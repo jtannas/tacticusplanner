@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import React, { useContext, useMemo, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
-import { RARITIES, RarityKey } from '@/fsd/5-shared/model';
+import { RarityKey } from '@/fsd/5-shared/model';
 import { FlexBox, Conditional, RaritySelect } from '@/fsd/5-shared/ui';
 
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure

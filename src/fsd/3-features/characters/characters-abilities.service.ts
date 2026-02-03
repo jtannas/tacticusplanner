@@ -6,7 +6,7 @@ import abilitiesLvlUpJson from 'src/data/characters-lvl-up-abilities.json';
 import xpData from 'src/data/xp.json';
 
 import { mutableCopy } from '@/fsd/5-shared/lib';
-import { Rarity, Alliance } from '@/fsd/5-shared/model';
+import { Alliance, RarityKey } from '@/fsd/5-shared/model';
 
 import {
     ICharacterAbilitiesMaterialsTotal,
@@ -41,7 +41,7 @@ export class CharactersAbilitiesService {
         const gold = sum(materials.map(x => x.gold));
 
         const badges = mapValues(groupBy(materials, 'rarity'), x => sum(x.map(y => y.badges))) as Record<
-            Rarity,
+            RarityKey,
             number
         >;
 
@@ -52,26 +52,12 @@ export class CharactersAbilitiesService {
         };
     }
 
-    private static getRarityFromLevel(level: number): Rarity {
-        if (level <= 8) {
-            return Rarity.Common;
-        }
-
-        if (level <= 17) {
-            return Rarity.Uncommon;
-        }
-
-        if (level <= 26) {
-            return Rarity.Rare;
-        }
-
-        if (level <= 35) {
-            return Rarity.Epic;
-        }
-        if (level <= 50) {
-            return Rarity.Legendary;
-        }
-
-        return Rarity.Mythic;
+    private static getRarityFromLevel(level: number) {
+        if (level <= 8) return 'Common';
+        if (level <= 17) return 'Uncommon';
+        if (level <= 26) return 'Rare';
+        if (level <= 35) return 'Epic';
+        if (level <= 50) return 'Legendary';
+        return 'Mythic';
     }
 }

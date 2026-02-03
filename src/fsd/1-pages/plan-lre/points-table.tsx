@@ -18,7 +18,7 @@ import { isMobile } from 'react-device-detect';
 import { StoreContext } from '@/reducers/store.provider';
 
 import { useQueryState } from '@/fsd/5-shared/lib';
-import { Rank, rankToString, Rarity, RarityMapper } from '@/fsd/5-shared/model';
+import { Rank, rankToString } from '@/fsd/5-shared/model';
 import { RarityIcon } from '@/fsd/5-shared/ui/icons';
 
 import { CharactersService, CharacterTitleShort, RankIcon } from '@/fsd/4-entities/character';
@@ -98,7 +98,7 @@ const PointsTable = (props: { legendaryEvent: ILegendaryEvent }) => {
                             return props.data?.character.rarity;
                         },
                         cellRenderer: (props: ICellRendererParams<ITableRow>) => {
-                            const rarity = props.value ?? Rarity.Common;
+                            const rarity = props.value ?? 'Common';
                             return <RarityIcon rarity={rarity} />;
                         },
                     },

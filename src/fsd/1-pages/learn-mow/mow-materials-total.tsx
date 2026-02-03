@@ -1,8 +1,8 @@
 ﻿import { Badge } from '@mui/material';
 import React from 'react';
 
-import { numberToThousandsString } from '@/fsd/5-shared/lib';
-import { Alliance } from '@/fsd/5-shared/model';
+import { numberToThousandsString, raritiesBetween } from '@/fsd/5-shared/lib';
+import { Alliance, RARITIES } from '@/fsd/5-shared/model';
 import { BadgeImage, ComponentImage, ForgeBadgeImage } from '@/fsd/5-shared/ui/icons';
 
 import { IMowMaterialsTotal } from './lookup.models';
@@ -20,7 +20,7 @@ export const MowMaterialsTotal: React.FC<Props> = ({ total, mowAlliance, label, 
             {label && <b>{label}</b>}
             <div className="flex-box gap20 wrap">
                 <div className="flex-box gap5">
-                    {(['Mythic', 'Legendary', 'Epic', 'Rare', 'Uncommon', 'Common'] as const).map(rarity => {
+                    {RARITIES.toReversed().map(rarity => {
                         const badgesCount = total.badges[rarity] ?? 0;
                         return (
                             badgesCount > 0 && (
@@ -36,16 +36,18 @@ export const MowMaterialsTotal: React.FC<Props> = ({ total, mowAlliance, label, 
                     <ComponentImage alliance={mowAlliance} size={size} />
                 </div>
                 <div className="flex-box gap5">
-                    {(['Mythic', 'Legendary', 'Epic', 'Rare', 'Uncommon'] as const).map(rarity => {
-                        const forgeBadgesCount = total.forgeBadges.get(rarity) ?? 0;
-                        return (
-                            forgeBadgesCount > 0 && (
-                                <Badge key={rarity} badgeContent={<b>{forgeBadgesCount}</b>}>
-                                    <ForgeBadgeImage rarity={rarity} size={size} />
-                                </Badge>
-                            )
-                        );
-                    })}
+                    {raritiesBetween('Uncommon', 'Mythic')
+                        .reverse()
+                        .map(rarity => {
+                            const forgeBadgesCount = total.forgeBadges.get(rarity) ?? 0;
+                            return (
+                                forgeBadgesCount > 0 && (
+                                    <Badge key={rarity} badgeContent={<b>{forgeBadgesCount}</b>}>
+                                        <ForgeBadgeImage rarity={rarity} size={size} />
+                                    </Badge>
+                                )
+                            );
+                        })}
                 </div>
                 <div className="flex-box gap5">
                     <b>{numberToThousandsString(total.gold)}</b>

@@ -122,7 +122,7 @@ export const EditGoalDialog: React.FC<Props> = ({ isOpen, onClose, goal, unit })
         }
     };
 
-    const handleAscendGoalChanges = (key: keyof ICharacterAscendGoal, value: number) => {
+    const handleAscendGoalChanges = <K extends keyof ICharacterAscendGoal>(key: K, value: ICharacterAscendGoal[K]) => {
         setForm(curr => ({ ...curr, [key]: value }));
     };
 

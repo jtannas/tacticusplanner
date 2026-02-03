@@ -24,29 +24,25 @@ export const Resources = () => {
         });
     };
 
-    const enabled: boolean[] = [
-        xpUse.useCommon,
-        xpUse.useUncommon,
-        xpUse.useRare,
-        xpUse.useEpic,
-        xpUse.useLegendary,
-        xpUse.useMythic,
-    ];
-
-    const getRarityIndex = (rarity: RarityKey): number => RARITIES.indexOf(rarity);
+    const enabled: { [key in RarityKey]: boolean } = {
+        Common: xpUse.useCommon,
+        Uncommon: xpUse.useUncommon,
+        Rare: xpUse.useRare,
+        Epic: xpUse.useEpic,
+        Legendary: xpUse.useLegendary,
+        Mythic: xpUse.useMythic,
+    };
 
     const newState = (rarity: RarityKey): XpUseState => {
-        const index = getRarityIndex(rarity);
-        const updatedEnabled = [...enabled];
-        updatedEnabled[index] = !updatedEnabled[index];
+        const updatedEnabled = { ...enabled, [rarity]: !enabled[rarity] };
 
         return {
-            useCommon: updatedEnabled[0],
-            useUncommon: updatedEnabled[1],
-            useRare: updatedEnabled[2],
-            useEpic: updatedEnabled[3],
-            useLegendary: updatedEnabled[4],
-            useMythic: updatedEnabled[5],
+            useCommon: updatedEnabled.Common,
+            useUncommon: updatedEnabled.Uncommon,
+            useRare: updatedEnabled.Rare,
+            useEpic: updatedEnabled.Epic,
+            useLegendary: updatedEnabled.Legendary,
+            useMythic: updatedEnabled.Mythic,
         };
     };
 
@@ -92,8 +88,7 @@ export const Resources = () => {
                     <div className="flex flex-wrap justify-start gap-x-1">
                         {RARITIES.map(rarity => {
                             const icon = rarity.toLowerCase() + 'Book';
-                            const index = getRarityIndex(rarity);
-                            const isEnabled = enabled[index];
+                            const isEnabled = enabled[rarity];
 
                             return renderResourceItem(
                                 'book-' + rarity,

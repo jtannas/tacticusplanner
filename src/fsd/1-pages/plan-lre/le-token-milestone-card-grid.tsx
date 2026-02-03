@@ -1,4 +1,3 @@
-import { Rarity } from '@/fsd/5-shared/model';
 import { RarityIcon, StarsIcon } from '@/fsd/5-shared/ui/icons';
 
 import { milestonesAndPoints } from './token-estimation-service';
@@ -45,7 +44,7 @@ export const LeTokenMilestoneCardGrid = ({ milestonesToList, emptyMessage, isMis
                             ) : (
                                 <>
                                     {milestone.stars == 7 ? (
-                                        <RarityIcon rarity={Rarity.Mythic} />
+                                        <RarityIcon rarity="Mythic" />
                                     ) : (
                                         <StarsIcon stars={milestone.stars + 5 - (milestone.stars >= 7 ? 1 : 0)} />
                                     )}

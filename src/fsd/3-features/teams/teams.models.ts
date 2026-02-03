@@ -1,6 +1,6 @@
 ﻿import { v4 } from 'uuid';
 
-import { Rarity } from '@/fsd/5-shared/model';
+import { RarityKey } from '@/fsd/5-shared/model';
 
 // eslint-disable-next-line import-x/no-internal-modules -- FYI: Ported from `v2` module; doesn't comply with `fsd` structure
 import { GameMode } from '@/fsd/3-features/teams/teams.enums';
@@ -8,7 +8,7 @@ import { GameMode } from '@/fsd/3-features/teams/teams.enums';
 export interface IPersonalTeam {
     id: string;
     name: string;
-    rarityCap: Rarity;
+    rarityCap: RarityKey;
     lineup: string[];
     primaryGameMode: GameMode;
     subModes: string[];
@@ -24,7 +24,7 @@ export class PersonalTeam implements IPersonalTeam {
         public subModes: string[],
         public name: string,
         public notes: string,
-        public rarityCap: Rarity,
+        public rarityCap: RarityKey,
         public lineup: string[],
         public mowId: string | undefined
     ) {}

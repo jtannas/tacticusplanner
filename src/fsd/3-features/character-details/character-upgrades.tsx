@@ -8,7 +8,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { StoreContext } from '@/reducers/store.provider';
 
 import { findAndRemoveItem } from '@/fsd/5-shared/lib';
-import { Rank, RarityMapper } from '@/fsd/5-shared/model';
+import { Rank } from '@/fsd/5-shared/model';
 import { MiscIcon } from '@/fsd/5-shared/ui/icons';
 
 import { ICharacter2, CharacterUpgradesService } from '@/fsd/4-entities/character';
