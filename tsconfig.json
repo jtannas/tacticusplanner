@@ -13,6 +13,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "allowUnusedLabels": false,
+        "noUncheckedSideEffectImports": true,
         "module": "esnext",
         "moduleResolution": "node",
         "resolveJsonModule": true,
