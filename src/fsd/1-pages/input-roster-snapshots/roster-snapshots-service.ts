@@ -147,7 +147,6 @@ export class RosterSnapshotsService {
                 return RarityStars.OneBlueStar;
             }
         }
-        return RarityStars.None;
     }
 
     /**

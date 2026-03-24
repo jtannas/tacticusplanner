@@ -14,6 +14,7 @@
         "noUnusedParameters": true,
         "allowUnusedLabels": false,
         "noUncheckedSideEffectImports": true,
+        "allowUnreachableCode": false,
         "module": "esnext",
         "moduleResolution": "node",
         "resolveJsonModule": true,

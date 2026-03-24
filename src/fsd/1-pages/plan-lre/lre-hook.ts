@@ -50,7 +50,6 @@ export const useLre = () => {
                 return LreSection.tokenomics;
             }
         }
-        return LreSection.teams;
     };
 
     const getDefaultPage = () =>

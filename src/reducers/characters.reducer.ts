@@ -212,8 +212,6 @@ export const charactersReducer = (state: ICharacter2[], action: CharactersAction
                             shards: 0,
                         };
                     }
-
-                    return char;
                 }),
             ];
         }

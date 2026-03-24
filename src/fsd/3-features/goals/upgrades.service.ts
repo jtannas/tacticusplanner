@@ -1445,7 +1445,6 @@ export class UpgradesService {
             }
             return orderBy(taggedLocs, orderingFields, orderingDirections).map(x => x.loc);
         }
-        return taggedLocs.map(x => x.loc);
     }
 
     /**
