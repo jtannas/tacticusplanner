@@ -12,6 +12,7 @@
         "noFallthroughCasesInSwitch": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
+        "allowUnusedLabels": false,
         "module": "esnext",
         "moduleResolution": "node",
         "resolveJsonModule": true,
