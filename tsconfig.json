@@ -11,6 +11,7 @@
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,
         "noUnusedLocals": true,
+        "noUnusedParameters": true,
         "module": "esnext",
         "moduleResolution": "node",
         "resolveJsonModule": true,
@@ -21,8 +22,8 @@
         "importJsonAsConst": true,
         "paths": {
             "@/*": ["./src/*"],
-            "src/*": ["./src/*"]
-        }
+            "src/*": ["./src/*"],
+        },
     },
-    "include": ["src"]
+    "include": ["src"],
 }
