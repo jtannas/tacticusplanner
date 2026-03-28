@@ -354,7 +354,8 @@ export class TokenEstimationService {
      */
     public static getFurthestCurrencyMilestoneAchieved(currentPoints: number): number {
         for (let index = milestonesAndPoints.length - 1; index >= 0; --index) {
-            if (currentPoints >= milestonesAndPoints[index].points) {
+            const milestone = milestonesAndPoints[index];
+            if (milestone !== undefined && currentPoints >= milestone.points) {
                 return index;
             }
         }
@@ -380,17 +381,17 @@ export class TokenEstimationService {
             const token = this.computeNextBestTokenInTrack(
                 element,
                 teams.filter(x => x.section === element.trackId),
-                lowestAvailableBattles[index],
-                highestAvailableBattles[index]
+                lowestAvailableBattles[index] ?? -1,
+                highestAvailableBattles[index] ?? -1
             );
             if (token !== undefined) nextBestTokens.push(token);
         }
-        if (nextBestTokens.length === 0) {
+        const firstBest = nextBestTokens[0];
+        if (firstBest === undefined) {
             // No tokens available, return a token with no team and no battle.
             return new TokenUse();
         }
-
-        let best = nextBestTokens[0];
+        let best: TokenUse = firstBest;
         for (const current of nextBestTokens) {
             // Priority 1) prefer the token with the highest number of points
             if (current.incrementalPoints > best.incrementalPoints) best = current;
@@ -447,6 +448,7 @@ export class TokenEstimationService {
             return;
         }
         const battle = track.battles[track.battles.length - 1 - token.battleNumber];
+        if (!battle) return;
         if (battle.completed) {
             return;
         }
@@ -477,7 +479,8 @@ export class TokenEstimationService {
      */
     static computeLowestAvailableBattle(track: ILreTrackProgress): number {
         for (let index = 0; index < track.battles.length; ++index) {
-            if (!track.battles[track.battles.length - index - 1].completed) return index;
+            const battle = track.battles[track.battles.length - index - 1];
+            if (battle && !battle.completed) return index;
         }
         return -1;
     }
@@ -494,9 +497,12 @@ export class TokenEstimationService {
 
         // Find the first battle where we don't have the kill points requirement completed.
         for (let index = 0; index < track.battles.length; ++index) {
-            const requirement = track.battles[track.battles.length - 1 - index].requirementsProgress.find(
-                r => r.id === killPointsId
-            );
+            const b = track.battles[track.battles.length - 1 - index];
+            if (!b) {
+                console.error("couldn't find a kill-points requirement");
+                return -1;
+            }
+            const requirement = b.requirementsProgress.find(r => r.id === killPointsId);
             if (requirement === undefined) {
                 console.error("couldn't find a kill-points requirement");
                 return -1;
@@ -507,7 +513,8 @@ export class TokenEstimationService {
         // We can play every battle, but we haven't completed every battle.
         // Work backwards to find the first battle we have not completed.
         for (let index = track.battles.length - 1; index >= 0; --index) {
-            if (!track.battles[track.battles.length - 1 - index].completed) return index;
+            const b = track.battles[track.battles.length - 1 - index];
+            if (b && !b.completed) return index;
         }
         return -1;
     }
@@ -528,6 +535,7 @@ export class TokenEstimationService {
         if (lowestBattle == -1 || highestBattle == -1) return undefined;
         for (let battleNumber = lowestBattle; battleNumber <= highestBattle; ++battleNumber) {
             const battle = track.battles[track.battles.length - 1 - battleNumber];
+            if (!battle) continue;
             if (battle.completed) continue;
             for (const team of teams) {
                 const restrictionsCleared: ILreRequirements[] = this.computeIncrementalRestrictionsCleared(
@@ -654,6 +662,7 @@ export class TokenEstimationService {
 
         // Figure out which restrictions we can satisfy with the current team.
         const team = teams[0];
+        if (!team) return currentMinimum;
         ++currentTokens;
         currentTeams = currentTeams.map(x => x);
         foundRestrictions = foundRestrictions.map(x => x);
@@ -814,35 +823,36 @@ export class TokenEstimationService {
         let starIndex = 0;
         let totalShards = 0;
         for (starIndex = 0; starIndex < ascensionMilestones.length; ++starIndex) {
+            const asc = ascensionMilestones[starIndex];
+            if (!asc) break;
             // Skip over the milestones we've already hit.
-            if (currentRarity > ascensionMilestones[starIndex].rarity) continue;
-            if (currentStars > ascensionMilestones[starIndex].stars) continue;
-            if (
-                currentRarity === ascensionMilestones[starIndex].rarity &&
-                currentStars === ascensionMilestones[starIndex].stars
-            ) {
+            if (currentRarity > asc.rarity) continue;
+            if (currentStars > asc.stars) continue;
+            if (currentRarity === asc.rarity && currentStars === asc.stars) {
                 continue;
             }
             // Can we spend our incremental shards to ascend?
-            if (ascensionMilestones[starIndex].incrementalShards > currentShards) break;
-            totalShards += ascensionMilestones[starIndex].incrementalShards;
-            currentRarity = ascensionMilestones[starIndex].rarity;
-            currentStars = ascensionMilestones[starIndex].stars;
-            currentShards -= ascensionMilestones[starIndex].incrementalShards;
+            if (asc.incrementalShards > currentShards) break;
+            totalShards += asc.incrementalShards;
+            currentRarity = asc.rarity;
+            currentStars = asc.stars;
+            currentShards -= asc.incrementalShards;
         }
 
         let addlCurrencyForNextMilestone = Infinity;
         let addlPointsForNextMilestone = Infinity;
         let addlShardsForNextMilestone = Infinity;
-        if (starIndex < ascensionMilestones.length) {
-            addlShardsForNextMilestone = ascensionMilestones[starIndex].incrementalShards - currentShards;
+        const nextAscMilestone = ascensionMilestones[starIndex];
+        if (starIndex < ascensionMilestones.length && nextAscMilestone) {
+            addlShardsForNextMilestone = nextAscMilestone.incrementalShards - currentShards;
             const addlChests = Math.ceil(addlShardsForNextMilestone / this.getShardsPerChest());
             const neededChestIndex = lastClaimedChestIndex + addlChests;
             if (neededChestIndex >= chestMilestones.length) {
                 addlCurrencyForNextMilestone = Infinity;
                 addlPointsForNextMilestone = 27_000 - totalPoints;
             } else {
-                addlCurrencyForNextMilestone = chestMilestones[neededChestIndex].totalNeededCurrency - totalCurrency;
+                addlCurrencyForNextMilestone =
+                    (chestMilestones[neededChestIndex]?.totalNeededCurrency ?? totalCurrency) - totalCurrency;
                 addlPointsForNextMilestone =
                     this.computeTotalPointsToNextMilestone(
                         totalPoints,
@@ -902,12 +912,13 @@ export class TokenEstimationService {
     ): number {
         let nextPointMilestoneIndex = this.getNextPointMilestoneIndex(totalPoints);
         while (nextPointMilestoneIndex < pointMilestones.length && addlCurrencyForNextMilestone > 0) {
-            addlCurrencyForNextMilestone -=
-                pointMilestones[nextPointMilestoneIndex].currencyPayout + bonusPayoutPerCurrencyPayout;
+            const pm = pointMilestones[nextPointMilestoneIndex];
+            if (!pm) break;
+            addlCurrencyForNextMilestone -= pm.currencyPayout + bonusPayoutPerCurrencyPayout;
             nextPointMilestoneIndex++;
         }
         if (nextPointMilestoneIndex < pointMilestones.length) {
-            return pointMilestones[nextPointMilestoneIndex - 1].points;
+            return pointMilestones[nextPointMilestoneIndex - 1]?.points ?? Infinity;
         }
         return Infinity;
     }
@@ -937,29 +948,24 @@ export class TokenEstimationService {
             currentPoints += token.incrementalPoints;
             let achievedPointsMilestone = false;
             let achievedStarMilestone = false;
-            while (
-                nextPointMilestoneIndex < pointMilestones.length &&
-                currentPoints >= pointMilestones[nextPointMilestoneIndex].points
-            ) {
-                currentCurrency +=
-                    pointMilestones[nextPointMilestoneIndex].currencyPayout +
-                    this.getBonusPayoutPerCurrencyPayout(progress);
+            while (nextPointMilestoneIndex < pointMilestones.length) {
+                const pm = pointMilestones[nextPointMilestoneIndex];
+                if (!pm || currentPoints < pm.points) break;
+                currentCurrency += pm.currencyPayout + this.getBonusPayoutPerCurrencyPayout(progress);
                 ++nextPointMilestoneIndex;
                 achievedPointsMilestone = true;
-                while (
-                    lastClaimedChestIndex + 1 < chestMilestones.length &&
-                    currentCurrency >= chestMilestones[lastClaimedChestIndex + 1].totalNeededCurrency
-                ) {
+                while (lastClaimedChestIndex + 1 < chestMilestones.length) {
+                    const cm = chestMilestones[lastClaimedChestIndex + 1];
+                    if (!cm || currentCurrency < cm.totalNeededCurrency) break;
                     currentShards += this.getShardsPerChest();
                     ++lastClaimedChestIndex;
                 }
-                while (
-                    nextStarIndex < ascensionMilestones.length &&
-                    currentShards >= ascensionMilestones[nextStarIndex].incrementalShards
-                ) {
-                    currentRarity = ascensionMilestones[nextStarIndex].rarity;
-                    currentStars = ascensionMilestones[nextStarIndex].stars;
-                    currentShards -= ascensionMilestones[nextStarIndex].incrementalShards;
+                while (nextStarIndex < ascensionMilestones.length) {
+                    const am = ascensionMilestones[nextStarIndex];
+                    if (!am || currentShards < am.incrementalShards) break;
+                    currentRarity = am.rarity;
+                    currentStars = am.stars;
+                    currentShards -= am.incrementalShards;
                     achievedStarMilestone = true;
                     ++nextStarIndex;
                 }
@@ -976,15 +982,14 @@ export class TokenEstimationService {
                     );
                 }
             }
+            const nextAscForShards = ascensionMilestones[nextStarIndex];
             const shardsToNextMilestone =
-                nextStarIndex < ascensionMilestones.length
-                    ? ascensionMilestones[nextStarIndex].incrementalShards - currentShards
-                    : 0;
+                nextAscForShards != null ? nextAscForShards.incrementalShards - currentShards : 0;
             returnValue.push({
                 team: chars,
                 restricts: token.restrictionsCleared,
                 battleNumber: token.battleNumber,
-                track: token.team!.section,
+                track: token.team?.section ?? '(null track)',
                 incrementalPoints: token.incrementalPoints,
                 totalPoints: currentPoints,
                 rarity: currentRarity,

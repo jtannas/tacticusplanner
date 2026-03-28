@@ -7,7 +7,6 @@ import {
     OnslaughtTrackId,
     OnslaughtZoneKey,
 } from './models';
-import { OnslaughtKillzone } from './types';
 
 export class HomeScreenEventPlannerService {
     /**
@@ -109,24 +108,24 @@ export class HomeScreenEventPlannerService {
         const rollingTotal: number[] = [];
 
         for (let index = 0; index < preEventTokens + duringEventTokens; ++index) {
-            const zoneData = onslaughtData[nextBattle.track].sectors[nextBattle.sector].killzones[
-                nextBattle.zone
-            ] as OnslaughtKillzone;
+            const zoneData = onslaughtData[nextBattle.track]?.sectors[nextBattle.sector]?.killzones[nextBattle.zone];
             if (!zoneData) break;
             enemies.push(zoneData.totalEnemyCount);
             nextBattle = this.getBattleAfter(onslaughtData, nextBattle.track, nextBattle.sector, nextBattle.zone);
             if (!nextBattle) break;
-            rollingTotal.push(enemies[index] + (rollingTotal[index - 1] || 0));
+            rollingTotal.push(zoneData.totalEnemyCount + (rollingTotal[index - 1] ?? 0));
         }
 
         let bestEndingIndex = 0;
         let bestSum = 0;
         for (let index = 0; index < rollingTotal.length; ++index) {
-            if (index < duringEventTokens && rollingTotal[index] > bestSum) {
-                bestSum = rollingTotal[index];
+            const rtCurrent = rollingTotal[index] ?? 0;
+            const rtPrev = rollingTotal[index - duringEventTokens] ?? 0;
+            if (index < duringEventTokens && rtCurrent > bestSum) {
+                bestSum = rtCurrent;
                 bestEndingIndex = index;
             }
-            const currentSum = rollingTotal[index] - rollingTotal[index - duringEventTokens];
+            const currentSum = rtCurrent - rtPrev;
             if (currentSum > bestSum) {
                 bestSum = currentSum;
                 bestEndingIndex = index;
@@ -184,31 +183,44 @@ export class HomeScreenEventPlannerService {
                 },
             };
         }
-        const trackA = tracks[0];
-        const trackB = tracks[1];
+        const [trackA, trackB] = tracks;
+        if (!trackA || !trackB) {
+            return {
+                preEventTokens: {
+                    [OnslaughtTrackId.Imperial]: 0,
+                    [OnslaughtTrackId.Xenos]: 0,
+                    [OnslaughtTrackId.Chaos]: 0,
+                },
+                eventTokens: {
+                    [OnslaughtTrackId.Imperial]: 0,
+                    [OnslaughtTrackId.Xenos]: 0,
+                    [OnslaughtTrackId.Chaos]: 0,
+                },
+            };
+        }
         const trackC = Object.keys(chosenTracks).find(t => !chosenTracks[t as OnslaughtTrackId]) as OnslaughtTrackId;
 
-        const allEnemies: number[][] = [[], []];
-        const allRollingTotal: number[][] = [[], []];
+        const allEnemies: [number[], number[]] = [[], []];
+        const allRollingTotal: [number[], number[]] = [[], []];
 
         let index = 0;
         for (const track of tracks) {
             const enemies = allEnemies[index];
             const rollingTotal = allRollingTotal[index];
             ++index;
+            if (!enemies || !rollingTotal) continue;
             let nextBattle: OnslaughtBattleKey | undefined =
                 track === OnslaughtTrackId.Imperial ? imperial : track === OnslaughtTrackId.Xenos ? xenos : chaos;
 
             if (nextBattle === undefined) continue;
             for (let tokenIndex = 0; tokenIndex < preEventTokensToUse + duringEventTokensToUse; ++tokenIndex) {
-                const zoneData = onslaughtData[nextBattle.track].sectors[nextBattle.sector].killzones[
-                    nextBattle.zone
-                ] as OnslaughtKillzone;
+                const zoneData =
+                    onslaughtData[nextBattle.track]?.sectors[nextBattle.sector]?.killzones[nextBattle.zone];
                 if (!zoneData) break;
                 nextBattle = this.getBattleAfter(onslaughtData, nextBattle.track, nextBattle.sector, nextBattle.zone);
                 if (!nextBattle) break;
                 enemies.push(zoneData.totalEnemyCount);
-                rollingTotal.push(enemies[tokenIndex] + (rollingTotal[tokenIndex - 1] || 0));
+                rollingTotal.push(zoneData.totalEnemyCount + (rollingTotal[tokenIndex - 1] ?? 0));
             }
         }
 
@@ -243,15 +255,15 @@ export class HomeScreenEventPlannerService {
                         const enemiesOnA =
                             finishingIndexOnA < startingIndexA
                                 ? 0
-                                : allRollingTotal[0][finishingIndexOnA] -
-                                  allRollingTotal[0][startingIndexA] +
-                                  allEnemies[0][startingIndexA];
+                                : (allRollingTotal[0][finishingIndexOnA] ?? 0) -
+                                  (allRollingTotal[0][startingIndexA] ?? 0) +
+                                  (allEnemies[0][startingIndexA] ?? 0);
                         const enemiesOnB =
                             finishingIndexOnB < startingIndexB
                                 ? 0
-                                : allRollingTotal[1][finishingIndexOnB] -
-                                  allRollingTotal[1][startingIndexB] +
-                                  allEnemies[1][startingIndexB];
+                                : (allRollingTotal[1][finishingIndexOnB] ?? 0) -
+                                  (allRollingTotal[1][startingIndexB] ?? 0) +
+                                  (allEnemies[1][startingIndexB] ?? 0);
                         const totalEnemies = enemiesOnA + enemiesOnB;
 
                         if (totalEnemies > bestEnemies) {
@@ -302,32 +314,32 @@ export class HomeScreenEventPlannerService {
         preEventTokensToUse: number,
         duringEventTokensToUse: number
     ): HsePlan {
-        const allEnemies: number[][] = [[], [], []];
-        const allRollingTotal: number[][] = [[], [], []];
+        const allEnemies: [number[], number[], number[]] = [[], [], []];
+        const allRollingTotal: [number[], number[], number[]] = [[], [], []];
 
         let index = 0;
         for (const track of [OnslaughtTrackId.Imperial, OnslaughtTrackId.Xenos, OnslaughtTrackId.Chaos]) {
             const enemies = allEnemies[index];
             const rollingTotal = allRollingTotal[index];
             ++index;
+            if (!enemies || !rollingTotal) continue;
             let nextBattle: OnslaughtBattleKey | undefined =
                 track === OnslaughtTrackId.Imperial ? imperial : track === OnslaughtTrackId.Xenos ? xenos : chaos;
 
             if (nextBattle === undefined) continue;
             for (let tokenIndex = 0; tokenIndex < preEventTokensToUse + duringEventTokensToUse; ++tokenIndex) {
-                const zoneData = onslaughtData[nextBattle.track].sectors[nextBattle.sector].killzones[
-                    nextBattle.zone
-                ] as OnslaughtKillzone;
+                const zoneData =
+                    onslaughtData[nextBattle.track]?.sectors[nextBattle.sector]?.killzones[nextBattle.zone];
                 if (!zoneData) break;
                 enemies.push(zoneData.totalEnemyCount);
-                rollingTotal.push(enemies[tokenIndex] + (rollingTotal[tokenIndex - 1] || 0));
+                rollingTotal.push(zoneData.totalEnemyCount + (rollingTotal[tokenIndex - 1] ?? 0));
                 nextBattle = this.getBattleAfter(onslaughtData, nextBattle.track, nextBattle.sector, nextBattle.zone);
                 if (!nextBattle) break;
             }
         }
 
-        let bestStartingIndex: number[] = [0, 0, 0];
-        let bestEndingIndex: number[] = [-1, -1, -1];
+        let bestStartingIndex: [number, number, number] = [0, 0, 0];
+        let bestEndingIndex: [number, number, number] = [-1, -1, -1];
         let bestEnemies = 0;
         for (let preEventTokensOnA = 0; preEventTokensOnA <= preEventTokensToUse; ++preEventTokensOnA) {
             for (
@@ -339,30 +351,34 @@ export class HomeScreenEventPlannerService {
                 for (let tokensOnA = 0; tokensOnA <= duringEventTokensToUse; ++tokensOnA) {
                     for (let tokensOnB = 0; tokensOnB <= duringEventTokensToUse - tokensOnA; ++tokensOnB) {
                         const tokensOnC = duringEventTokensToUse - tokensOnA - tokensOnB;
-                        const startingIndex = [preEventTokensOnA, preEventTokensOnB, preEventTokensOnC];
-                        const finishingIndex = [
+                        const startingIndex: [number, number, number] = [
+                            preEventTokensOnA,
+                            preEventTokensOnB,
+                            preEventTokensOnC,
+                        ];
+                        const finishingIndex: [number, number, number] = [
                             Math.min(preEventTokensOnA + tokensOnA - 1, allRollingTotal[0].length - 1),
                             Math.min(preEventTokensOnB + tokensOnB - 1, allRollingTotal[1].length - 1),
                             Math.min(preEventTokensOnC + tokensOnC - 1, allRollingTotal[2].length - 1),
                         ];
-                        const enemies = [
+                        const enemies: [number, number, number] = [
                             finishingIndex[0] < startingIndex[0]
                                 ? 0
-                                : allRollingTotal[0][finishingIndex[0]] -
-                                  allRollingTotal[0][startingIndex[0]] +
-                                  allEnemies[0][startingIndex[0]],
+                                : (allRollingTotal[0][finishingIndex[0]] ?? 0) -
+                                  (allRollingTotal[0][startingIndex[0]] ?? 0) +
+                                  (allEnemies[0][startingIndex[0]] ?? 0),
 
                             finishingIndex[1] < startingIndex[1]
                                 ? 0
-                                : allRollingTotal[1][finishingIndex[1]] -
-                                  allRollingTotal[1][startingIndex[1]] +
-                                  allEnemies[1][startingIndex[1]],
+                                : (allRollingTotal[1][finishingIndex[1]] ?? 0) -
+                                  (allRollingTotal[1][startingIndex[1]] ?? 0) +
+                                  (allEnemies[1][startingIndex[1]] ?? 0),
 
                             finishingIndex[2] < startingIndex[2]
                                 ? 0
-                                : allRollingTotal[2][finishingIndex[2]] -
-                                  allRollingTotal[2][startingIndex[2]] +
-                                  allEnemies[2][startingIndex[2]],
+                                : (allRollingTotal[2][finishingIndex[2]] ?? 0) -
+                                  (allRollingTotal[2][startingIndex[2]] ?? 0) +
+                                  (allEnemies[2][startingIndex[2]] ?? 0),
                         ];
                         const totalEnemies = enemies[0] + enemies[1] + enemies[2];
 
@@ -410,7 +426,8 @@ export class HomeScreenEventPlannerService {
             console.error('Invalid track', track);
             return undefined;
         }
-        if (zone + 1 < trackData.sectors[sector].killzones.length) {
+        const sectorData = trackData.sectors[sector];
+        if (sectorData && zone + 1 < sectorData.killzones.length) {
             return { track, sector, zone: zone + 1 };
         }
         if (sector + 1 < trackData.sectors.length) {
@@ -445,9 +462,7 @@ export class HomeScreenEventPlannerService {
             if (!nextBattle) return 0;
         }
         for (let index = 0; index < duringEventTokens; ++index) {
-            const zoneData = onslaughtData[nextBattle.track].sectors[nextBattle.sector].killzones[
-                nextBattle.zone
-            ] as OnslaughtKillzone;
+            const zoneData = onslaughtData[nextBattle.track]?.sectors[nextBattle.sector]?.killzones[nextBattle.zone];
             if (!zoneData) break;
             totalEnemies += zoneData.totalEnemyCount;
             nextBattle = this.getBattleAfter(onslaughtData, nextBattle.track, nextBattle.sector, nextBattle.zone);

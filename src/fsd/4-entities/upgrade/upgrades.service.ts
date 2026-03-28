@@ -1,6 +1,7 @@
 ﻿/* eslint-disable boundaries/element-types */
-import { groupBy, map, orderBy, sumBy, uniq } from 'lodash';
+import { groupBy, orderBy, sumBy, uniq } from 'lodash';
 
+import { filterMap } from '@/fsd/5-shared/lib';
 import { Rarity, RarityMapper, RarityString } from '@/fsd/5-shared/model';
 
 import { CampaignsService } from '@/fsd/4-entities/campaign/@x/upgrade';
@@ -84,6 +85,7 @@ export class UpgradesService {
         // Now fill in all of the craftable upgrades that only have base upgrade materials.
         for (const key in UpgradesService.craftedUpgradesData) {
             const craftedUpgrade = UpgradesService.craftedUpgradesData[key];
+            if (!craftedUpgrade) continue;
             if (craftedUpgrade.craftedUpgrades.length > 0) {
                 // We have to use more expansion, which we handle further below.
                 continue;
@@ -151,11 +153,8 @@ export class UpgradesService {
         expandedRecipe: IRecipeExpandedUpgrade,
         recipeItem: IMaterialRecipeIngredient
     ): void {
-        if (expandedRecipe.expandedRecipe[recipeItem.material]) {
-            expandedRecipe.expandedRecipe[recipeItem.material] += recipeItem.count;
-        } else {
-            expandedRecipe.expandedRecipe[recipeItem.material] = recipeItem.count;
-        }
+        expandedRecipe.expandedRecipe[recipeItem.material] =
+            (expandedRecipe.expandedRecipe[recipeItem.material] ?? 0) + recipeItem.count;
     }
 
     /**
@@ -187,13 +186,14 @@ export class UpgradesService {
         };
         let moreToExpand = false;
         for (const recipeItem of upgrade.recipe) {
-            if (!expandedRecipeData[recipeItem.id]) {
+            const expandedIngredient = expandedRecipeData[recipeItem.id];
+            if (!expandedIngredient) {
                 // We haven't expanded an ingredient yet, so we can't expand this recipe.
                 moreToExpand = true;
                 break;
             }
-            if (expandedRecipeData[recipeItem.id].crafted) {
-                for (const [material, count] of Object.entries(expandedRecipeData[recipeItem.id].expandedRecipe)) {
+            if (expandedIngredient.crafted) {
+                for (const [material, count] of Object.entries(expandedIngredient.expandedRecipe)) {
                     this.addIngredientsToExpandedRecipe(expandedRecipe, {
                         material: material,
                         count: recipeItem.count * count,
@@ -228,7 +228,7 @@ export class UpgradesService {
                 if (availableCount >= count) {
                     // Enough crafted upgrades available in inventory
                     inventoryUpdate[upgrade.id] = (inventoryUpdate[upgrade.id] ?? 0) + count;
-                    inventory[upgrade.id] -= count; // Decrement inventory
+                    inventory[upgrade.id] = (inventory[upgrade.id] ?? 0) - count; // Decrement inventory
                 } else {
                     // Not enough crafted upgrades, need to process recipe
                     inventoryUpdate[upgrade.id] = (inventoryUpdate[upgrade.id] ?? 0) + availableCount;
@@ -290,6 +290,7 @@ export class UpgradesService {
 
         for (const upgradeName of upgrades) {
             const upgrade = recipeDataByName[upgradeName];
+            if (!upgrade) continue;
 
             // Filter out craftable upgrades, we only return base upgrades from here.
             if (upgrade.craftable) {
@@ -299,7 +300,7 @@ export class UpgradesService {
             // Get all the locations where this particular upgrade can be farmed.
             const locations = upgradeLocationsShort[upgrade.snowprintId] ?? [];
             const locationsComposed = orderBy(
-                locations.map(location => CampaignsService.campaignsComposed[location]),
+                filterMap(locations, location => CampaignsService.campaignsComposed[location]),
                 ['dropRate', 'nodeNumber'],
                 ['desc', 'desc']
             );
@@ -318,7 +319,7 @@ export class UpgradesService {
 
         for (const upgradeId of Object.keys(upgradeLocationsShort)) {
             if (!upgradeId.startsWith('shards_') && !upgradeId.startsWith('mythicShards_')) continue;
-            const unitId = upgradeId.split('_')[1];
+            const unitId = upgradeId.split('_')[1] ?? '';
             const char = CharactersService.charactersData.find(c => c.snowprintId === unitId);
             const mow = mows2Data.mows.find(m => m.snowprintId === unitId);
             result[upgradeId] = {
@@ -328,14 +329,14 @@ export class UpgradesService {
                     ? 'Shards for ' + (char?.name ?? mow?.name ?? unitId)
                     : 'Mythic Shards for ' + (char?.name ?? mow?.name ?? unitId),
                 rarity: upgradeId.startsWith('shards_') ? 'Shard' : 'Mythic Shard',
-                locations:
-                    orderBy(
-                        upgradeLocationsShort[upgradeId as keyof typeof upgradeLocationsShort].map(
-                            location => CampaignsService.campaignsComposed[location]
-                        ),
-                        ['dropRate', 'nodeNumber'],
-                        ['desc', 'desc']
-                    ) ?? [],
+                locations: orderBy(
+                    filterMap(
+                        upgradeLocationsShort[upgradeId] ?? [],
+                        location => CampaignsService.campaignsComposed[location]
+                    ),
+                    ['dropRate', 'nodeNumber'],
+                    ['desc', 'desc']
+                ),
                 iconPath: char?.roundIcon ?? mow?.roundIcon ?? '',
                 crafted: false,
                 stat: 'Shard',
@@ -400,10 +401,7 @@ export class UpgradesService {
 
         for (const upgradeName of upgrades) {
             const upgrade = recipeDataByName[upgradeName];
-
-            if (!upgrade.craftable) {
-                continue;
-            }
+            if (!upgrade?.craftable) continue;
 
             const id = upgrade.material;
 
@@ -517,7 +515,7 @@ export class UpgradesService {
                     stat: upgrade.stat,
                     craftable: upgrade.craftable,
                     locations: locations,
-                    locationsComposed: locations.map(x => CampaignsService.campaignsComposed[x]),
+                    locationsComposed: filterMap(locations, x => CampaignsService.campaignsComposed[x]),
                     rarity: RarityMapper.stringToNumber[upgrade.rarity as RarityString],
                     recipe: upgrade.recipe.map(item => getRecipe(item.material, count * item.count, allMaterials)),
                     iconPath: upgrade.icon ?? '',
@@ -534,7 +532,7 @@ export class UpgradesService {
                 stat: upgrade?.stat ?? '',
                 locations: locations,
                 craftable: upgrade?.craftable,
-                locationsComposed: locations.map(x => CampaignsService.campaignsComposed[x]),
+                locationsComposed: filterMap(locations, x => CampaignsService.campaignsComposed[x]),
                 iconPath: upgrade?.icon ?? '',
                 characters: [],
                 priority: 0,
@@ -545,6 +543,7 @@ export class UpgradesService {
 
         for (const upgradeName of upgrades) {
             const upgrade = recipeDataByName[upgradeName];
+            if (!upgrade) continue;
             if (upgrade.craftable) {
                 const allMaterials: IMaterialRecipeIngredientFull[] = [];
                 result[upgradeName] = {
@@ -560,22 +559,26 @@ export class UpgradesService {
 
                 const groupedData = groupBy(allMaterials, 'id');
 
-                result[upgradeName].allMaterials = map(groupedData, (items, material) => ({
-                    id: material,
-                    snowprintId: items[0].snowprintId,
-                    count: sumBy(items, 'count'),
-                    quantity: 0,
-                    countLeft: 0,
-                    label: items[0].label,
-                    craftable: items[0].craftable,
-                    rarity: items[0].rarity,
-                    stat: items[0].stat,
-                    locations: items[0].locations,
-                    locationsComposed: items[0].locationsComposed,
-                    iconPath: items[0].iconPath ?? '',
-                    characters: [],
-                    priority: 0,
-                }));
+                result[upgradeName].allMaterials = filterMap(Object.entries(groupedData), ([material, items]) => {
+                    const first = items[0];
+                    if (!first) return;
+                    return {
+                        id: material,
+                        snowprintId: first.snowprintId,
+                        count: sumBy(items, 'count'),
+                        quantity: 0,
+                        countLeft: 0,
+                        label: first.label,
+                        craftable: first.craftable,
+                        rarity: first.rarity,
+                        stat: first.stat,
+                        locations: first.locations,
+                        locationsComposed: first.locationsComposed,
+                        iconPath: first.iconPath ?? '',
+                        characters: [],
+                        priority: 0,
+                    };
+                });
             } else {
                 result[upgradeName] = {
                     id: upgrade.material,
@@ -608,7 +611,7 @@ export class UpgradesService {
                     stat: type == kRegular ? 'Shard' : 'MythicShard',
                     locations: locations,
                     craftable: false,
-                    locationsComposed: locations.map(x => CampaignsService.campaignsComposed[x]),
+                    locationsComposed: filterMap(locations, x => CampaignsService.campaignsComposed[x]),
                     iconPath: character.roundIcon,
                     characters: [],
                     priority: 0,
@@ -654,20 +657,24 @@ export class UpgradesService {
             'id'
         );
 
-        const result: IMaterialRecipeIngredientFull[] = map(groupedData, (items, material) => {
+        const result: IMaterialRecipeIngredientFull[] = filterMap(Object.entries(groupedData), ([material, items]) => {
+            const first = items[0];
+            if (!first) return;
             return {
                 id: material,
-                snowprintId: items[0].snowprintId,
+                snowprintId: first.snowprintId,
                 count: sumBy(items, 'count'),
-                label: items[0].label,
-                rarity: items[0].rarity,
-                iconPath: items[0].iconPath,
-                stat: items[0].stat,
-                craftable: items[0].craftable,
-                locations: items[0].locations,
-                priority: items[0].priority,
+                label: first.label,
+                rarity: first.rarity,
+                iconPath: first.iconPath,
+                stat: first.stat,
+                craftable: first.craftable,
+                locations: first.locations,
+                priority: first.priority,
                 characters: uniq(items.flatMap(item => item.characters)),
-                locationsComposed: items[0].locations?.map(location => CampaignsService.campaignsComposed[location]),
+                locationsComposed:
+                    first.locations &&
+                    filterMap(first.locations, location => CampaignsService.campaignsComposed[location]),
             };
         });
         return keepGold ? result : result.filter(x => x.id !== 'Gold');

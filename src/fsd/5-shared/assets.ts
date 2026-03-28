@@ -93,7 +93,7 @@ interface SnowprintIcon {
     label: string;
 }
 
-export const snowprintIcons: Record<string, SnowprintIcon> = {
+export const snowprintIcons = {
     checkmark: {
         file: checkmark,
         label: 'Checkmark',
@@ -446,4 +446,4 @@ export const snowprintIcons: Record<string, SnowprintIcon> = {
         file: leShard,
         label: 'Legendary-Event Shard',
     },
-};
+} satisfies Record<string, SnowprintIcon>;

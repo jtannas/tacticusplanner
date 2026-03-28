@@ -10,7 +10,7 @@ import {
     IGameModeTokensState,
 } from 'src/models/interfaces';
 
-import { getEnumValues } from '@/fsd/5-shared/lib';
+import { filterMap, getEnumValues } from '@/fsd/5-shared/lib';
 import { TacticusUpgrade } from '@/fsd/5-shared/lib/tacticus-api/tacticus-api.models';
 import { Alliance, Rank, Rarity, RarityStars } from '@/fsd/5-shared/model';
 
@@ -356,7 +356,7 @@ export class UpgradesService {
             ? goalPriorityEstimates!.filter(x => !x.isFinished && !x.isBlocked)
             : this.getTotalEstimates(mergedInProgress, inventoryUpgrades).map(x => {
                   for (const loc of x.locations) {
-                      const inProgressLoc = combinedBaseMaterials[x.id].locations.find(l => l.id === loc.id);
+                      const inProgressLoc = combinedBaseMaterials[x.id]?.locations.find(l => l.id === loc.id);
                       if (inProgressLoc) loc.isSuggested = inProgressLoc.isSuggested;
                   }
                   return x;
@@ -546,6 +546,7 @@ export class UpgradesService {
         const newRemainignMats: Record<string, ICombinedUpgrade> = {};
         for (const key in remainingMats) {
             const mat = remainingMats[key];
+            if (!mat) continue;
             if (mat.requiredCount <= 0) continue;
             if (!this.canRaidMaterial(mat, characters, mows, goals)) {
                 blockedMats[key] = mat;
@@ -587,6 +588,7 @@ export class UpgradesService {
             const upgradeIds = Object.keys(remainingMats);
             for (const upgradeId of upgradeIds) {
                 const mat = remainingMats[upgradeId];
+                if (!mat) continue;
                 if (inventory[upgradeId] === undefined) continue;
                 if (inventory[upgradeId] >= mat.requiredCount) {
                     delete remainingMats[upgradeId];
@@ -621,7 +623,8 @@ export class UpgradesService {
         }
 
         for (const upgradeId of Object.keys(blockedMats)) {
-            remainingMats[upgradeId] = blockedMats[upgradeId];
+            const blocked = blockedMats[upgradeId];
+            if (blocked) remainingMats[upgradeId] = blocked;
         }
 
         for (const day of returnValue) {
@@ -752,7 +755,10 @@ export class UpgradesService {
                     .filter(([_, mat]) => mat.relatedGoals.includes(goal.goalId))
                     .map(([upgradeId]) => upgradeId)
             );
-            const locsForGoal = allSuggestedLocs.filter(loc => upgradeIds.has(loc.rewards.potential[0].id));
+            const locsForGoal = allSuggestedLocs.filter(loc => {
+                const potential = loc.rewards.potential[0];
+                return potential !== undefined && upgradeIds.has(potential.id);
+            });
             result.set(goal.goalId, { locs: locsForGoal, upgradeIds });
         }
 
@@ -829,7 +835,9 @@ export class UpgradesService {
                     precomputedState?.locs ??
                     locs.filter(loc => loc.rewards.potential.some(reward => matsForGoalIds.has(reward.id)))
                 ).filter(loc => {
-                    const upgradeId = loc.rewards.potential[0].id;
+                    const potential = loc.rewards.potential[0];
+                    if (!potential) return false;
+                    const upgradeId = potential.id;
                     if (!matsForGoalIds.has(upgradeId)) {
                         return false;
                     }
@@ -892,7 +900,9 @@ export class UpgradesService {
 
                 for (const loc of sortedCandidateLocs) {
                     if (energy < minEnergy) break;
-                    const raidKey = `${loc.rewards.potential[0].id}::${goal.goalId}`;
+                    const potential = loc.rewards.potential[0];
+                    if (!potential) continue;
+                    const raidKey = `${potential.id}::${goal.goalId}`;
                     energy = this.raidLocation(
                         day,
                         energy,
@@ -1058,7 +1068,9 @@ export class UpgradesService {
         > = new Map()
     ): number {
         if (energy < loc.energyCost) return energy;
-        const upgradeId = loc.rewards.potential[0].id;
+        const potential = loc.rewards.potential[0];
+        if (!potential) return energy;
+        const upgradeId = potential.id;
         const mat = remainingMats[upgradeId];
         if (mat === undefined) {
             console.error('Material', upgradeId, 'not found for location:', loc);
@@ -1291,8 +1303,10 @@ export class UpgradesService {
         const isTotalMaterialsOrder =
             settings.preferences.farmPreferences?.order === IDailyRaidsFarmOrder.totalMaterials;
 
-        return locs.map(loc => {
-            const upgradeId = loc.rewards.potential[0].id;
+        return filterMap(locs, loc => {
+            const potential = loc.rewards.potential[0];
+            if (!potential) return;
+            const upgradeId = potential.id;
             const cachedTag = tagByUpgradeId.get(upgradeId);
             if (cachedTag) {
                 return { loc, ...cachedTag };
@@ -1571,10 +1585,11 @@ export class UpgradesService {
 
     public static isOnslaughtLocation(location: IItemRaidLocation): boolean {
         const comps = location.id.split('-');
+        const comp1 = comps[1] ?? '';
         return (
             location.id.startsWith('Onslaught-') &&
             comps.length === 3 &&
-            (comps[1].startsWith('shards_') || comps[1].startsWith('mythicShards_'))
+            (comp1.startsWith('shards_') || comp1.startsWith('mythicShards_'))
         );
     }
 
@@ -1658,8 +1673,9 @@ export class UpgradesService {
             }
 
             const fractional = (inventory[upgradeId] ?? 0) - Math.floor(inventory[upgradeId] ?? 0);
-            onslaughts[upgradeId] ||= [];
-            onslaughts[upgradeId].push(
+            const upgradeOnslaughts = onslaughts[upgradeId] ?? [];
+            onslaughts[upgradeId] = upgradeOnslaughts;
+            upgradeOnslaughts.push(
                 this.createOnslaughtLocation(upgradeId, Math.floor(shards + fractional), 'Shard', ++index)
             );
             relatedGoals[upgradeId] = [...(relatedGoals[upgradeId] ?? []), goal];
@@ -1673,6 +1689,7 @@ export class UpgradesService {
 
         for (const [upgradeId, raids] of Object.entries(onslaughts)) {
             const mat = combinedBaseMaterials[upgradeId];
+            const firstPotential = raids[0]?.rewards.potential[0];
             day.raids.push({
                 raidLocations: raids,
                 energyTotal: 0,
@@ -1691,7 +1708,9 @@ export class UpgradesService {
                 label: mat?.label ?? upgradeId,
                 rarity: mat?.rarity ?? (upgradeId.startsWith('shards_') ? 'Shard' : 'Mythic Shard'),
                 iconPath:
-                    mat?.iconPath ?? FsdUpgradesService.getUpgrade(raids[0].rewards.potential[0].id)?.iconPath ?? '',
+                    mat?.iconPath ??
+                    (firstPotential ? FsdUpgradesService.getUpgrade(firstPotential.id)?.iconPath : undefined) ??
+                    '',
                 locations: raids,
                 crafted: false,
                 stat: 'Shard',
@@ -2006,6 +2025,7 @@ export class UpgradesService {
                 // remove upgrades that do not match to selected rarities
                 for (const upgradeId in baseUpgradesTotal) {
                     const upgradeData = FsdUpgradesService.baseUpgradesData[upgradeId];
+                    if (!upgradeData) continue;
                     if (
                         upgradeData.rarity !== 'Shard' &&
                         upgradeData.rarity !== 'Mythic Shard' &&
@@ -2095,6 +2115,7 @@ export class UpgradesService {
 
         for (const upgradeId in upgrades) {
             const upgrade = upgrades[upgradeId];
+            if (!upgrade) continue;
             const requiredCount = upgrade.requiredCount;
             const acquiredCount = inventoryUpgrades[upgradeId] ?? 0;
 
@@ -2122,6 +2143,7 @@ export class UpgradesService {
 
         for (const upgradeId in upgrades) {
             const upgrade = upgrades[upgradeId];
+            if (!upgrade) continue;
             let available = inventoryUpgrades[upgradeId] ?? 0;
 
             for (const goal of sortedGoals) {
@@ -2161,7 +2183,7 @@ export class UpgradesService {
         return orderBy(
             result,
             [
-                estimate => goalPriorityMap.get(estimate.relatedGoals[0]) ?? Number.POSITIVE_INFINITY,
+                estimate => goalPriorityMap.get(estimate.relatedGoals[0] ?? '') ?? Number.POSITIVE_INFINITY,
                 'daysTotal',
                 'energyTotal',
             ],
@@ -2275,10 +2297,12 @@ export class UpgradesService {
         const result: Record<string, ICombinedUpgrade> = {};
         for (const character of charactersUpgrades) {
             for (const upgradeId in character.baseUpgradesTotal) {
-                const upgradeCount = character.baseUpgradesTotal[upgradeId];
+                const upgradeCount = character.baseUpgradesTotal[upgradeId] ?? 0;
+                const baseUpgradeData = FsdUpgradesService.baseUpgradesData[upgradeId];
+                if (!baseUpgradeData) continue;
 
                 const combinedUpgrade: ICombinedUpgrade = result[upgradeId] ?? {
-                    ...FsdUpgradesService.baseUpgradesData[upgradeId],
+                    ...baseUpgradeData,
                     requiredCount: 0,
                     countByGoalId: {},
                     relatedCharacters: [],
@@ -2407,6 +2431,7 @@ export class UpgradesService {
         const currentCampaignEventLocations = campaignsByGroup[settings.preferences.campaignEvent ?? ''] ?? [];
         for (const upgradeId in upgrades) {
             const combinedUpgrade = upgrades[upgradeId];
+            if (!combinedUpgrade) continue;
 
             for (const location of combinedUpgrade.locations) {
                 const campaignProgress = settings.campaignsProgress[location.campaign];
@@ -2497,8 +2522,8 @@ export class UpgradesService {
             const nextLevelCraftedUpgrades: Record<string, number> = {};
 
             for (const craftedUpgrade in craftedUpgrades) {
-                const acquiredCount = inventoryUpgrades[craftedUpgrade];
-                const requiredCount = craftedUpgrades[craftedUpgrade];
+                const acquiredCount = inventoryUpgrades[craftedUpgrade] ?? 0;
+                const requiredCount = craftedUpgrades[craftedUpgrade] ?? 0;
 
                 // If we already own enough of this crafted upgrade, consume from inventory and move on.
                 if (acquiredCount >= requiredCount) {
@@ -2513,7 +2538,7 @@ export class UpgradesService {
                 }
 
                 const craftedUpgradeData = FsdUpgradesService.craftedUpgradesData[craftedUpgrade];
-                const craftedUpgradeCount = craftedUpgrades[craftedUpgrade];
+                const craftedUpgradeCount = craftedUpgrades[craftedUpgrade] ?? 0;
 
                 // For each crafted upgrade, expand into either base materials or nested crafted upgrades.
                 if (craftedUpgradeData) {
@@ -2602,6 +2627,7 @@ export class UpgradesService {
 
         for (const materialName in FsdUpgradesService.recipeDataByName) {
             const material = FsdUpgradesService.recipeDataByName[materialName];
+            if (!material) continue;
             if (material.snowprintId) {
                 result[material.snowprintId] = material;
             }
