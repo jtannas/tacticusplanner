@@ -18,6 +18,18 @@ import { routes } from '../routing/app-routing';
 const webSnackbarOrigin: SnackbarOrigin = { vertical: 'bottom', horizontal: 'right' };
 const mobileSnackbarOrigin: SnackbarOrigin = { vertical: 'top', horizontal: 'center' };
 
+const convexClient = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL, { expectAuth: true });
+const convexQueryClient = new ConvexQueryClient(convexClient);
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            queryKeyHashFn: convexQueryClient.hashFn(),
+            queryFn: convexQueryClient.queryFn(),
+        },
+    },
+});
+convexQueryClient.connect(queryClient);
+
 // Wrapper component to work around TypeScript JSX component type issue
 const PopupWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const Provider = PopupProvider as any;
@@ -25,17 +37,6 @@ const PopupWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 };
 
 export const ThirdPartyProviders: React.FC = () => {
-    const convexClient = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL, { expectAuth: true });
-    const convexQueryClient = new ConvexQueryClient(convexClient);
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                queryKeyHashFn: convexQueryClient.hashFn(),
-                queryFn: convexQueryClient.queryFn(),
-            },
-        },
-    });
-    convexQueryClient.connect(queryClient);
     return (
         <ClerkProvider publishableKey={import.meta.env.VITE_CLERK_PUBLISHABLE_KEY} afterSignOutUrl="/">
             {/* eslint-disable-next-line react-compiler/react-compiler*/}

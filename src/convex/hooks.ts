@@ -9,7 +9,7 @@ Intro for people not familiar with this tooling:
 - `@tanstack/react-query` is a tool for handling all the ugliness of "server state" (i.e. loading states, errors states, cacheing, etc...)
 - `convex` is a backend/database built for syncing data between frontend and backend
 - Convex does most of the work, but ReactQuery gives us a better DX around loading and error states
-- Convex is also integrated with the auth provuder (Clerk) so you don't have to worry about it
+- Convex is also integrated with the auth provider (Clerk) so you don't have to worry about it
 - The Convex API defintions live in another repo and the definitions are exported here: https://stack.convex.dev/multiple-repos
 
 Because this is an open-source project we don't expect people to have experience with these tools.
