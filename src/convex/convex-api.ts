@@ -27,7 +27,6 @@ export type PublicApiType = {
                 tacticusApiKey?: string;
                 tacticusGuildApiKey?: string;
                 tacticusUserId?: string;
-                username?: string;
             }
         >;
         upsertLegacyData: FunctionReference<
@@ -40,7 +39,6 @@ export type PublicApiType = {
                 tacticusApiKey?: string;
                 tacticusGuildApiKey?: string;
                 tacticusUserId?: string;
-                username?: string;
             },
             any
         >;

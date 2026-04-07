@@ -1,4 +1,5 @@
-﻿import AddIcon from '@mui/icons-material/Add';
+﻿import { useUser } from '@clerk/clerk-react';
+import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -19,12 +20,15 @@ import { createShareToken, refreshShareToken, removeShareToken } from './share-r
 export const ShareRosterDialog = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
     const [loading, setLoading] = useState(false);
 
+    const { user, isLoaded } = useUser();
     const userDataQuery = useConvexUserDataQuery();
+    if (!isLoaded) return 'Loading login...';
+    if (!user) return 'Must be logged in to access this page';
     if (userDataQuery.isError) return 'Error loading settings';
-    if (userDataQuery.isPending) return 'Loading...';
-    const { username, shareToken } = userDataQuery.data;
+    if (userDataQuery.isPending) return 'Loading data...';
+    const { shareToken } = userDataQuery.data;
 
-    const shareRoute = (isMobile ? '/mobile' : '') + `/sharedRoster?username=${username}&shareToken=${shareToken}`;
+    const shareRoute = (isMobile ? '/mobile' : '') + `/sharedRoster?username=${user.username}&shareToken=${shareToken}`;
     const shareLink = shareToken ? location.origin + shareRoute : undefined;
 
     const copyLink = () => {
