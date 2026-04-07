@@ -1,13 +1,11 @@
-﻿import { UserRole } from '@/fsd/5-shared/model';
-
-import { IPersonalData, IPersonalData2 } from '../models/interfaces';
+﻿import { IPersonalData, IPersonalData2 } from '../models/interfaces';
 
 export interface IUserDataResponse {
     id: number;
     username: string;
     lastModifiedDate: string;
     shareToken?: string;
-    role: UserRole;
+    role: 'admin' | 'moderator' | 'user';
     pendingTeamsCount: number;
     rejectedTeamsCount: number;
     modifiedDateTicks: string;

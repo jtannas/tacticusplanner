@@ -6,18 +6,23 @@ import { DialogActions, DialogContent, DialogTitle, TextField } from '@mui/mater
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { enqueueSnackbar } from 'notistack';
-import React from 'react';
+import { useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
-import { useAuth } from '@/fsd/5-shared/model';
+// eslint-disable-next-line import-x/no-internal-modules
+import { useConvexUserDataQuery } from '@/convex/hooks';
+
 import { LoaderWithText } from '@/fsd/5-shared/ui';
 
 import { createShareToken, refreshShareToken, removeShareToken } from './share-roster.endpoints';
 
 export const ShareRosterDialog = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-    const [loading, setLoading] = React.useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const { shareToken, username, setUser } = useAuth();
+    const userDataQuery = useConvexUserDataQuery();
+    if (userDataQuery.isError) return 'Error loading settings';
+    if (userDataQuery.isPending) return 'Loading...';
+    const { username, shareToken } = userDataQuery.data;
 
     const shareRoute = (isMobile ? '/mobile' : '') + `/sharedRoster?username=${username}&shareToken=${shareToken}`;
     const shareLink = shareToken ? location.origin + shareRoute : undefined;
@@ -35,9 +40,7 @@ export const ShareRosterDialog = ({ isOpen, onClose }: { isOpen: boolean; onClos
         if (confirmed) {
             setLoading(true);
 
-            createShareToken()
-                .then(response => setUser(response.data?.username ?? '', response.data?.shareToken))
-                .finally(() => setLoading(false));
+            createShareToken().finally(() => setLoading(false));
         }
     };
 
@@ -49,9 +52,7 @@ export const ShareRosterDialog = ({ isOpen, onClose }: { isOpen: boolean; onClos
         if (confirmed) {
             setLoading(true);
 
-            refreshShareToken()
-                .then(response => setUser(response.data?.username ?? '', response.data?.shareToken))
-                .finally(() => setLoading(false));
+            refreshShareToken().finally(() => setLoading(false));
         }
     };
 
@@ -61,9 +62,7 @@ export const ShareRosterDialog = ({ isOpen, onClose }: { isOpen: boolean; onClos
         if (confirmed) {
             setLoading(true);
 
-            removeShareToken()
-                .then(() => setUser(username, ''))
-                .finally(() => setLoading(false));
+            removeShareToken().finally(() => setLoading(false));
         }
     };
 
