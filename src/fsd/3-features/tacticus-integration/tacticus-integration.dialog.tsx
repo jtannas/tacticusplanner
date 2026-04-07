@@ -11,13 +11,7 @@ import { Modal } from '@/fsd/5-shared/ui/modal';
 
 import { useSyncWithTacticus } from './use-sync-with-tacticus';
 
-interface Props extends DialogProps {
-    tacticusApiKey: string;
-    tacticusUserId: string;
-    tacticusGuildApiKey: string;
-}
-
-export const TacticusIntegrationDialog: React.FC<Props> = ({ isOpen, onClose }) => {
+export const TacticusIntegrationDialog: React.FC<DialogProps> = ({ isOpen, onClose }) => {
     const { data } = useConvexUserDataQuery();
     const userDataMutation = useConvexUserDataMutation();
     const { syncWithTacticus } = useSyncWithTacticus();

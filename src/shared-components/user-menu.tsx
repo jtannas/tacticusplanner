@@ -125,9 +125,6 @@ export const UserMenu = () => {
     function syncWithTacticus() {
         if (!userDataQuery.data) return;
         popupManager.open(TacticusIntegrationDialog, {
-            tacticusApiKey: userDataQuery.data.tacticusApiKey ?? '',
-            tacticusUserId: userDataQuery.data.tacticusUserId ?? '',
-            tacticusGuildApiKey: userDataQuery.data.tacticusGuildApiKey ?? '',
             onClose: () => {},
         });
     }
