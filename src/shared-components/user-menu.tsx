@@ -2,8 +2,6 @@
 import { Computer as ComputerIcon, Smartphone as PhoneIcon } from '@mui/icons-material';
 import DownloadIcon from '@mui/icons-material/Download';
 import GroupWorkIcon from '@mui/icons-material/GroupWork';
-import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import SyncIcon from '@mui/icons-material/Sync';
 import UploadIcon from '@mui/icons-material/Upload';
 import { Badge, Divider, IconButton, ListItemIcon, Menu, MenuItem } from '@mui/material';
@@ -11,7 +9,7 @@ import Box from '@mui/material/Box';
 import ListItemText from '@mui/material/ListItemText';
 import { Settings2Icon } from 'lucide-react';
 import { enqueueSnackbar } from 'notistack';
-import { ChangeEvent, useContext, useRef, useState } from 'react';
+import { ChangeEvent, useContext, useRef } from 'react';
 import { isMobile } from 'react-device-detect';
 import { usePopupManager } from 'react-popup-manager';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -20,15 +18,11 @@ import { useConvexUserDataQuery } from '@/convex/hooks';
 import { GlobalState } from 'src/models/global-state';
 import { IPersonalData2 } from 'src/models/interfaces';
 import { DispatchContext, StoreContext } from 'src/reducers/store.provider';
-import { convertData, PersonalDataLocalStorage } from 'src/services';
-import { AdminToolsDialog } from 'src/shared-components/user-menu/admin-tools-dialog';
+import { convertData } from 'src/services';
 
 import { usePopUpControls } from '@/fsd/5-shared/ui';
 
 import { TacticusIntegrationDialog } from '@/fsd/3-features/tacticus-integration/tacticus-integration.dialog';
-
-import { OverrideDataDialog } from './override-data-dialog';
-import { RestoreBackupDialog } from './restore-backup-dialog';
 
 export const UserMenu = () => {
     const store = useContext(StoreContext);
@@ -36,10 +30,7 @@ export const UserMenu = () => {
     const popupManager = usePopupManager();
     const { isSignedIn } = useUser();
     const userDataQuery = useConvexUserDataQuery();
-    const [showAdminTools, setShowAdminTools] = useState(false);
     const inputReference = useRef<HTMLInputElement>(null);
-    const [showRestoreBackup, setShowRestoreBackup] = useState(false);
-    const [showOverrideDataWarning, setShowOverrideDataWarning] = useState(false);
     const userMenuControls = usePopUpControls();
     const navigate = useNavigate();
     const location = useLocation();
@@ -131,16 +122,6 @@ export const UserMenu = () => {
         URL.revokeObjectURL(url);
     };
 
-    const restoreData = () => {
-        const localStorage = new PersonalDataLocalStorage();
-        const restoredData = localStorage.restoreData();
-        if (restoredData) {
-            setShowRestoreBackup(true);
-        } else {
-            enqueueSnackbar('No Backup Found', { variant: 'error' });
-        }
-    };
-
     function syncWithTacticus() {
         if (!userDataQuery.data) return;
         popupManager.open(TacticusIntegrationDialog, {
@@ -199,13 +180,6 @@ export const UserMenu = () => {
                             <ListItemText>Export JSON</ListItemText>
                         </MenuItem>
                         <Divider />
-                        <MenuItem onClick={() => restoreData()}>
-                            <ListItemIcon>
-                                <SettingsBackupRestoreIcon />
-                            </ListItemIcon>
-                            <ListItemText>Restore Backup</ListItemText>
-                        </MenuItem>
-                        <Divider />
                     </>
                 )}
                 {isDesktopView ? (
@@ -226,15 +200,6 @@ export const UserMenu = () => {
 
                 <Divider />
 
-                {['admin', 'moderator'].includes(userDataQuery.data?.role ?? '') && (
-                    <MenuItem onClick={() => setShowAdminTools(true)}>
-                        <ListItemIcon>
-                            <SupervisorAccountIcon />
-                        </ListItemIcon>
-                        <ListItemText>Admin tools</ListItemText>
-                    </MenuItem>
-                )}
-
                 <MenuItem onClick={() => navigateToReviewTeams()}>
                     <ListItemIcon>
                         <GroupWorkIcon />
@@ -250,19 +215,6 @@ export const UserMenu = () => {
                     )}
                 </MenuItem>
             </Menu>
-            <RestoreBackupDialog isOpen={showRestoreBackup} onClose={() => setShowRestoreBackup(false)} />
-            <OverrideDataDialog
-                isOpen={showOverrideDataWarning}
-                onClose={() => {
-                    setShowOverrideDataWarning(false);
-                }}
-            />
-            <AdminToolsDialog
-                isOpen={showAdminTools}
-                onClose={() => {
-                    setShowAdminTools(false);
-                }}
-            />
         </Box>
     );
 };
