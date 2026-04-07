@@ -19,7 +19,6 @@ export type PublicApiType = {
             'public',
             Record<string, never>,
             {
-                clerkUserId: string;
                 pendingTeamsCount: number;
                 rejectedTeamsCount: number;
                 role: 'user' | 'moderator' | 'admin';
