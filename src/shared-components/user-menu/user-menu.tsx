@@ -1,85 +1,50 @@
-﻿import { Computer as ComputerIcon, Smartphone as PhoneIcon } from '@mui/icons-material';
+﻿import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
+import { Computer as ComputerIcon, Smartphone as PhoneIcon } from '@mui/icons-material';
 import DownloadIcon from '@mui/icons-material/Download';
 import GroupWorkIcon from '@mui/icons-material/GroupWork';
-import LoginIcon from '@mui/icons-material/Login';
-import LogoutIcon from '@mui/icons-material/Logout';
-import RegisterIcon from '@mui/icons-material/PersonAdd';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import SyncIcon from '@mui/icons-material/Sync';
 import UploadIcon from '@mui/icons-material/Upload';
-import { Avatar, Badge, Divider, IconButton, ListItemIcon, Menu, MenuItem } from '@mui/material';
+import { Badge, Divider, IconButton, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import Box from '@mui/material/Box';
 import ListItemText from '@mui/material/ListItemText';
+import { Settings2Icon } from 'lucide-react';
 import { enqueueSnackbar } from 'notistack';
 import { ChangeEvent, useContext, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { usePopupManager } from 'react-popup-manager';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { useConvexUserDataQuery } from '@/convex/hooks';
 import { GlobalState } from 'src/models/global-state';
 import { IPersonalData2 } from 'src/models/interfaces';
 import { DispatchContext, StoreContext } from 'src/reducers/store.provider';
 import { convertData, PersonalDataLocalStorage } from 'src/services';
 import { AdminToolsDialog } from 'src/shared-components/user-menu/admin-tools-dialog';
 
-import { useAuth, UserRole } from '@/fsd/5-shared/model';
 import { usePopUpControls } from '@/fsd/5-shared/ui';
 
 import { TacticusIntegrationDialog } from '@/fsd/3-features/tacticus-integration/tacticus-integration.dialog';
 
-import { LoginUserDialog } from './login-user-dialog';
 import { OverrideDataDialog } from './override-data-dialog';
-import { RegisterUserDialog } from './register-user-dialog';
 import { RestoreBackupDialog } from './restore-backup-dialog';
-
-function stringToColor(string: string) {
-    let hash = 0;
-    let index;
-
-    for (index = 0; index < string.length; index += 1) {
-        const character = string.codePointAt(index);
-        if (!character) throw new Error('invalid codePoint');
-        hash = character + ((hash << 5) - hash);
-    }
-
-    let color = '#';
-
-    for (index = 0; index < 3; index += 1) {
-        const value = (hash >> (index * 8)) & 0xff;
-        color += `00${value.toString(16)}`.slice(-2);
-    }
-
-    return color;
-}
-
-function stringAvatar(name: string) {
-    return {
-        sx: {
-            width: 32,
-            height: 32,
-            bgcolor: stringToColor(name),
-        },
-        children: `${name.slice(0, 2)}`,
-    };
-}
 
 export const UserMenu = () => {
     const store = useContext(StoreContext);
     const dispatch = useContext(DispatchContext);
     const popupManager = usePopupManager();
-    const { isAuthenticated, logout, username, userInfo } = useAuth();
+    const { isSignedIn } = useUser();
+    const userDataQuery = useConvexUserDataQuery();
     const [showAdminTools, setShowAdminTools] = useState(false);
     const inputReference = useRef<HTMLInputElement>(null);
-    const [showRegisterUser, setShowRegisterUser] = useState(false);
-    const [showLoginUser, setShowLoginUser] = useState(false);
     const [showRestoreBackup, setShowRestoreBackup] = useState(false);
     const [showOverrideDataWarning, setShowOverrideDataWarning] = useState(false);
     const userMenuControls = usePopUpControls();
     const navigate = useNavigate();
     const location = useLocation();
     const isDesktopView = !location.pathname.includes('mobile');
-    const hasRejectedGuides = userInfo.rejectedTeamsCount > 0;
+    const hasRejectedGuides = Boolean(userDataQuery.data?.rejectedTeamsCount);
 
     const navigateToDesktopView = () => {
         localStorage.setItem('preferredView', 'desktop');
@@ -94,7 +59,7 @@ export const UserMenu = () => {
     const navigateToReviewTeams = () => {
         let tabId = 2;
 
-        if (userInfo.pendingTeamsCount > 0) {
+        if (userDataQuery.data?.pendingTeamsCount) {
             tabId = 3;
         }
 
@@ -159,9 +124,8 @@ export const UserMenu = () => {
             minute: 'numeric',
         };
         const formattedDate = new Intl.DateTimeFormat(navigator.language, options).format(date);
-        const realUsername = isAuthenticated ? username : (localStorage.getItem('userOld') ?? username);
 
-        link.download = `${realUsername}-data-${formattedDate}.json`;
+        link.download = `tacticus-planner-data-${formattedDate}.json`;
         link.click();
 
         URL.revokeObjectURL(url);
@@ -177,20 +141,12 @@ export const UserMenu = () => {
         }
     };
 
-    const openLoginForm = () => {
-        const hasAnyChanges = !!store.modifiedDate;
-        if (hasAnyChanges) {
-            setShowOverrideDataWarning(true);
-        } else {
-            setShowLoginUser(true);
-        }
-    };
-
-    function syncWithTacticus(): void {
+    function syncWithTacticus() {
+        if (!userDataQuery.data) return;
         popupManager.open(TacticusIntegrationDialog, {
-            tacticusApiKey: userInfo.tacticusApiKey,
-            tacticusUserId: userInfo.tacticusUserId,
-            tacticusGuildApiKey: userInfo.tacticusGuildApiKey,
+            tacticusApiKey: userDataQuery.data.tacticusApiKey ?? '',
+            tacticusUserId: userDataQuery.data.tacticusUserId ?? '',
+            tacticusGuildApiKey: userDataQuery.data.tacticusGuildApiKey ?? '',
             onClose: () => {},
         });
     }
@@ -198,20 +154,20 @@ export const UserMenu = () => {
     return (
         <Box sx={{ display: 'flex', textAlign: 'center', justifyContent: 'flex-end' }}>
             <input ref={inputReference} className="hidden" type="file" accept=".json" onChange={handleFileUpload} />
-            <div className="flex items-center">
-                <span className="text-base font-bold">Hi, {username}</span>
+            <div className="flex items-center gap-2">
+                <SignedIn>
+                    <UserButton />
+                </SignedIn>
+                <SignedOut>
+                    <SignInButton />
+                </SignedOut>
                 <IconButton
                     onClick={userMenuControls.handleClick}
                     size="small"
-                    sx={{ ml: 2 }}
                     aria-controls={userMenuControls.open ? 'account-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={userMenuControls.open ? 'true' : undefined}>
-                    {isAuthenticated ? (
-                        <Avatar {...stringAvatar(username)}></Avatar>
-                    ) : (
-                        <Avatar sx={{ width: 32, height: 32 }}>TP</Avatar>
-                    )}
+                    <Settings2Icon />
                 </IconButton>
             </div>
             <Menu
@@ -222,61 +178,36 @@ export const UserMenu = () => {
                 onClick={userMenuControls.handleClose}
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
-                {isAuthenticated ? (
-                    <MenuItem onClick={() => logout()}>
-                        <ListItemIcon>
-                            <LogoutIcon />
-                        </ListItemIcon>
-                        <ListItemText>Logout</ListItemText>
-                    </MenuItem>
-                ) : (
-                    <div>
-                        <MenuItem onClick={() => openLoginForm()}>
+                {isSignedIn && (
+                    <>
+                        <MenuItem onClick={syncWithTacticus}>
                             <ListItemIcon>
-                                <LoginIcon />
+                                <SyncIcon />
                             </ListItemIcon>
-                            <ListItemText>Login</ListItemText>
+                            <ListItemText>Sync via Tacticus API</ListItemText>
                         </MenuItem>
-                        <MenuItem onClick={() => setShowRegisterUser(true)}>
+                        <MenuItem onClick={() => inputReference.current?.click()}>
                             <ListItemIcon>
-                                <RegisterIcon />
+                                <UploadIcon />
                             </ListItemIcon>
-                            <ListItemText>Register</ListItemText>
+                            <ListItemText>Import JSON</ListItemText>
                         </MenuItem>
-                    </div>
+                        <MenuItem onClick={() => downloadJson()}>
+                            <ListItemIcon>
+                                <DownloadIcon />
+                            </ListItemIcon>
+                            <ListItemText>Export JSON</ListItemText>
+                        </MenuItem>
+                        <Divider />
+                        <MenuItem onClick={() => restoreData()}>
+                            <ListItemIcon>
+                                <SettingsBackupRestoreIcon />
+                            </ListItemIcon>
+                            <ListItemText>Restore Backup</ListItemText>
+                        </MenuItem>
+                        <Divider />
+                    </>
                 )}
-
-                <Divider />
-                {isAuthenticated && (
-                    <MenuItem onClick={syncWithTacticus}>
-                        <ListItemIcon>
-                            <SyncIcon />
-                        </ListItemIcon>
-                        <ListItemText>Sync via Tacticus API</ListItemText>
-                    </MenuItem>
-                )}
-
-                <MenuItem onClick={() => inputReference.current?.click()}>
-                    <ListItemIcon>
-                        <UploadIcon />
-                    </ListItemIcon>
-                    <ListItemText>Import JSON</ListItemText>
-                </MenuItem>
-                <MenuItem onClick={() => downloadJson()}>
-                    <ListItemIcon>
-                        <DownloadIcon />
-                    </ListItemIcon>
-                    <ListItemText>Export JSON</ListItemText>
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={() => restoreData()}>
-                    <ListItemIcon>
-                        <SettingsBackupRestoreIcon />
-                    </ListItemIcon>
-                    <ListItemText>Restore Backup</ListItemText>
-                </MenuItem>
-
-                <Divider />
                 {isDesktopView ? (
                     <MenuItem onClick={() => navigateToMobileView()}>
                         <ListItemIcon>
@@ -295,7 +226,7 @@ export const UserMenu = () => {
 
                 <Divider />
 
-                {[UserRole.admin, UserRole.moderator].includes(userInfo.role) && (
+                {['admin', 'moderator'].includes(userDataQuery.data?.role ?? '') && (
                     <MenuItem onClick={() => setShowAdminTools(true)}>
                         <ListItemIcon>
                             <SupervisorAccountIcon />
@@ -308,33 +239,22 @@ export const UserMenu = () => {
                     <ListItemIcon>
                         <GroupWorkIcon />
                     </ListItemIcon>
-                    {userInfo.rejectedTeamsCount > 0 ? (
-                        <Badge badgeContent={userInfo.rejectedTeamsCount} color="error">
+                    {userDataQuery.data?.rejectedTeamsCount ? (
+                        <Badge badgeContent={userDataQuery.data.rejectedTeamsCount} color="error">
                             <ListItemText>Review guides</ListItemText>
                         </Badge>
                     ) : (
-                        <Badge badgeContent={userInfo.pendingTeamsCount} color="warning">
+                        <Badge badgeContent={userDataQuery.data?.pendingTeamsCount ?? 0} color="warning">
                             <ListItemText>Review guides</ListItemText>
                         </Badge>
                     )}
                 </MenuItem>
             </Menu>
-            <RegisterUserDialog
-                isOpen={showRegisterUser}
-                onClose={success => {
-                    setShowRegisterUser(false);
-                    setShowLoginUser(success);
-                }}
-            />
-            <LoginUserDialog isOpen={showLoginUser} onClose={() => setShowLoginUser(false)} />
             <RestoreBackupDialog isOpen={showRestoreBackup} onClose={() => setShowRestoreBackup(false)} />
             <OverrideDataDialog
                 isOpen={showOverrideDataWarning}
-                onClose={(proceed: boolean) => {
+                onClose={() => {
                     setShowOverrideDataWarning(false);
-                    if (proceed) {
-                        setShowLoginUser(true);
-                    }
                 }}
             />
             <AdminToolsDialog
