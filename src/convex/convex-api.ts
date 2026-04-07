@@ -34,10 +34,8 @@ export type PublicApiType = {
             'mutation',
             'public',
             {
-                clerkUserId: string;
                 pendingTeamsCount?: number;
                 rejectedTeamsCount?: number;
-                role?: 'user' | 'moderator' | 'admin';
                 shareToken?: string;
                 tacticusApiKey?: string;
                 tacticusGuildApiKey?: string;
